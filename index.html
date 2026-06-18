@@ -936,31 +936,24 @@
   });
 
   // ══════════════════════════════════════════════════════════════════
-  // ZOHO FORMS CONFIG
-  // TODO – After creating your Zoho Form (zoho.com/forms):
-  //   1. Open the form → Share tab → Embed → copy the "Permalink URL"
-  //      e.g. https://forms.zohopublic.in/fyuser/form/FreeYouInterest/formperma/XXXX
-  //   2. Replace ZOHO_SUBMIT_URL below with that URL + /htmlRecords/submit
-  //   3. Match field names below to your actual Zoho field names
-  //      (Forms builder → click each field → "Field Name" on right panel)
+  // ZOHO CRM WEB-TO-LEAD — direct CRM submission
   // ══════════════════════════════════════════════════════════════════
-  var ZOHO_SUBMIT_URL = 'https://forms.zohopublic.in/freeyou1/form/ProfessionalProfileForm/htmlRecords/submit';
-
   function submitToZoho(data, onSuccess) {
-    if (!ZOHO_SUBMIT_URL || ZOHO_SUBMIT_URL.indexOf('TODO') === 0) {
-      // Zoho not configured yet — log and succeed silently
-      console.warn('[FreeYou] Zoho Forms URL not configured. Data collected:', data);
-      onSuccess();
-      return;
-    }
     var fd = new FormData();
+    // Zoho CRM security tokens (do not modify)
+    fd.append('xnQsjsdp', '6c74ca919f5078842bc0841aa0f62a5cd7f1b920bb5aabe520b91e58de435e12');
+    fd.append('zc_gad', '');
+    fd.append('xmIwtLD', '9c38798e6417f2177757eff1a37f5d8728d25cd1c0cddf1518fafcec6d30e7e36246bfc22afd070763dfa2778471a10e');
+    fd.append('actionType', 'TGVhZHM=');
+    fd.append('returnURL', 'null');
+    fd.append('aG9uZXlwb3Q', '');
+    // Lead data
     Object.keys(data).forEach(function(k) { fd.append(k, data[k]); });
-    // mode: 'no-cors' because Zoho Forms doesn't set CORS headers on submission endpoint
-    fetch(ZOHO_SUBMIT_URL, { method: 'POST', body: fd, mode: 'no-cors' })
+    fetch('https://crm.zoho.in/crm/WebToLeadForm', { method: 'POST', body: fd, cache: 'no-cache' })
       .then(function() { onSuccess(); })
       .catch(function(err) {
-        console.error('[FreeYou] Zoho submit failed:', err);
-        onSuccess(); // Still show success to user — don't block on network issues
+        console.error('[FreeYou] Zoho CRM submit failed:', err);
+        onSuccess(); // Still show success to user
       });
   }
 
@@ -990,18 +983,14 @@
       form_id: 'hero_form', skill_type: skill, experience: exp
     });
 
-    // Submit to Zoho Forms
-    // Field names below must match your Zoho form field names exactly
+    // Submit to Zoho CRM Web-to-Lead
     submitToZoho({
-      SingleLine: fname + ' ' + lname,   // Full Name field
-      SingleLine1: fname,                 // First Name (if separate)
-      SingleLine2: lname,                 // Last Name (if separate)
-      Email: email,
-      PhoneNumber_countrycode: '+91',
-      PhoneNumber: phone,
-      Dropdown: skill,                    // Primary Skill dropdown
-      Dropdown1: exp,                     // Experience dropdown
-      SingleLine3: 'hero_lead_form',      // Source / Form identifier
+      'First Name': fname,
+      'Last Name': lname,
+      'Email': email,
+      'Phone': phone,
+      'Lead Source': 'Web Download',
+      'Description': 'Skill: ' + skill + ' | Experience: ' + exp,
     }, function() {
       document.getElementById('leadForm').style.display = 'none';
       document.getElementById('successMsg').style.display = 'block';
@@ -1036,19 +1025,15 @@
       form_id: 'apply_form', skill_type: skill, city: city
     });
 
-    // Submit to Zoho Forms
+    // Submit to Zoho CRM Web-to-Lead
     submitToZoho({
-      SingleLine: fname + ' ' + lname,
-      SingleLine1: fname,
-      SingleLine2: lname,
-      Email: email,
-      PhoneNumber_countrycode: '+91',
-      PhoneNumber: phone,
-      Website: linkedin,                  // LinkedIn URL field
-      Dropdown: skill,
-      Dropdown1: city,
-      MultiLine: why,                     // "What draws you" textarea
-      SingleLine3: 'apply_form',
+      'First Name': fname,
+      'Last Name': lname,
+      'Email': email,
+      'Phone': phone,
+      'Address - City': city,
+      'Lead Source': 'Web Download',
+      'Description': 'Skill: ' + skill + ' | LinkedIn: ' + linkedin + ' | Why FreeYou: ' + why,
     }, function() {
       document.getElementById('applyForm').style.display = 'none';
       document.getElementById('applySuccessMsg').style.display = 'block';
