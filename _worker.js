@@ -1,20 +1,15 @@
 /**
  * FreeYou – Cloudflare Worker
  * ════════════════════════════════════════════════════════════════════
- * Deploy: same Cloudflare account as your Pages site.
- * In Cloudflare Pages > Settings > Functions > set these env vars as Secrets:
- *
- *   DIDIT_API_KEY          → from Didit dashboard (business.didit.me > API & Webhooks)
- *   DIDIT_WEBHOOK_SECRET   → from Didit dashboard (same page, after saving webhook URL)
- *   ZOHO_REFRESH_TOKEN     → from Zoho API console (for CRM write access)
- *   ZOHO_CLIENT_ID         → Zoho API console
- *   ZOHO_CLIENT_SECRET     → Zoho API console
- *
  * Routes handled:
+ *   POST /api/submit-lead      → proxy form data to Zoho CRM (no CORS issues)
  *   POST /api/kyc-session      → create Didit verification session
  *   POST /api/didit-webhook    → receive Didit signed verdict
  * ════════════════════════════════════════════════════════════════════
  */
+
+const ZOHO_TOKEN_1 = '6c74ca919f5078842bc0841aa0f62a5cd7f1b920bb5aabe520b91e58de435e12';
+const ZOHO_TOKEN_2 = '9c38798e6417f2177757eff1a37f5d8728d25cd1c0cddf1518fafcec6d30e7e36246bfc22afd070763dfa2778471a10e';
 
 export default {
   async fetch(request, env, ctx) {
@@ -31,6 +26,11 @@ export default {
       });
     }
 
+    // ── Route: Submit lead to Zoho CRM ───────────────────────────────
+    if (url.pathname === '/api/submit-lead' && request.method === 'POST') {
+      return handleLeadSubmit(request);
+    }
+
     // ── Route: Create Didit KYC session ──────────────────────────────
     if (url.pathname === '/api/kyc-session' && request.method === 'POST') {
       return handleCreateSession(request, env);
@@ -44,6 +44,46 @@ export default {
     return new Response('Not found', { status: 404 });
   }
 };
+
+// ═══════════════════════════════════════════════════════════════════
+// SUBMIT LEAD — proxy to Zoho CRM server-side (bypasses browser CORS)
+// ═══════════════════════════════════════════════════════════════════
+async function handleLeadSubmit(request) {
+  try {
+    const data = await request.json();
+
+    const fd = new FormData();
+    fd.append('xnQsjsdp', ZOHO_TOKEN_1);
+    fd.append('zc_gad', '');
+    fd.append('xmIwtLD', ZOHO_TOKEN_2);
+    fd.append('actionType', 'TGVhZHM=');
+    fd.append('returnURL', 'null');
+    fd.append('aG9uZXlwb3Q', '');
+    fd.append('Lead Source', 'Web Download');
+
+    // Map fields from request
+    Object.entries(data).forEach(([k, v]) => fd.append(k, v));
+
+    await fetch('https://crm.zoho.in/crm/WebToLeadForm', {
+      method: 'POST',
+      body: fd,
+    });
+
+    return new Response(JSON.stringify({ success: true }), {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+      }
+    });
+  } catch (err) {
+    console.error('handleLeadSubmit error:', err);
+    return new Response(JSON.stringify({ success: false, error: err.message }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
+    });
+  }
+}
 
 // ═══════════════════════════════════════════════════════════════════
 // 1. CREATE DIDIT SESSION

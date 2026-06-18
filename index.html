@@ -936,24 +936,18 @@
   });
 
   // ══════════════════════════════════════════════════════════════════
-  // ZOHO CRM WEB-TO-LEAD — direct CRM submission
+  // ZOHO CRM — submit via Cloudflare Worker proxy (avoids CORS)
   // ══════════════════════════════════════════════════════════════════
   function submitToZoho(data, onSuccess) {
-    var fd = new FormData();
-    // Zoho CRM security tokens (do not modify)
-    fd.append('xnQsjsdp', '6c74ca919f5078842bc0841aa0f62a5cd7f1b920bb5aabe520b91e58de435e12');
-    fd.append('zc_gad', '');
-    fd.append('xmIwtLD', '9c38798e6417f2177757eff1a37f5d8728d25cd1c0cddf1518fafcec6d30e7e36246bfc22afd070763dfa2778471a10e');
-    fd.append('actionType', 'TGVhZHM=');
-    fd.append('returnURL', 'null');
-    fd.append('aG9uZXlwb3Q', '');
-    // Lead data
-    Object.keys(data).forEach(function(k) { fd.append(k, data[k]); });
-    fetch('https://crm.zoho.in/crm/WebToLeadForm', { method: 'POST', body: fd, cache: 'no-cache' })
+    fetch('/api/submit-lead', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    })
       .then(function() { onSuccess(); })
       .catch(function(err) {
-        console.error('[FreeYou] Zoho CRM submit failed:', err);
-        onSuccess(); // Still show success to user
+        console.error('[FreeYou] Lead submit failed:', err);
+        onSuccess();
       });
   }
 
