@@ -59,10 +59,12 @@ async function handleLeadSubmit(request) {
     fd.append('actionType', 'TGVhZHM=');
     fd.append('returnURL', 'null');
     fd.append('aG9uZXlwb3Q', '');
-    fd.append('Lead Source', 'Web Download');
-
-    // Map fields from request
-    Object.entries(data).forEach(([k, v]) => fd.append(k, v));
+    // Map fields from request — skip internal keys (prefixed with _)
+    Object.entries(data).forEach(([k, v]) => {
+      if (k.startsWith('_')) return;
+      if (v && String(v).trim()) fd.append(k, v);
+    });
+    if (!data['Lead Source']) fd.append('Lead Source', 'Web Site');
 
     await fetch('https://crm.zoho.in/crm/WebToLeadForm', {
       method: 'POST',
