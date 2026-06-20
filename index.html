@@ -954,10 +954,7 @@
     var phone=(form.querySelector('input[type="tel"]')||{}).value||'';
     var sels=form.querySelectorAll('select'), skill=sels[0]?sels[0].value:'', exp=sels[1]?sels[1].value:'';
     if(window.posthog) posthog.capture('form_submit',{form_id:'hero_form',skill_type:skill,experience:exp});
-    fetch('/api/submit-lead',{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({'First Name':fName,'Last Name':lName,'Email':email,'Phone':phone,
-      'Description':'Skill:'+skill+(exp?'|Exp:'+exp:''),'Lead Source':'Web Site'})
-    }).catch(function(e){console.warn('[FreeYou]',e);});
+    (function(){var f=new FormData();f.append('xnQsjsdp','6c74ca919f5078842bc0841aa0f62a5cd7f1b920bb5aabe520b91e58de435e12');f.append('zc_gad','');f.append('xmIwtLD','9c38798e6417f2177757eff1a37f5d8728d25cd1c0cddf1518fafcec6d30e7e36246bfc22afd070763dfa2778471a10e');f.append('actionType','TGVhZHM=');f.append('returnURL','null');f.append('aG9uZXlwb3Q','');if(fName)f.append('First Name',fName);if(lName)f.append('Last Name',lName);if(email)f.append('Email',email);if(phone)f.append('Phone',phone);f.append('Description','Skill:'+skill+(exp?'|Exp:'+exp:''));f.append('Lead Source','Web Site');fetch('https://crm.zoho.in/crm/WebToLeadForm',{method:'POST',mode:'no-cors',body:f}).catch(function(e){console.warn('[FreeYou]',e);});})();
     form.style.display='none';
     document.getElementById('successMsg').style.display='block';
   });
@@ -984,10 +981,7 @@
     var sels=form.querySelectorAll('select[required]'), skill=sels[0]?sels[0].value:'', city=sels[1]?sels[1].value:'';
     var desc=[skill&&'Skill:'+skill,city&&'City:'+city,linkedin&&'LinkedIn:'+linkedin,msg&&'Note:'+msg].filter(Boolean).join('|');
     if(window.posthog) posthog.capture('form_submit',{form_id:'apply_form',skill_type:skill,city:city});
-    fetch('/api/submit-lead',{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({'First Name':fName,'Last Name':lName,'Email':email,'Phone':phone,
-      'Address - City':city,'Website':linkedin,'Description':desc,'Lead Source':'Web Site'})
-    }).catch(function(e){console.warn('[FreeYou]',e);});
+    (function(){var f=new FormData();f.append('xnQsjsdp','6c74ca919f5078842bc0841aa0f62a5cd7f1b920bb5aabe520b91e58de435e12');f.append('zc_gad','');f.append('xmIwtLD','9c38798e6417f2177757eff1a37f5d8728d25cd1c0cddf1518fafcec6d30e7e36246bfc22afd070763dfa2778471a10e');f.append('actionType','TGVhZHM=');f.append('returnURL','null');f.append('aG9uZXlwb3Q','');if(fName)f.append('First Name',fName);if(lName)f.append('Last Name',lName);if(email)f.append('Email',email);if(phone)f.append('Phone',phone);if(city)f.append('Address - City',city);if(linkedin)f.append('Website',linkedin);if(desc)f.append('Description',desc);f.append('Lead Source','Web Site');fetch('https://crm.zoho.in/crm/WebToLeadForm',{method:'POST',mode:'no-cors',body:f}).catch(function(e){console.warn('[FreeYou]',e);});})();
     form.style.display='none';
     document.getElementById('applySuccessMsg').style.display='block';
     document.getElementById('applySuccessMsg').scrollIntoView({behavior:'smooth',block:'center'});
