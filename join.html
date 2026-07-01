@@ -4,517 +4,195 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Join FreeYou – Freelancer Companion for Bharat</title>
-  <meta name="description" content="Become a FreeYou member. Aadhaar-verified. ₹1,499/month." />
+  <meta name="description" content="Create your FreeYou account. Verified identity, Companion membership, and a safety net for India's independent professionals." />
+  <link rel="canonical" href="https://freeyou.co.in/join.html" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Google Identity Services (Sign in with Google) -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
 
   <!-- PostHog Analytics -->
   <script>
     !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]);t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
-    posthog.init('phc_Chj2S9pvBJEaQfhRHuDoxyx3GvJGMPSy3r6AUSTueH2z', {
-      api_host: 'https://us.i.posthog.com',
-      capture_pageview: true,
-      session_recording: { maskAllInputs: true }
-    });
+    posthog.init('phc_Chj2S9pvBJEaQfhRHuDoxyx3GvJGMPSy3r6AUSTueH2z', { api_host: 'https://us.i.posthog.com', capture_pageview: true, session_recording: { maskAllInputs: true } });
   </script>
 
-  <!-- ══════════════════════════════════════════════
-       TODO – Replace these placeholders before launch:
-       1. RAZORPAY_PLAN_ID   → From Razorpay > Subscriptions > Plans
-       2. RAZORPAY_KEY_ID    → From Razorpay > Settings > API Keys
-       3. DISCORD_INVITE_URL → Your FreeYou Discord invite link
-       (DIDIT_WORKFLOW_ID already set; Cloudflare env vars set separately)
-  ═══════════════════════════════════════════════ -->
   <script>
+    // ── CONFIG — update before launch ──────────────────────────────
     const CONFIG = {
-      ZOHO_FORM_ID: 'TODO_YOUR_FORM_ID',           // e.g. 'form_001xxxxxxxxxxx'
-      ZOHO_FORM_OWNER: 'TODO_YOUR_OWNER_ID',        // e.g. '201xxxxxxxxxxxxx'
-      DIDIT_WORKFLOW_ID: 'c7a05647-6f8d-4bed-8b0e-05842077ecf0',   // Didit dashboard > Workflows > Free KYC
-      RAZORPAY_PLAN_ID: 'TODO_PLAN_ID',             // e.g. 'plan_xxxxxxxxxxxxxxxx'
-      RAZORPAY_KEY_ID: 'TODO_KEY_ID',               // e.g. 'rzp_live_xxxxxxxxxxxxxxxx'
-      DISCORD_INVITE_URL: 'https://discord.gg/TODO_YOUR_INVITE',
-      SITE_URL: 'https://freeyou.in',               // Update when domain is live
+      // Google OAuth: console.cloud.google.com → APIs & Services → Credentials → Create OAuth 2.0 Client ID
+      // Authorized JavaScript origins: https://freeyou.co.in  (add http://localhost:8788 for local dev)
+      // ▼▼ PASTE YOUR CLIENT ID BELOW, then set the SAME value as Worker var GOOGLE_CLIENT_ID ▼▼
+      GOOGLE_CLIENT_ID: 'TODO_YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com',
+
+      DIDIT_WORKFLOW_ID: 'c7a05647-6f8d-4bed-8b0e-05842077ecf0',
+      RAZORPAY_KEY_ID:   'rzp_live_T8HAE0lmgX4am4',
+      DISCORD_INVITE_URL:'https://discord.gg/TODO_YOUR_INVITE',
+      SITE_URL:          'https://freeyou.co.in',
     };
   </script>
 
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --navy: #0D1B4B;
-      --indigo: #1A2E7A;
-      --saffron: #F5A623;
-      --amber: #E8920E;
-      --teal: #00897B;
-      --teal-light: #E0F2F1;
-      --light: #F7F9FC;
-      --white: #FFFFFF;
-      --gray: #6B7280;
-      --gray-light: #9CA3AF;
-      --dark: #111827;
-      --border: #E5E7EB;
-      --red: #EF4444;
-      --green: #10B981;
+      --navy:#0D1B4B; --indigo:#1A2E7A; --saffron:#F5A623; --amber:#E8920E;
+      --teal:#00897B; --teal-light:#E0F2F1; --light:#F7F9FC; --white:#FFFFFF;
+      --gray:#6B7280; --gray-light:#9CA3AF; --dark:#111827;
+      --border:#E5E7EB; --red:#EF4444; --green:#10B981;
+    }
+    html { scroll-behavior:smooth; }
+    body { font-family:'Inter',sans-serif; color:var(--dark); background:var(--light); min-height:100vh; }
+
+    /* NAV */
+    nav { background:var(--navy); padding:16px 24px; display:flex; align-items:center; justify-content:space-between; }
+    .nav-logo { font-family:'Sora',sans-serif; font-size:1.4rem; font-weight:800; color:var(--white); text-decoration:none; }
+    .nav-logo span { color:var(--saffron); }
+    .nav-back { font-size:0.85rem; color:rgba(255,255,255,0.6); text-decoration:none; display:flex; align-items:center; gap:6px; }
+    .nav-back:hover { color:var(--white); }
+
+    /* PROGRESS */
+    .progress-wrap { background:var(--white); border-bottom:1px solid var(--border); padding:0 24px; }
+    .progress-inner { max-width:600px; margin:0 auto; display:flex; align-items:center; padding:20px 0; }
+    .prog-step { display:flex; align-items:center; gap:10px; flex:1; position:relative; }
+    .prog-step:not(:last-child)::after { content:''; position:absolute; left:36px; right:-10px; top:18px; height:2px; background:var(--border); z-index:0; }
+    .prog-step.done:not(:last-child)::after { background:var(--teal); }
+    .prog-dot { width:36px; height:36px; border-radius:50%; background:var(--border); display:flex; align-items:center; justify-content:center; font-size:0.8rem; font-weight:700; color:var(--gray); flex-shrink:0; position:relative; z-index:1; transition:all 0.3s; }
+    .prog-step.active .prog-dot { background:var(--navy); color:var(--white); box-shadow:0 0 0 4px rgba(13,27,75,0.12); }
+    .prog-step.done .prog-dot { background:var(--teal); color:var(--white); content:'✓'; }
+    .prog-label { font-size:0.72rem; font-weight:600; color:var(--gray-light); line-height:1.3; display:none; }
+    @media(min-width:480px){ .prog-label { display:block; } }
+    .prog-step.active .prog-label { color:var(--navy); }
+    .prog-step.done .prog-label { color:var(--teal); }
+
+    /* MAIN */
+    .main { max-width:600px; margin:0 auto; padding:32px 24px 80px; }
+    .card { background:var(--white); border-radius:16px; border:1px solid var(--border); padding:32px; margin-bottom:16px; }
+    .card-title { font-family:'Sora',sans-serif; font-size:1.3rem; font-weight:700; color:var(--navy); margin-bottom:6px; }
+    .card-sub { font-size:0.875rem; color:var(--gray); margin-bottom:28px; line-height:1.6; }
+    .step-tag { font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--teal); background:var(--teal-light); padding:3px 10px; border-radius:100px; display:inline-block; margin-bottom:10px; }
+
+    /* FORM */
+    .form-group { margin-bottom:18px; }
+    .form-group label { display:block; font-size:0.8rem; font-weight:600; color:var(--dark); margin-bottom:6px; }
+    .form-group label .req { color:var(--red); margin-left:2px; }
+    .form-group input, .form-group select, .form-group textarea { width:100%; padding:12px 14px; border:1.5px solid var(--border); border-radius:8px; font-size:0.9rem; font-family:'Inter',sans-serif; color:var(--dark); background:var(--white); transition:border-color 0.2s; outline:none; -webkit-appearance:none; }
+    .form-group input:focus, .form-group select:focus { border-color:var(--indigo); }
+    .form-group input.error, .form-group select.error { border-color:var(--red); }
+    .form-group input[readonly] { background:#f8f9fa; color:var(--gray); cursor:default; }
+    .field-error { font-size:0.75rem; color:var(--red); margin-top:4px; display:none; }
+    .field-error.show { display:block; }
+    .form-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+    .phone-group { display:flex; align-items:stretch; }
+    .phone-prefix { background:var(--light); border:1.5px solid var(--border); border-right:none; border-radius:8px 0 0 8px; padding:12px 12px; font-size:0.9rem; color:var(--gray); display:flex; align-items:center; font-weight:600; }
+    .phone-group input { border-radius:0 8px 8px 0; flex:1; }
+
+    /* SKILLS */
+    .skills-pills { display:flex; flex-wrap:wrap; gap:8px; margin-top:6px; }
+    .skill-pill { padding:6px 14px; border-radius:100px; border:1.5px solid var(--border); font-size:0.82rem; font-weight:500; cursor:pointer; transition:all 0.15s; user-select:none; }
+    .skill-pill:hover { border-color:var(--indigo); color:var(--indigo); }
+    .skill-pill.selected { background:var(--indigo); border-color:var(--indigo); color:var(--white); }
+
+    /* CONSENT */
+    .consent-box { background:var(--light); border-radius:10px; padding:16px; display:flex; gap:12px; align-items:flex-start; margin-bottom:20px; border:1.5px solid var(--border); }
+    .consent-box input[type="checkbox"] { width:18px; height:18px; flex-shrink:0; margin-top:2px; accent-color:var(--indigo); cursor:pointer; }
+    .consent-box label { font-size:0.82rem; color:var(--gray); line-height:1.5; cursor:pointer; }
+    .consent-box label a { color:var(--indigo); }
+
+    /* BUTTONS */
+    .btn-primary { width:100%; padding:14px; background:var(--navy); color:var(--white); border:none; border-radius:10px; font-size:1rem; font-weight:700; font-family:'Inter',sans-serif; cursor:pointer; transition:all 0.2s; display:flex; align-items:center; justify-content:center; gap:8px; }
+    .btn-primary:hover:not(:disabled) { background:var(--indigo); }
+    .btn-primary:disabled { opacity:0.6; cursor:not-allowed; }
+    .btn-saffron { background:var(--saffron); color:var(--navy); }
+    .btn-saffron:hover:not(:disabled) { background:var(--amber); }
+    .btn-teal { background:var(--teal); color:var(--white); }
+    .btn-teal:hover:not(:disabled) { background:#00695C; }
+    .btn-outline { width:100%; padding:12px; background:transparent; color:var(--gray); border:1.5px solid var(--border); border-radius:10px; font-size:0.9rem; font-weight:600; font-family:'Inter',sans-serif; cursor:pointer; transition:all 0.2s; margin-top:10px; }
+    .btn-outline:hover { border-color:var(--gray); color:var(--dark); }
+
+    .spinner { width:18px; height:18px; border:2px solid rgba(255,255,255,0.3); border-top-color:white; border-radius:50%; animation:spin 0.7s linear infinite; display:none; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+
+    /* ALERT */
+    .alert { padding:12px 16px; border-radius:8px; font-size:0.85rem; margin-bottom:16px; display:none; }
+    .alert.show { display:block; }
+    .alert-error { background:#FEF2F2; color:#DC2626; border:1px solid #FECACA; }
+    .alert-success { background:#F0FDF4; color:#15803D; border:1px solid #BBF7D0; }
+    .alert-info { background:#EFF6FF; color:#1D4ED8; border:1px solid #BFDBFE; }
+
+    /* SHOW/HIDE STEPS */
+    .step-section { display:none; }
+    .step-section.active { display:block; }
+
+    /* ── AUTH STEP (Step 0) ── */
+    .auth-logo { text-align:center; margin-bottom:24px; }
+    .auth-logo-text { font-family:'Sora',sans-serif; font-size:1.8rem; font-weight:800; color:var(--navy); }
+    .auth-logo-text span { color:var(--saffron); }
+    .auth-tagline { font-size:0.875rem; color:var(--gray); margin-top:4px; }
+
+    .auth-divider { display:flex; align-items:center; gap:12px; margin:20px 0; }
+    .auth-divider hr { flex:1; border:none; border-top:1px solid var(--border); }
+    .auth-divider span { font-size:0.75rem; color:var(--gray-light); white-space:nowrap; }
+
+    /* Social sign-in buttons */
+    .social-btn { width:100%; padding:12px 16px; border:1.5px solid var(--border); border-radius:10px; background:var(--white); font-size:0.9rem; font-weight:600; font-family:'Inter',sans-serif; color:var(--dark); cursor:pointer; display:flex; align-items:center; gap:12px; transition:all 0.2s; margin-bottom:10px; }
+    .social-btn:hover { border-color:var(--navy); background:#f8f9fc; }
+    .social-btn img { width:20px; height:20px; }
+    .social-btn .social-text { flex:1; text-align:center; }
+    .social-btn .social-coming { font-size:0.7rem; font-weight:600; color:var(--gray-light); background:var(--light); padding:2px 8px; border-radius:20px; }
+
+    /* Google Sign-In container */
+    #google-btn-container { display:flex; justify-content:center; margin-bottom:10px; min-height:44px; }
+
+    /* Email OTP flow */
+    .otp-input { letter-spacing:8px; font-size:1.4rem; font-weight:700; text-align:center; }
+    .otp-row { display:flex; gap:8px; justify-content:center; margin:12px 0; }
+    .otp-box { width:46px; height:54px; border:1.5px solid var(--border); border-radius:8px; font-size:1.4rem; font-weight:700; text-align:center; font-family:'Sora',sans-serif; outline:none; }
+    .otp-box:focus { border-color:var(--indigo); }
+    .resend-link { font-size:0.8rem; color:var(--indigo); cursor:pointer; text-decoration:underline; }
+
+    /* Auth verified badge */
+    .auth-verified-badge { background:var(--teal-light); border-radius:10px; padding:12px 16px; display:flex; align-items:center; gap:10px; margin-bottom:20px; }
+    .auth-verified-badge .icon { font-size:1.2rem; }
+    .auth-verified-badge .text { font-size:0.85rem; color:#065f46; font-weight:600; }
+    .auth-verified-badge .sub { font-size:0.75rem; color:var(--teal); }
+
+    /* KYC */
+    .kyc-info-box { background:linear-gradient(135deg,rgba(13,27,75,0.04) 0%,rgba(0,137,123,0.04) 100%); border:1px solid rgba(13,27,75,0.1); border-radius:12px; padding:20px; margin-bottom:24px; }
+    .kyc-info-box h4 { font-size:0.875rem; font-weight:700; color:var(--navy); margin-bottom:12px; }
+    .kyc-step-item { display:flex; align-items:flex-start; gap:10px; font-size:0.82rem; color:var(--dark); margin-bottom:8px; }
+    .kyc-num { width:22px; height:22px; border-radius:50%; background:var(--navy); color:var(--white); font-size:0.7rem; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px; }
+    .dpdp-badge { display:inline-flex; align-items:center; gap:6px; background:var(--teal-light); color:var(--teal); border-radius:100px; padding:5px 12px; font-size:0.75rem; font-weight:600; margin-bottom:16px; }
+
+    /* Payment */
+    .plan-card { border:2px solid var(--saffron); border-radius:12px; padding:24px; text-align:center; margin-bottom:24px; background:linear-gradient(135deg,rgba(245,166,35,0.04) 0%,rgba(245,166,35,0.08) 100%); }
+    .plan-badge { display:inline-block; background:var(--saffron); color:var(--navy); font-size:0.72rem; font-weight:700; padding:3px 12px; border-radius:100px; margin-bottom:12px; letter-spacing:0.5px; text-transform:uppercase; }
+    .plan-price { font-family:'Sora',sans-serif; font-size:2.4rem; font-weight:800; color:var(--navy); margin-bottom:4px; }
+    .plan-price span { font-size:1rem; font-weight:500; }
+    .plan-note { font-size:0.8rem; color:var(--gray); }
+    .benefits-list { display:flex; flex-direction:column; gap:10px; margin-bottom:24px; }
+    .benefit-item { display:flex; align-items:center; gap:10px; font-size:0.875rem; }
+    .benefit-item .check { width:22px; height:22px; border-radius:50%; background:var(--teal-light); color:var(--teal); font-size:0.75rem; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .razorpay-note { text-align:center; font-size:0.75rem; color:var(--gray); margin-top:12px; display:flex; align-items:center; justify-content:center; gap:6px; }
+
+    /* Welcome */
+    .welcome-hero { text-align:center; padding:16px 0 28px; }
+    .welcome-icon { font-size:3.5rem; margin-bottom:16px; display:block; }
+    .welcome-hero h2 { font-family:'Sora',sans-serif; font-size:1.6rem; font-weight:800; color:var(--navy); margin-bottom:10px; }
+    .welcome-hero p { font-size:0.9rem; color:var(--gray); max-width:420px; margin:0 auto; line-height:1.6; }
+    .member-id-box { background:var(--light); border-radius:10px; padding:14px 20px; text-align:center; margin:20px 0; border:1px solid var(--border); }
+    .member-id-box .label { font-size:0.72rem; font-weight:600; text-transform:uppercase; letter-spacing:1px; color:var(--gray); margin-bottom:4px; }
+    .member-id-box .id { font-family:'Sora',sans-serif; font-size:1.4rem; font-weight:800; color:var(--navy); letter-spacing:2px; }
+    .next-step-item { display:flex; align-items:center; gap:14px; padding:14px 16px; border-radius:10px; background:var(--light); border:1px solid var(--border); margin-bottom:10px; text-decoration:none; color:inherit; }
+    .next-step-icon { font-size:1.3rem; flex-shrink:0; }
+    .next-step-text strong { font-size:0.875rem; font-weight:700; display:block; }
+    .next-step-text span { font-size:0.8rem; color:var(--gray); }
+
+    @media(max-width:480px){
+      .card { padding:24px 20px; }
+      .form-row { grid-template-columns:1fr; }
+      .main { padding:20px 16px 60px; }
     }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: 'Inter', sans-serif;
-      color: var(--dark);
-      background: var(--light);
-      min-height: 100vh;
-    }
-
-    /* ── TOP NAV ── */
-    nav {
-      background: var(--navy);
-      padding: 16px 24px;
-      display: flex; align-items: center; justify-content: space-between;
-    }
-
-    .nav-logo {
-      font-family: 'Sora', sans-serif;
-      font-size: 1.4rem; font-weight: 800;
-      color: var(--white); text-decoration: none;
-    }
-    .nav-logo span { color: var(--saffron); }
-
-    .nav-back {
-      font-size: 0.85rem; color: rgba(255,255,255,0.6);
-      text-decoration: none; display: flex; align-items: center; gap: 6px;
-    }
-    .nav-back:hover { color: var(--white); }
-
-    /* ── PROGRESS BAR ── */
-    .progress-wrap {
-      background: var(--white);
-      border-bottom: 1px solid var(--border);
-      padding: 0 24px;
-    }
-
-    .progress-inner {
-      max-width: 600px; margin: 0 auto;
-      display: flex; align-items: center;
-      padding: 20px 0;
-      gap: 0;
-    }
-
-    .prog-step {
-      display: flex; align-items: center; gap: 10px;
-      flex: 1;
-      position: relative;
-    }
-
-    .prog-step:not(:last-child)::after {
-      content: '';
-      position: absolute; left: 36px; right: -10px; top: 18px;
-      height: 2px;
-      background: var(--border);
-      z-index: 0;
-    }
-
-    .prog-step.done:not(:last-child)::after { background: var(--teal); }
-    .prog-step.active:not(:last-child)::after { background: var(--border); }
-
-    .prog-dot {
-      width: 36px; height: 36px; border-radius: 50%;
-      background: var(--border);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 0.8rem; font-weight: 700;
-      color: var(--gray);
-      flex-shrink: 0;
-      position: relative; z-index: 1;
-      transition: all 0.3s;
-    }
-
-    .prog-step.active .prog-dot {
-      background: var(--navy); color: var(--white);
-      box-shadow: 0 0 0 4px rgba(13,27,75,0.12);
-    }
-
-    .prog-step.done .prog-dot {
-      background: var(--teal); color: var(--white);
-    }
-
-    .prog-step.done .prog-dot::after {
-      content: '✓';
-    }
-    .prog-step.active .prog-dot-num,
-    .prog-step.done .prog-dot-num {
-      display: none;
-    }
-    .prog-step.done .prog-dot-check { display: inline; }
-    .prog-dot-check { display: none; }
-
-    .prog-label {
-      font-size: 0.72rem; font-weight: 600;
-      color: var(--gray-light); line-height: 1.3;
-      display: none;
-    }
-
-    @media (min-width: 480px) { .prog-label { display: block; } }
-
-    .prog-step.active .prog-label { color: var(--navy); }
-    .prog-step.done .prog-label { color: var(--teal); }
-
-    /* ── MAIN CONTENT ── */
-    .main {
-      max-width: 600px; margin: 0 auto;
-      padding: 32px 24px 80px;
-    }
-
-    /* ── CARDS ── */
-    .card {
-      background: var(--white);
-      border-radius: 16px;
-      border: 1px solid var(--border);
-      padding: 32px;
-      margin-bottom: 16px;
-    }
-
-    .card-title {
-      font-family: 'Sora', sans-serif;
-      font-size: 1.3rem; font-weight: 700;
-      color: var(--navy); margin-bottom: 6px;
-    }
-
-    .card-sub {
-      font-size: 0.875rem; color: var(--gray);
-      margin-bottom: 28px; line-height: 1.6;
-    }
-
-    /* ── FORM ELEMENTS ── */
-    .form-group { margin-bottom: 18px; }
-
-    .form-group label {
-      display: block; font-size: 0.8rem;
-      font-weight: 600; color: var(--dark);
-      margin-bottom: 6px;
-    }
-
-    .form-group label .req { color: var(--red); margin-left: 2px; }
-
-    .form-group input,
-    .form-group select,
-    .form-group textarea {
-      width: 100%; padding: 12px 14px;
-      border: 1.5px solid var(--border);
-      border-radius: 8px; font-size: 0.9rem;
-      font-family: 'Inter', sans-serif;
-      color: var(--dark); background: var(--white);
-      transition: border-color 0.2s;
-      outline: none;
-      -webkit-appearance: none;
-    }
-
-    .form-group input:focus,
-    .form-group select:focus,
-    .form-group textarea:focus { border-color: var(--indigo); }
-
-    .form-group input.error,
-    .form-group select.error { border-color: var(--red); }
-
-    .field-error {
-      font-size: 0.75rem; color: var(--red);
-      margin-top: 4px; display: none;
-    }
-
-    .field-error.show { display: block; }
-
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-
-    /* Phone field with prefix */
-    .phone-group { display: flex; align-items: stretch; }
-
-    .phone-prefix {
-      background: var(--light); border: 1.5px solid var(--border);
-      border-right: none; border-radius: 8px 0 0 8px;
-      padding: 12px 12px; font-size: 0.9rem;
-      color: var(--gray); display: flex; align-items: center;
-      font-weight: 600; white-space: nowrap;
-    }
-
-    .phone-group input {
-      border-radius: 0 8px 8px 0; flex: 1;
-    }
-
-    /* Skills multi-select pills */
-    .skills-pills {
-      display: flex; flex-wrap: wrap; gap: 8px;
-      margin-top: 6px;
-    }
-
-    .skill-pill {
-      padding: 6px 14px; border-radius: 100px;
-      border: 1.5px solid var(--border);
-      font-size: 0.82rem; font-weight: 500;
-      cursor: pointer; transition: all 0.15s;
-      user-select: none; background: var(--white);
-    }
-
-    .skill-pill:hover { border-color: var(--indigo); color: var(--indigo); }
-
-    .skill-pill.selected {
-      background: var(--indigo); border-color: var(--indigo);
-      color: var(--white);
-    }
-
-    .skills-error { display: none; }
-    .skills-error.show { display: block; }
-
-    /* Consent checkbox */
-    .consent-box {
-      background: var(--light); border-radius: 10px;
-      padding: 16px; display: flex; gap: 12px; align-items: flex-start;
-      margin-bottom: 20px; border: 1.5px solid var(--border);
-    }
-
-    .consent-box input[type="checkbox"] {
-      width: 18px; height: 18px; flex-shrink: 0;
-      margin-top: 2px; accent-color: var(--indigo);
-      cursor: pointer;
-    }
-
-    .consent-box label {
-      font-size: 0.82rem; color: var(--gray);
-      line-height: 1.5; cursor: pointer;
-    }
-
-    .consent-box label a { color: var(--indigo); }
-
-    /* Buttons */
-    .btn-primary {
-      width: 100%; padding: 14px;
-      background: var(--navy); color: var(--white);
-      border: none; border-radius: 10px;
-      font-size: 1rem; font-weight: 700;
-      font-family: 'Inter', sans-serif;
-      cursor: pointer; transition: all 0.2s;
-      display: flex; align-items: center; justify-content: center; gap: 8px;
-    }
-    .btn-primary:hover:not(:disabled) { background: var(--indigo); }
-    .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
-
-    .btn-saffron {
-      background: var(--saffron); color: var(--navy);
-    }
-    .btn-saffron:hover:not(:disabled) { background: var(--amber); }
-
-    .btn-teal {
-      background: var(--teal); color: var(--white);
-    }
-    .btn-teal:hover:not(:disabled) { background: #00695C; }
-
-    .btn-outline {
-      width: 100%; padding: 12px;
-      background: transparent; color: var(--gray);
-      border: 1.5px solid var(--border); border-radius: 10px;
-      font-size: 0.9rem; font-weight: 600;
-      font-family: 'Inter', sans-serif;
-      cursor: pointer; transition: all 0.2s;
-      margin-top: 10px;
-    }
-    .btn-outline:hover { border-color: var(--gray); color: var(--dark); }
-
-    /* Loading spinner */
-    .spinner {
-      width: 18px; height: 18px;
-      border: 2px solid rgba(255,255,255,0.3);
-      border-top-color: white;
-      border-radius: 50%;
-      animation: spin 0.7s linear infinite;
-      display: none;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    /* ── STEP-SPECIFIC STYLES ── */
-
-    /* Step 2 – eKYC */
-    .kyc-info-box {
-      background: linear-gradient(135deg, rgba(13,27,75,0.04) 0%, rgba(0,137,123,0.04) 100%);
-      border: 1px solid rgba(13,27,75,0.1);
-      border-radius: 12px; padding: 20px;
-      margin-bottom: 24px;
-    }
-
-    .kyc-info-box h4 {
-      font-size: 0.875rem; font-weight: 700;
-      color: var(--navy); margin-bottom: 12px;
-      display: flex; align-items: center; gap: 8px;
-    }
-
-    .kyc-steps-list {
-      display: flex; flex-direction: column; gap: 8px;
-    }
-
-    .kyc-step-item {
-      display: flex; align-items: flex-start; gap: 10px;
-      font-size: 0.82rem; color: var(--dark);
-    }
-
-    .kyc-num {
-      width: 22px; height: 22px; border-radius: 50%;
-      background: var(--navy); color: var(--white);
-      font-size: 0.7rem; font-weight: 700;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0; margin-top: 1px;
-    }
-
-    .dpdp-badge {
-      display: inline-flex; align-items: center; gap: 6px;
-      background: var(--teal-light); color: var(--teal);
-      border-radius: 100px; padding: 5px 12px;
-      font-size: 0.75rem; font-weight: 600;
-      margin-bottom: 16px;
-    }
-
-    /* Step 3 – Payment */
-    .plan-card {
-      border: 2px solid var(--saffron);
-      border-radius: 12px; padding: 24px;
-      text-align: center; margin-bottom: 24px;
-      background: linear-gradient(135deg, rgba(245,166,35,0.04) 0%, rgba(245,166,35,0.08) 100%);
-    }
-
-    .plan-badge {
-      display: inline-block;
-      background: var(--saffron); color: var(--navy);
-      font-size: 0.72rem; font-weight: 700;
-      padding: 3px 12px; border-radius: 100px;
-      margin-bottom: 12px; letter-spacing: 0.5px;
-      text-transform: uppercase;
-    }
-
-    .plan-price {
-      font-family: 'Sora', sans-serif;
-      font-size: 2.4rem; font-weight: 800;
-      color: var(--navy); margin-bottom: 4px;
-    }
-
-    .plan-price span { font-size: 1rem; font-weight: 500; }
-
-    .plan-note { font-size: 0.8rem; color: var(--gray); }
-
-    .benefits-list {
-      display: flex; flex-direction: column; gap: 10px;
-      margin-bottom: 24px;
-    }
-
-    .benefit-item {
-      display: flex; align-items: center; gap: 10px;
-      font-size: 0.875rem; color: var(--dark);
-    }
-
-    .benefit-item .check {
-      width: 22px; height: 22px; border-radius: 50%;
-      background: var(--teal-light); color: var(--teal);
-      font-size: 0.75rem; font-weight: 700;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .razorpay-note {
-      text-align: center; font-size: 0.75rem; color: var(--gray);
-      margin-top: 12px; display: flex; align-items: center;
-      justify-content: center; gap: 6px;
-    }
-
-    /* Step 4 – Welcome */
-    .welcome-hero {
-      text-align: center; padding: 16px 0 28px;
-    }
-
-    .welcome-icon {
-      font-size: 3.5rem; margin-bottom: 16px; display: block;
-    }
-
-    .welcome-hero h2 {
-      font-family: 'Sora', sans-serif;
-      font-size: 1.6rem; font-weight: 800;
-      color: var(--navy); margin-bottom: 10px;
-    }
-
-    .welcome-hero p {
-      font-size: 0.9rem; color: var(--gray);
-      max-width: 420px; margin: 0 auto; line-height: 1.6;
-    }
-
-    .member-id-box {
-      background: var(--light); border-radius: 10px;
-      padding: 14px 20px; text-align: center;
-      margin: 20px 0; border: 1px solid var(--border);
-    }
-
-    .member-id-box .label {
-      font-size: 0.72rem; font-weight: 600;
-      text-transform: uppercase; letter-spacing: 1px;
-      color: var(--gray); margin-bottom: 4px;
-    }
-
-    .member-id-box .id {
-      font-family: 'Sora', sans-serif;
-      font-size: 1.4rem; font-weight: 800;
-      color: var(--navy); letter-spacing: 2px;
-    }
-
-    .next-steps {
-      display: flex; flex-direction: column; gap: 12px;
-      margin-top: 24px;
-    }
-
-    .next-step-item {
-      display: flex; align-items: center; gap: 14px;
-      padding: 14px 16px; border-radius: 10px;
-      background: var(--light); border: 1px solid var(--border);
-    }
-
-    .next-step-icon {
-      font-size: 1.3rem; flex-shrink: 0;
-    }
-
-    .next-step-text strong {
-      font-size: 0.875rem; font-weight: 700;
-      color: var(--dark); display: block;
-    }
-
-    .next-step-text span {
-      font-size: 0.8rem; color: var(--gray);
-    }
-
-    /* Step indicator in header */
-    .step-header {
-      display: flex; align-items: center; gap: 10px;
-      margin-bottom: 6px;
-    }
-
-    .step-tag {
-      font-size: 0.7rem; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 1px;
-      color: var(--teal); background: var(--teal-light);
-      padding: 3px 10px; border-radius: 100px;
-    }
-
-    /* Alert */
-    .alert {
-      padding: 12px 16px; border-radius: 8px;
-      font-size: 0.85rem; margin-bottom: 16px;
-      display: none;
-    }
-    .alert.show { display: block; }
-    .alert-error { background: #FEF2F2; color: #DC2626; border: 1px solid #FECACA; }
-    .alert-success { background: #F0FDF4; color: #15803D; border: 1px solid #BBF7D0; }
-
-    /* Responsive */
-    @media (max-width: 480px) {
-      .card { padding: 24px 20px; }
-      .form-row { grid-template-columns: 1fr; }
-      .main { padding: 20px 16px 60px; }
-    }
-
-    /* Hide/show steps */
-    .step-section { display: none; }
-    .step-section.active { display: block; }
   </style>
 </head>
 <body>
@@ -525,56 +203,143 @@
   <a href="/" class="nav-back">← Back to home</a>
 </nav>
 
-<!-- PROGRESS BAR -->
-<div class="progress-wrap">
+<!-- PROGRESS BAR (hidden until after auth) -->
+<div class="progress-wrap" id="progress-bar" style="display:none;">
   <div class="progress-inner">
     <div class="prog-step" id="prog-1">
-      <div class="prog-dot">
-        <span class="prog-dot-num">1</span>
-        <span class="prog-dot-check">✓</span>
-      </div>
+      <div class="prog-dot"><span class="prog-dot-num">1</span></div>
       <span class="prog-label">Your Profile</span>
     </div>
     <div class="prog-step" id="prog-2">
-      <div class="prog-dot">
-        <span class="prog-dot-num">2</span>
-        <span class="prog-dot-check">✓</span>
-      </div>
+      <div class="prog-dot"><span class="prog-dot-num">2</span></div>
       <span class="prog-label">Verify Identity</span>
     </div>
     <div class="prog-step" id="prog-3">
-      <div class="prog-dot">
-        <span class="prog-dot-num">3</span>
-        <span class="prog-dot-check">✓</span>
-      </div>
+      <div class="prog-dot"><span class="prog-dot-num">3</span></div>
       <span class="prog-label">Activate Plan</span>
     </div>
     <div class="prog-step" id="prog-4">
-      <div class="prog-dot">
-        <span class="prog-dot-num">4</span>
-        <span class="prog-dot-check">✓</span>
-      </div>
+      <div class="prog-dot"><span class="prog-dot-num">4</span></div>
       <span class="prog-label">Welcome!</span>
     </div>
   </div>
 </div>
 
-<!-- MAIN -->
 <main class="main">
 
-  <!-- ═══════════════════ STEP 1: PROFILE ═══════════════════ -->
-  <section class="step-section active" id="step-1">
+  <!-- ════════════════ STEP 0: SIGN IN ════════════════ -->
+  <section class="step-section active" id="step-0">
     <div class="card">
-      <div class="step-header">
-        <span class="step-tag">Step 1 of 4</span>
+      <div class="auth-logo">
+        <div class="auth-logo-text">Free<span>You</span></div>
+        <div class="auth-tagline">India's freelancer companion — health cover, contracts, community</div>
       </div>
+
+      <h2 class="card-title" style="text-align:center;margin-bottom:8px;">Create your account</h2>
+      <p class="card-sub" style="text-align:center;margin-bottom:24px;">Free to join. Upgrade when you're ready.</p>
+
+      <div id="alert-step0" class="alert"></div>
+
+      <!-- Google Sign-In -->
+      <div id="google-btn-container"></div>
+
+      <div id="google-manual-btn" style="display:none;">
+        <button class="social-btn" onclick="triggerGoogleSignIn()">
+          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" />
+          <span class="social-text">Continue with Google</span>
+        </button>
+      </div>
+
+      <!-- Divider -->
+      <div class="auth-divider"><hr /><span>or continue with</span><hr /></div>
+
+      <!-- Email OTP -->
+      <div id="email-entry-section">
+        <div class="form-group">
+          <label for="auth-email">Email address</label>
+          <input type="email" id="auth-email" placeholder="yourname@gmail.com" autocomplete="email" />
+          <div class="field-error" id="err-auth-email">Enter a valid email address</div>
+        </div>
+        <button class="btn-primary" onclick="sendEmailOTP()" id="btn-email-otp">
+          <span id="btn-otp-text">Continue with Email →</span>
+          <div class="spinner" id="spinner-otp"></div>
+        </button>
+      </div>
+
+      <!-- OTP Verification (shown after email submitted) -->
+      <div id="otp-section" style="display:none;">
+        <div class="alert alert-info show" id="otp-sent-msg">
+          ✉️ A 6-digit code was sent to <strong id="otp-email-display"></strong>
+        </div>
+        <div class="form-group">
+          <label>Enter verification code</label>
+          <div class="otp-row" id="otp-inputs">
+            <input class="otp-box" maxlength="1" type="text" inputmode="numeric" />
+            <input class="otp-box" maxlength="1" type="text" inputmode="numeric" />
+            <input class="otp-box" maxlength="1" type="text" inputmode="numeric" />
+            <input class="otp-box" maxlength="1" type="text" inputmode="numeric" />
+            <input class="otp-box" maxlength="1" type="text" inputmode="numeric" />
+            <input class="otp-box" maxlength="1" type="text" inputmode="numeric" />
+          </div>
+          <div class="field-error" id="err-otp">Incorrect code. Please try again.</div>
+        </div>
+        <button class="btn-primary" onclick="verifyEmailOTP()" id="btn-verify-otp">
+          Verify Code →
+        </button>
+        <p style="text-align:center;font-size:0.8rem;color:var(--gray);margin-top:12px;">
+          Didn't receive it? <span class="resend-link" onclick="resendOTP()">Resend code</span>
+          &nbsp;·&nbsp; <span class="resend-link" onclick="resetToEmail()">Change email</span>
+        </p>
+      </div>
+
+      <!-- Mobile option -->
+      <div class="auth-divider" style="margin-top:16px;"><hr /><span>or</span><hr /></div>
+      <button class="social-btn" onclick="continueWithMobile()">
+        <span style="font-size:1.1rem;">📱</span>
+        <span class="social-text">Continue with Mobile / WhatsApp OTP</span>
+        <span class="social-coming">Coming soon</span>
+      </button>
+
+      <!-- Microsoft / Apple -->
+      <button class="social-btn" onclick="showComingSoon('Microsoft')">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg" alt="Microsoft" style="width:18px;height:18px;" />
+        <span class="social-text">Continue with Microsoft</span>
+        <span class="social-coming">Coming soon</span>
+      </button>
+      <button class="social-btn" onclick="showComingSoon('Apple')">
+        <span style="font-size:1.2rem;">🍎</span>
+        <span class="social-text">Continue with Apple</span>
+        <span class="social-coming">Coming soon</span>
+      </button>
+    </div>
+
+    <p style="text-align:center;font-size:0.78rem;color:var(--gray);padding:8px 0;">
+      Already a member? <a href="/portal-test.html" style="color:var(--indigo);font-weight:600;">Go to your portal →</a>
+    </p>
+    <div style="text-align:center;font-size:0.75rem;color:var(--gray-light);margin-top:6px;">
+      🔒 DPDP Act 2023 compliant · No spam · Cancel anytime
+    </div>
+  </section>
+
+  <!-- ════════════════ STEP 1: PROFILE ════════════════ -->
+  <section class="step-section" id="step-1">
+    <div class="card">
+      <span class="step-tag">Step 1 of 4</span>
       <h2 class="card-title">Tell us about yourself</h2>
       <p class="card-sub">Quick setup — takes 2 minutes. Your data is stored securely per DPDP Act 2023.</p>
+
+      <!-- Auth verified badge -->
+      <div class="auth-verified-badge" id="auth-badge">
+        <div class="icon">✅</div>
+        <div>
+          <div class="text" id="auth-badge-text">Signed in with Google</div>
+          <div class="sub" id="auth-badge-sub">Email verified</div>
+        </div>
+      </div>
 
       <div id="alert-step1" class="alert alert-error"></div>
 
       <form id="form-step1" novalidate>
-        <!-- Name -->
         <div class="form-row">
           <div class="form-group">
             <label for="fname">First Name <span class="req">*</span></label>
@@ -588,41 +353,29 @@
           </div>
         </div>
 
-        <!-- Email -->
         <div class="form-group">
           <label for="email">Email Address <span class="req">*</span></label>
           <input type="email" id="email" name="email" placeholder="ravi@gmail.com" autocomplete="email" />
           <div class="field-error" id="err-email">Enter a valid email address</div>
         </div>
 
-        <!-- Phone -->
         <div class="form-group">
           <label for="phone">Mobile Number <span class="req">*</span></label>
           <div class="phone-group">
             <span class="phone-prefix">🇮🇳 +91</span>
-            <input type="tel" id="phone" name="phone" placeholder="98765 43210"
-              maxlength="10" autocomplete="tel-national"
-              oninput="this.value=this.value.replace(/\D/g,'')" />
+            <input type="tel" id="phone" name="phone" placeholder="98765 43210" maxlength="10" autocomplete="tel-national" oninput="this.value=this.value.replace(/\D/g,'')" />
           </div>
           <div class="field-error" id="err-phone">Enter a valid 10-digit mobile number</div>
         </div>
 
-        <!-- City + Years -->
         <div class="form-row">
           <div class="form-group">
             <label for="city">City <span class="req">*</span></label>
             <select id="city" name="city">
               <option value="">Select city</option>
-              <option>Bangalore</option>
-              <option>Mumbai</option>
-              <option>Delhi NCR</option>
-              <option>Hyderabad</option>
-              <option>Chennai</option>
-              <option>Pune</option>
-              <option>Kolkata</option>
-              <option>Ahmedabad</option>
-              <option>Jaipur</option>
-              <option>Other</option>
+              <option>Bangalore</option><option>Mumbai</option><option>Delhi NCR</option>
+              <option>Hyderabad</option><option>Chennai</option><option>Pune</option>
+              <option>Kolkata</option><option>Ahmedabad</option><option>Jaipur</option><option>Other</option>
             </select>
             <div class="field-error" id="err-city">Select your city</div>
           </div>
@@ -639,7 +392,6 @@
           </div>
         </div>
 
-        <!-- Skills -->
         <div class="form-group">
           <label>Primary Skills <span class="req">*</span> <span style="font-weight:400;color:var(--gray)">(pick up to 3)</span></label>
           <div class="skills-pills" id="skills-pills">
@@ -654,29 +406,22 @@
             <div class="skill-pill" data-skill="Finance & Accounts">💰 Finance</div>
             <div class="skill-pill" data-skill="Other">➕ Other</div>
           </div>
-          <div class="field-error skills-error" id="err-skills">Select at least one skill</div>
+          <div class="field-error" id="err-skills">Select at least one skill</div>
         </div>
 
-        <!-- How did you hear -->
         <div class="form-group">
           <label for="source">How did you hear about FreeYou?</label>
           <select id="source" name="source">
             <option value="">Select (optional)</option>
-            <option>WhatsApp</option>
-            <option>Instagram</option>
-            <option>LinkedIn</option>
-            <option>Friend / Referral</option>
-            <option>Twitter/X</option>
-            <option>Google Search</option>
-            <option>Other</option>
+            <option>WhatsApp</option><option>Instagram</option><option>LinkedIn</option>
+            <option>Friend / Referral</option><option>Twitter/X</option><option>Google Search</option><option>Other</option>
           </select>
         </div>
 
-        <!-- Consent -->
         <div class="consent-box">
           <input type="checkbox" id="consent" name="consent" />
           <label for="consent">
-            I agree to FreeYou's <a href="/privacy">Privacy Policy</a> and consent to processing my personal data for membership purposes as per the <strong>Digital Personal Data Protection Act 2023</strong>. My Aadhaar number will not be stored — only verification status.
+            I agree to FreeYou's <a href="/privacy.html">Privacy Policy</a> and consent to processing my personal data per the <strong>Digital Personal Data Protection Act 2023</strong>. My Aadhaar number will not be stored — only verification status.
           </label>
         </div>
         <div class="field-error" id="err-consent">Please accept the consent to continue</div>
@@ -687,8 +432,6 @@
         </button>
       </form>
     </div>
-
-    <!-- Trust row -->
     <div style="display:flex;gap:20px;justify-content:center;flex-wrap:wrap;padding:16px 0;font-size:0.78rem;color:var(--gray);">
       <span>🔒 SSL Encrypted</span>
       <span>🇮🇳 DPDP Act 2023 Compliant</span>
@@ -696,42 +439,23 @@
     </div>
   </section>
 
-  <!-- ═══════════════════ STEP 2: eKYC ═══════════════════ -->
+  <!-- ════════════════ STEP 2: eKYC ════════════════ -->
   <section class="step-section" id="step-2">
     <div class="card">
-      <div class="step-header">
-        <span class="step-tag">Step 2 of 4</span>
-      </div>
+      <span class="step-tag">Step 2 of 4</span>
       <h2 class="card-title">Verify your identity</h2>
       <p class="card-sub">Quick ID check — takes under 30 seconds. Use your Aadhaar, PAN, Passport, or Driving Licence.</p>
 
-      <div class="dpdp-badge">
-        🛡️ DPDP Act 2023 compliant — your document data is NOT stored by FreeYou
-      </div>
+      <div class="dpdp-badge">🛡️ DPDP Act 2023 compliant — your document data is NOT stored by FreeYou</div>
 
       <div class="kyc-info-box">
         <h4>🔐 How identity verification works</h4>
-        <div class="kyc-steps-list">
-          <div class="kyc-step-item">
-            <div class="kyc-num">1</div>
-            <span>You'll be redirected to <strong>Didit</strong> (YC-backed, SOC2 + ISO 27001 certified)</span>
-          </div>
-          <div class="kyc-step-item">
-            <div class="kyc-num">2</div>
-            <span>Take a photo of any Indian ID — Aadhaar, PAN, Passport, or Driving Licence</span>
-          </div>
-          <div class="kyc-step-item">
-            <div class="kyc-num">3</div>
-            <span>Quick selfie — no blinking, no OTP, done in under 30 seconds</span>
-          </div>
-          <div class="kyc-step-item">
-            <div class="kyc-num">4</div>
-            <span>FreeYou receives only: ✅ Verified / ❌ Failed — <strong>no document data stored by us</strong></span>
-          </div>
-        </div>
+        <div class="kyc-step-item"><div class="kyc-num">1</div><span>Redirected to <strong>Didit</strong> (YC-backed, SOC2 + ISO 27001 certified)</span></div>
+        <div class="kyc-step-item"><div class="kyc-num">2</div><span>Photo of any Indian ID — Aadhaar, PAN, Passport, or Driving Licence</span></div>
+        <div class="kyc-step-item"><div class="kyc-num">3</div><span>Quick selfie — no blinking, no OTP, done in under 30 seconds</span></div>
+        <div class="kyc-step-item"><div class="kyc-num">4</div><span>FreeYou receives only: ✅ Verified / ❌ Failed — <strong>no document data stored by us</strong></span></div>
       </div>
 
-      <!-- Accepted documents -->
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;">
         <span style="background:var(--light);border:1px solid var(--border);border-radius:8px;padding:6px 12px;font-size:0.78rem;font-weight:600;">🪪 Aadhaar</span>
         <span style="background:var(--light);border:1px solid var(--border);border-radius:8px;padding:6px 12px;font-size:0.78rem;font-weight:600;">💳 PAN Card</span>
@@ -750,57 +474,33 @@
       <button class="btn-primary" id="btn-start-kyc" onclick="startDiditKYC()">
         🔐 Start Identity Verification — takes ~30 seconds
       </button>
-
       <button class="btn-outline" onclick="goToStep(1)">← Go back</button>
     </div>
-
     <div style="text-align:center;font-size:0.76rem;color:var(--gray);padding:8px 0;">
-      Powered by <strong>Didit</strong> · YC-backed · SOC 2 · ISO 27001 · 220+ countries · 14,000+ document types
+      Powered by <strong>Didit</strong> · YC-backed · SOC 2 · ISO 27001 · 220+ countries
     </div>
   </section>
 
-  <!-- ═══════════════════ STEP 3: PAYMENT ═══════════════════ -->
+  <!-- ════════════════ STEP 3: PAYMENT ════════════════ -->
   <section class="step-section" id="step-3">
     <div class="card">
-      <div class="step-header">
-        <span class="step-tag">Step 3 of 4</span>
-      </div>
+      <span class="step-tag">Step 3 of 4</span>
       <h2 class="card-title">Activate your membership</h2>
-      <p class="card-sub">Identity verified ✅ — one last step to unlock all FreeYou benefits.</p>
+      <p class="card-sub">Identity verified ✅ — one last step to unlock all FreeYou Companion benefits.</p>
 
-      <!-- Plan -->
       <div class="plan-card">
         <div class="plan-badge">FreeYou Companion</div>
         <div class="plan-price">₹1,499<span>/month</span></div>
         <div class="plan-note">UPI Autopay · Cancel anytime · No hidden charges</div>
       </div>
 
-      <!-- Benefits -->
       <div class="benefits-list">
-        <div class="benefit-item">
-          <div class="check">✓</div>
-          <span>Health insurance cover (up to ₹2 lakh)</span>
-        </div>
-        <div class="benefit-item">
-          <div class="check">✓</div>
-          <span>AI-powered contract & invoice tools</span>
-        </div>
-        <div class="benefit-item">
-          <div class="check">✓</div>
-          <span>Verified member badge & profile</span>
-        </div>
-        <div class="benefit-item">
-          <div class="check">✓</div>
-          <span>Private Discord community (2,000+ members)</span>
-        </div>
-        <div class="benefit-item">
-          <div class="check">✓</div>
-          <span>Legal & tax consultation access</span>
-        </div>
-        <div class="benefit-item">
-          <div class="check">✓</div>
-          <span>Priority access to curated projects</span>
-        </div>
+        <div class="benefit-item"><div class="check">✓</div><span>Health insurance cover (up to ₹2 lakh)</span></div>
+        <div class="benefit-item"><div class="check">✓</div><span>AI-powered contract & invoice tools</span></div>
+        <div class="benefit-item"><div class="check">✓</div><span>Verified member badge & profile</span></div>
+        <div class="benefit-item"><div class="check">✓</div><span>Private Discord community</span></div>
+        <div class="benefit-item"><div class="check">✓</div><span>Legal & tax consultation access</span></div>
+        <div class="benefit-item"><div class="check">✓</div><span>Priority access to curated projects</span></div>
       </div>
 
       <div id="alert-step3" class="alert"></div>
@@ -808,68 +508,41 @@
       <button class="btn-primary btn-saffron" id="btn-pay" onclick="startRazorpay()">
         💳 Pay ₹1,499 via UPI / Card
       </button>
-
-      <div class="razorpay-note">
-        🔒 Secured by <strong>Razorpay</strong> · UPI Autopay · PCI-DSS compliant
-      </div>
-
+      <div class="razorpay-note">🔒 Secured by <strong>Razorpay</strong> · UPI Autopay · PCI-DSS compliant</div>
       <button class="btn-outline" onclick="goToStep(2)">← Go back</button>
     </div>
   </section>
 
-  <!-- ═══════════════════ STEP 4: WELCOME ═══════════════════ -->
+  <!-- ════════════════ STEP 4: WELCOME ════════════════ -->
   <section class="step-section" id="step-4">
     <div class="card">
       <div class="welcome-hero">
         <span class="welcome-icon">🎉</span>
         <h2>Welcome to FreeYou!</h2>
-        <p>You're now a verified FreeYou member. Your journey as a confident, protected freelancer in Bharat starts here.</p>
+        <p>You're now a verified FreeYou Companion member. Your journey as a confident, protected freelancer in Bharat starts here.</p>
       </div>
-
       <div class="member-id-box">
         <div class="label">Your Member ID</div>
         <div class="id" id="member-id">FY-######</div>
       </div>
-
-      <div class="next-steps">
-        <a href="" id="discord-link" class="next-step-item" style="text-decoration:none;color:inherit;" target="_blank">
-          <div class="next-step-icon">💬</div>
-          <div class="next-step-text">
-            <strong>Join the FreeYou Community</strong>
-            <span>Connect with freelancers across Bharat on Discord</span>
-          </div>
-        </a>
-        <div class="next-step-item">
-          <div class="next-step-icon">📧</div>
-          <div class="next-step-text">
-            <strong>Check your email</strong>
-            <span>Welcome kit + member handbook sent to <span id="welcome-email">your inbox</span></span>
-          </div>
-        </div>
-        <div class="next-step-item">
-          <div class="next-step-icon">📋</div>
-          <div class="next-step-text">
-            <strong>Complete your profile</strong>
-            <span>Add portfolio, skills, and rate — get found by clients</span>
-          </div>
-        </div>
-        <div class="next-step-item">
-          <div class="next-step-icon">🛡️</div>
-          <div class="next-step-text">
-            <strong>Activate health cover</strong>
-            <span>Our team will contact you within 24 hours</span>
-          </div>
-        </div>
+      <a href="" id="discord-link" class="next-step-item" target="_blank">
+        <div class="next-step-icon">💬</div>
+        <div class="next-step-text"><strong>Join the FreeYou Community</strong><span>Connect with freelancers across Bharat on Discord</span></div>
+      </a>
+      <div class="next-step-item">
+        <div class="next-step-icon">📧</div>
+        <div class="next-step-text"><strong>Check your email</strong><span>Welcome kit sent to <span id="welcome-email">your inbox</span></span></div>
       </div>
-
-      <button class="btn-primary btn-teal" style="margin-top:24px;"
-        onclick="window.open(CONFIG.DISCORD_INVITE_URL,'_blank')">
-        Join FreeYou Discord Community 💬
-      </button>
+      <div class="next-step-item">
+        <div class="next-step-icon">🛡️</div>
+        <div class="next-step-text"><strong>Activate health cover</strong><span>Our team will contact you within 24 hours</span></div>
+      </div>
+      <a href="/portal-test.html" class="btn-primary btn-teal" style="margin-top:24px;text-decoration:none;">
+        Go to Your Member Portal →
+      </a>
     </div>
-
     <div style="text-align:center;padding:16px;font-size:0.8rem;color:var(--gray);">
-      Questions? Email us at <a href="mailto:hello@freeyou.in" style="color:var(--indigo);">hello@freeyou.in</a>
+      Questions? <a href="mailto:freeyouforever@outlook.com" style="color:var(--indigo);">freeyouforever@outlook.com</a>
     </div>
   </section>
 
@@ -879,40 +552,41 @@
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
 <script>
-/* ══════════════════════════════════════════
-   FreeYou Join Flow — Core Logic
-   ══════════════════════════════════════════ */
+/* ════════════════════════════════════════════════════
+   FreeYou Join Flow — Auth + Onboarding Logic
+   ════════════════════════════════════════════════════ */
 
-// In-memory session store (no localStorage)
 const SESSION = {
+  authMethod: '',    // 'google' | 'email'
+  authEmail: '',
   fname: '', lname: '', email: '', phone: '',
   city: '', experience: '', skills: [],
-  source: '', kycVerified: false, paymentId: '',
-  memberId: ''
+  source: '', kycVerified: false, paymentId: '', memberId: ''
 };
 
-let currentStep = 1;
+let currentStep = 0;
 const selectedSkills = new Set();
+let emailOTP = '';      // test: store OTP in memory
+let authEmail = '';
 
-// ── Init ──────────────────────────────────
+// ── Init ──────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
-  // Check URL params for returning from Digio or Razorpay
+  // Handle return from Didit KYC redirect
   const params = new URLSearchParams(window.location.search);
-
   if (params.get('kyc') === 'success') {
-    SESSION.kycVerified = true;
     restoreSession();
+    SESSION.kycVerified = true;
+    showProgressBar();
     goToStep(3);
-    posthog.capture('kyc_completed', { method: 'aadhaar_otp' });
-  } else if (params.get('kyc') === 'failed') {
+    if (window.posthog) posthog.capture('kyc_completed');
+    return;
+  }
+  if (params.get('kyc') === 'failed') {
     restoreSession();
+    showProgressBar();
     goToStep(2);
-    showAlert('step2', 'Aadhaar verification failed. Please try again.', 'error');
-  } else if (params.get('payment') === 'success') {
-    SESSION.paymentId = params.get('razorpay_payment_id') || 'manual';
-    restoreSession();
-    SESSION.kycVerified = true;
-    completeOnboarding();
+    showAlert('step2', 'Identity verification failed. Please try again.', 'error');
+    return;
   }
 
   // Skills pill toggle
@@ -929,36 +603,236 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Step 1 form submit
   document.getElementById('form-step1').addEventListener('submit', handleStep1Submit);
 
-  updateProgress(1);
+  // OTP input auto-advance
+  setupOTPInputs();
+
+  // Init Google Sign-In
+  initGoogleSignIn();
 });
 
-// ── Navigation ────────────────────────────
+// ── Google Identity Services ──────────────────────────
+function initGoogleSignIn() {
+  // Wait for GIS library to load
+  function tryInit() {
+    if (window.google && google.accounts && google.accounts.id) {
+      if (CONFIG.GOOGLE_CLIENT_ID === 'TODO_YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com') {
+        // No client ID configured — show manual button as fallback
+        document.getElementById('google-btn-container').style.display = 'none';
+        document.getElementById('google-manual-btn').style.display = 'block';
+        return;
+      }
+      google.accounts.id.initialize({
+        client_id: CONFIG.GOOGLE_CLIENT_ID,
+        callback: handleGoogleCredential,
+        auto_select: false,
+        cancel_on_tap_outside: true,
+      });
+      google.accounts.id.renderButton(
+        document.getElementById('google-btn-container'),
+        { theme: 'outline', size: 'large', width: 552, text: 'continue_with', shape: 'rectangular', logo_alignment: 'left' }
+      );
+    } else {
+      setTimeout(tryInit, 300);
+    }
+  }
+  tryInit();
+}
+
+async function handleGoogleCredential(response) {
+  // Verify the Google ID token SERVER-SIDE (worker /api/verify-google checks
+  // the signature, expiry, and that the audience matches our Client ID).
+  // Never trust a client-side JWT decode for identity on a paid/KYC flow.
+  try {
+    const r = await fetch('/api/verify-google', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ credential: response.credential }),
+    });
+    const data = await r.json();
+    if (!r.ok || !data.verified) throw new Error(data.error || 'verification failed');
+
+    SESSION.authMethod = 'google';
+    SESSION.authEmail  = data.email;
+    SESSION.fname      = data.given_name || '';
+    SESSION.lname      = data.family_name || '';
+    SESSION.email      = data.email;
+    if (window.posthog) posthog.capture('auth_google', { email: data.email });
+    proceedToProfile();
+  } catch (e) {
+    showAlert('step0', 'Google sign-in failed. Please try email instead.', 'error');
+  }
+}
+
+function triggerGoogleSignIn() {
+  // Fallback button — only shown when Google Client ID not configured
+  showAlert('step0', 'Google sign-in not configured yet. Add GOOGLE_CLIENT_ID in join.html CONFIG. Use email for now.', 'info');
+}
+
+// ── Email OTP ─────────────────────────────────────────
+function sendEmailOTP() {
+  const emailEl = document.getElementById('auth-email');
+  const email = emailEl.value.trim();
+  const errEl = document.getElementById('err-auth-email');
+
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    emailEl.classList.add('error');
+    errEl.classList.add('show');
+    return;
+  }
+  emailEl.classList.remove('error');
+  errEl.classList.remove('show');
+
+  const btn = document.getElementById('btn-email-otp');
+  const spinner = document.getElementById('spinner-otp');
+  btn.disabled = true;
+  spinner.style.display = 'block';
+  document.getElementById('btn-otp-text').textContent = 'Sending...';
+
+  authEmail = email;
+  // TEST MODE: Generate OTP locally (in production: call /api/send-otp Worker endpoint)
+  emailOTP = Math.floor(100000 + Math.random() * 900000).toString();
+  console.log('[FreeYou TEST] OTP for', email, ':', emailOTP); // visible in dev console only
+
+  setTimeout(() => {
+    // Simulate OTP sent
+    document.getElementById('email-entry-section').style.display = 'none';
+    document.getElementById('otp-section').style.display = 'block';
+    document.getElementById('otp-email-display').textContent = email;
+    const boxes = document.querySelectorAll('#otp-inputs .otp-box');
+    boxes[0].focus();
+    btn.disabled = false;
+    spinner.style.display = 'none';
+    document.getElementById('btn-otp-text').textContent = 'Continue with Email →';
+    if (window.posthog) posthog.capture('auth_email_otp_sent', { masked_email: email.replace(/(.{2}).*@/, '$1***@') });
+    // In test mode, show a hint
+    showAlert('step0', `[TEST MODE] Your OTP is: ${emailOTP} — check browser console too`, 'info');
+  }, 1000);
+}
+
+function verifyEmailOTP() {
+  const boxes = document.querySelectorAll('#otp-inputs .otp-box');
+  const entered = Array.from(boxes).map(b => b.value).join('');
+  const errEl = document.getElementById('err-otp');
+
+  if (entered !== emailOTP) {
+    errEl.classList.add('show');
+    boxes.forEach(b => b.style.borderColor = 'var(--red)');
+    return;
+  }
+  errEl.classList.remove('show');
+  SESSION.authMethod = 'email';
+  SESSION.authEmail  = authEmail;
+  SESSION.email      = authEmail;
+  // Pre-fill first name from email prefix if possible
+  const namePart = authEmail.split('@')[0].replace(/[._]/g, ' ').replace(/\d+/g,'').trim();
+  if (namePart && !SESSION.fname) {
+    const parts = namePart.split(' ');
+    SESSION.fname = parts[0].charAt(0).toUpperCase() + parts[0].slice(1);
+    SESSION.lname = parts.slice(1).map(p => p.charAt(0).toUpperCase() + p.slice(1)).join(' ');
+  }
+  if (window.posthog) posthog.capture('auth_email_verified', { masked_email: authEmail.replace(/(.{2}).*@/, '$1***@') });
+  proceedToProfile();
+}
+
+function resendOTP() {
+  emailOTP = Math.floor(100000 + Math.random() * 900000).toString();
+  console.log('[FreeYou TEST] New OTP:', emailOTP);
+  showAlert('step0', `[TEST MODE] New OTP: ${emailOTP}`, 'info');
+  document.querySelectorAll('#otp-inputs .otp-box').forEach(b => { b.value = ''; b.style.borderColor = ''; });
+  document.getElementById('err-otp').classList.remove('show');
+  document.querySelectorAll('#otp-inputs .otp-box')[0].focus();
+}
+
+function resetToEmail() {
+  document.getElementById('otp-section').style.display = 'none';
+  document.getElementById('email-entry-section').style.display = 'block';
+  document.getElementById('auth-email').value = '';
+  hideAlert('step0');
+}
+
+function setupOTPInputs() {
+  const boxes = document.querySelectorAll('#otp-inputs .otp-box');
+  boxes.forEach((box, idx) => {
+    box.addEventListener('input', () => {
+      box.value = box.value.replace(/\D/g, '').slice(-1);
+      if (box.value && idx < boxes.length - 1) boxes[idx + 1].focus();
+      // Auto-verify when all filled
+      if (Array.from(boxes).every(b => b.value)) verifyEmailOTP();
+    });
+    box.addEventListener('keydown', e => {
+      if (e.key === 'Backspace' && !box.value && idx > 0) boxes[idx - 1].focus();
+    });
+    box.addEventListener('paste', e => {
+      e.preventDefault();
+      const text = (e.clipboardData || window.clipboardData).getData('text').replace(/\D/g,'').slice(0,6);
+      text.split('').forEach((ch, i) => { if (boxes[i]) boxes[i].value = ch; });
+      if (text.length === 6) verifyEmailOTP();
+    });
+  });
+}
+
+function continueWithMobile() {
+  showAlert('step0', 'Mobile OTP is coming soon. Please use Google sign-in or email for now.', 'info');
+}
+
+function showComingSoon(name) {
+  showAlert('step0', `${name} sign-in is coming soon. Use Google or email to continue.`, 'info');
+}
+
+// ── Proceed to profile after auth ─────────────────────
+function proceedToProfile() {
+  showProgressBar();
+  // Pre-fill form
+  if (SESSION.fname) {
+    document.getElementById('fname').value = SESSION.fname;
+    document.getElementById('fname').setAttribute('readonly', 'true');
+  }
+  if (SESSION.lname) {
+    document.getElementById('lname').value = SESSION.lname;
+    document.getElementById('lname').setAttribute('readonly', 'true');
+  }
+  if (SESSION.email) {
+    document.getElementById('email').value = SESSION.email;
+    document.getElementById('email').setAttribute('readonly', 'true');
+  }
+
+  // Update auth badge
+  const badgeMethod = SESSION.authMethod === 'google' ? 'Signed in with Google' : 'Email verified';
+  document.getElementById('auth-badge-text').textContent = badgeMethod;
+  document.getElementById('auth-badge-sub').textContent = SESSION.authEmail;
+
+  goToStep(1);
+}
+
+function showProgressBar() {
+  document.getElementById('progress-bar').style.display = 'block';
+}
+
+// ── Navigation ────────────────────────────────────────
 function goToStep(n) {
   document.querySelectorAll('.step-section').forEach(s => s.classList.remove('active'));
   document.getElementById(`step-${n}`).classList.add('active');
   currentStep = n;
-  updateProgress(n);
+  if (n >= 1) updateProgress(n);
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function updateProgress(n) {
   for (let i = 1; i <= 4; i++) {
     const el = document.getElementById(`prog-${i}`);
+    if (!el) continue;
     el.classList.remove('active', 'done');
     if (i < n) el.classList.add('done');
     else if (i === n) el.classList.add('active');
   }
 }
 
-// ── Session persistence (memory only) ────
+// ── Session persistence ───────────────────────────────
 function saveSession() {
-  // Store in window object for same-tab navigation
   window.__FY_SESSION__ = { ...SESSION, skills: [...selectedSkills] };
 }
-
 function restoreSession() {
   if (window.__FY_SESSION__) {
     Object.assign(SESSION, window.__FY_SESSION__);
@@ -968,165 +842,114 @@ function restoreSession() {
   }
 }
 
-// ── Alerts ────────────────────────────────
+// ── Alerts ────────────────────────────────────────────
 function showAlert(stepId, message, type = 'error') {
   const el = document.getElementById(`alert-${stepId}`);
+  if (!el) return;
   el.textContent = message;
   el.className = `alert alert-${type} show`;
 }
-
 function hideAlert(stepId) {
   const el = document.getElementById(`alert-${stepId}`);
   if (el) el.classList.remove('show');
 }
 
-// ── Step 1: Profile ───────────────────────
+// ── Step 1: Profile ───────────────────────────────────
 function handleStep1Submit(e) {
   e.preventDefault();
   hideAlert('step1');
-
   let valid = true;
 
   const validators = [
-    { id: 'fname', errId: 'err-fname', test: v => v.trim().length >= 2 },
-    { id: 'lname', errId: 'err-lname', test: v => v.trim().length >= 2 },
-    { id: 'email', errId: 'err-email', test: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) },
-    { id: 'phone', errId: 'err-phone', test: v => /^\d{10}$/.test(v) },
-    { id: 'city', errId: 'err-city', test: v => v !== '' },
-    { id: 'experience', errId: 'err-experience', test: v => v !== '' },
+    { id:'fname', errId:'err-fname', test:v => v.trim().length >= 2 },
+    { id:'lname', errId:'err-lname', test:v => v.trim().length >= 2 },
+    { id:'email', errId:'err-email', test:v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) },
+    { id:'phone', errId:'err-phone', test:v => /^\d{10}$/.test(v) },
+    { id:'city',  errId:'err-city',  test:v => v !== '' },
+    { id:'experience', errId:'err-experience', test:v => v !== '' },
   ];
 
   validators.forEach(({ id, errId, test }) => {
     const el = document.getElementById(id);
     const err = document.getElementById(errId);
-    if (!test(el.value)) {
-      el.classList.add('error');
-      err.classList.add('show');
-      valid = false;
-    } else {
-      el.classList.remove('error');
-      err.classList.remove('show');
-    }
+    if (!test(el.value)) { el.classList.add('error'); err.classList.add('show'); valid = false; }
+    else { el.classList.remove('error'); err.classList.remove('show'); }
   });
 
-  // Skills
-  if (selectedSkills.size === 0) {
-    document.getElementById('err-skills').classList.add('show');
-    valid = false;
-  } else {
-    document.getElementById('err-skills').classList.remove('show');
-  }
+  if (selectedSkills.size === 0) { document.getElementById('err-skills').classList.add('show'); valid = false; }
+  else { document.getElementById('err-skills').classList.remove('show'); }
 
-  // Consent
-  if (!document.getElementById('consent').checked) {
-    document.getElementById('err-consent').classList.add('show');
-    valid = false;
-  } else {
-    document.getElementById('err-consent').classList.remove('show');
-  }
+  if (!document.getElementById('consent').checked) { document.getElementById('err-consent').classList.add('show'); valid = false; }
+  else { document.getElementById('err-consent').classList.remove('show'); }
 
   if (!valid) return;
 
-  // Save to session
-  SESSION.fname = document.getElementById('fname').value.trim();
-  SESSION.lname = document.getElementById('lname').value.trim();
-  SESSION.email = document.getElementById('email').value.trim();
-  SESSION.phone = document.getElementById('phone').value.trim();
-  SESSION.city = document.getElementById('city').value;
+  SESSION.fname      = document.getElementById('fname').value.trim();
+  SESSION.lname      = document.getElementById('lname').value.trim();
+  SESSION.email      = document.getElementById('email').value.trim();
+  SESSION.phone      = document.getElementById('phone').value.trim();
+  SESSION.city       = document.getElementById('city').value;
   SESSION.experience = document.getElementById('experience').value;
-  SESSION.skills = [...selectedSkills];
-  SESSION.source = document.getElementById('source').value;
+  SESSION.skills     = [...selectedSkills];
+  SESSION.source     = document.getElementById('source').value;
   saveSession();
 
-  // Submit to Zoho Forms
-  submitToZohoForms();
+  submitToZoho();
 }
 
-async function submitToZohoForms() {
+async function submitToZoho() {
   const btn = document.getElementById('btn-step1');
   const spinner = document.getElementById('spinner1');
-  const btnText = document.getElementById('btn1-text');
-
+  document.getElementById('btn1-text').textContent = 'Saving...';
   btn.disabled = true;
   spinner.style.display = 'block';
-  btnText.textContent = 'Saving...';
 
   try {
-    // ── TODO: Replace with your actual Zoho Forms submission URL ──
-    // Get this from Zoho Forms > Share > Embed > Form URL
-    // Format: https://forms.zohopublic.in/YOUR_ACCOUNT/form/FORM_NAME/formperma/FORM_ID
-    //
-    // Field names must match your Zoho Form field names exactly.
-    // Common Zoho Forms field names (check yours in Forms > Builder > each field > "Field Name"):
-
     const ZOHO_SUBMIT = 'https://forms.zohopublic.in/freeyou1/form/ProfessionalProfileForm/htmlRecords/submit';
+    const fd = new FormData();
+    fd.append('SingleLine', `${SESSION.fname} ${SESSION.lname}`);
+    fd.append('Email', SESSION.email);
+    fd.append('PhoneNumber_countrycode', '+91');
+    fd.append('PhoneNumber', SESSION.phone);
+    fd.append('Dropdown', SESSION.city);
+    fd.append('Dropdown1', SESSION.experience);
+    fd.append('MultiSelect', SESSION.skills.join(', '));
+    fd.append('Dropdown2', SESSION.source);
+    fd.append('SingleLine1', SESSION.authMethod); // auth method
 
-    const formData = new FormData();
-    formData.append('SingleLine', `${SESSION.fname} ${SESSION.lname}`);
-    formData.append('Email', SESSION.email);
-    formData.append('PhoneNumber_countrycode', '+91');
-    formData.append('PhoneNumber', SESSION.phone);
-    formData.append('Dropdown', SESSION.city);
-    formData.append('Dropdown1', SESSION.experience);
-    formData.append('MultiSelect', SESSION.skills.join(', '));
-    formData.append('Dropdown2', SESSION.source);
+    await fetch(ZOHO_SUBMIT, { method:'POST', body:fd, mode:'no-cors' });
 
-    await fetch(ZOHO_SUBMIT, { method: 'POST', body: formData, mode: 'no-cors' });
-
-    posthog.capture('profile_submitted', {
-      city: SESSION.city, skills: SESSION.skills,
-      experience: SESSION.experience, source: SESSION.source
+    if (window.posthog) posthog.capture('profile_submitted', {
+      auth_method: SESSION.authMethod, city:SESSION.city,
+      skills:SESSION.skills, experience:SESSION.experience
     });
 
     goToStep2();
-
   } catch (err) {
-    console.error('Zoho submit error:', err);
     showAlert('step1', 'Something went wrong. Please try again.', 'error');
     btn.disabled = false;
     spinner.style.display = 'none';
-    btnText.textContent = 'Continue to Identity Verification →';
+    document.getElementById('btn1-text').textContent = 'Continue to Identity Verification →';
   }
 }
 
 function goToStep2() {
-  // Populate KYC display
-  document.getElementById('kyc-name-display').textContent =
-    `${SESSION.fname} ${SESSION.lname}`;
-  document.getElementById('kyc-phone-display').textContent =
-    `+91 ${SESSION.phone} · ${SESSION.email}`;
+  document.getElementById('kyc-name-display').textContent = `${SESSION.fname} ${SESSION.lname}`;
+  document.getElementById('kyc-phone-display').textContent = `+91 ${SESSION.phone} · ${SESSION.email}`;
   goToStep(2);
 }
 
-// ── Step 2: Didit KYC ────────────────────
-// Architecture: Cloudflare Pages (static) cannot hold API keys.
-// We use a Cloudflare Worker at /api/kyc-session to create the Didit session server-side.
-// The Worker returns a hosted session URL; we redirect the user there.
-// Didit calls our Worker webhook at /api/didit-webhook when done.
-// Webhook updates Zoho CRM and redirects user back to join.html?kyc=success.
-//
-// See _worker.js in this repo for the backend implementation.
-
+// ── Step 2: Didit KYC ─────────────────────────────────
 async function startDiditKYC() {
   const btn = document.getElementById('btn-start-kyc');
   btn.disabled = true;
   btn.textContent = '⏳ Starting verification...';
-  posthog.capture('kyc_started', { provider: 'didit' });
-
-  // Dev mode — no Worker configured yet
-  if (CONFIG.DIDIT_WORKFLOW_ID === 'TODO_DIDIT_WORKFLOW_ID') {
-    console.log('[FreeYou] Didit not configured — simulating KYC success in dev mode');
-    SESSION.kycVerified = true;
-    saveSession();
-    setTimeout(() => goToStep(3), 800);
-    return;
-  }
+  if (window.posthog) posthog.capture('kyc_started', { provider:'didit' });
 
   try {
-    // Call our Cloudflare Worker to create a Didit session (keeps API key server-side)
     const resp = await fetch('/api/kyc-session', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type':'application/json' },
       body: JSON.stringify({
         vendor_data: `fy_${SESSION.phone}_${Date.now()}`,
         email: SESSION.email,
@@ -1137,109 +960,138 @@ async function startDiditKYC() {
       })
     });
 
-    if (!resp.ok) throw new Error(`Worker error: ${resp.status}`);
+    if (!resp.ok) {
+      const errBody = await resp.json().catch(() => ({}));
+      showAlert('step2', `Verification error (${resp.status}): ${errBody.detail || errBody.error || 'Unknown error'}`, 'error');
+      btn.disabled = false;
+      btn.textContent = '🔐 Start Identity Verification — takes ~30 seconds';
+      return;
+    }
     const { session_url } = await resp.json();
-
-    // Save session before redirect so we can restore on return
+    if (!session_url) {
+      showAlert('step2', 'Verification service returned unexpected response. Please try again.', 'error');
+      btn.disabled = false;
+      btn.textContent = '🔐 Start Identity Verification — takes ~30 seconds';
+      return;
+    }
     saveSession();
-
-    // Redirect to Didit's hosted verification UI (they handle camera, ID scan, selfie)
     window.location.href = session_url;
 
   } catch (err) {
-    console.error('[FreeYou] Didit session creation failed:', err);
-    showAlert('step2', 'Could not start verification. Please try again in a moment.', 'error');
+    showAlert('step2', `Could not start verification: ${err.message}`, 'error');
     btn.disabled = false;
     btn.textContent = '🔐 Start Identity Verification — takes ~30 seconds';
   }
 }
 
-// ── Step 3: Razorpay ─────────────────────
-function startRazorpay() {
-  posthog.capture('payment_started', { plan: 'companion_1499' });
+// ── Step 3: Razorpay ──────────────────────────────────
+async function startRazorpay() {
+  const btn = document.getElementById('btn-pay');
+  btn.disabled = true;
+  btn.textContent = 'Creating order…';
+  if (window.posthog) posthog.capture('payment_started', { plan:'companion_1499' });
 
-  if (CONFIG.RAZORPAY_PLAN_ID === 'TODO_PLAN_ID') {
-    // Dev mode: simulate payment
-    console.log('[FreeYou] Razorpay not configured — simulating payment in dev mode');
-    SESSION.paymentId = 'DEV_PAY_' + Date.now();
-    completeOnboarding();
-    return;
+  try {
+    const orderResp = await fetch('/api/create-order', {
+      method: 'POST',
+      headers: { 'Content-Type':'application/json' },
+      body: JSON.stringify({
+        amount: 149900,
+        currency: 'INR',
+        receipt: `fy_${SESSION.phone}_${Date.now()}`,
+        notes: {
+          name: `${SESSION.fname} ${SESSION.lname}`,
+          phone: SESSION.phone, city: SESSION.city,
+          kyc_verified: SESSION.kycVerified ? 'yes' : 'no',
+          skills: SESSION.skills.join(', '),
+          auth_method: SESSION.authMethod,
+        },
+      }),
+    });
+
+    if (!orderResp.ok) throw new Error('Order creation failed');
+    const { order_id, amount, currency } = await orderResp.json();
+
+    const options = {
+      key: CONFIG.RAZORPAY_KEY_ID,
+      amount, currency, order_id,
+      name: 'FreeYou',
+      description: 'Freelancer Companion — Monthly Membership',
+      prefill: {
+        name: `${SESSION.fname} ${SESSION.lname}`,
+        email: SESSION.email,
+        contact: `+91${SESSION.phone}`,
+      },
+      theme: { color:'#0D1B4B' },
+      handler: async function (response) {
+        btn.textContent = 'Verifying payment…';
+        try {
+          const verifyResp = await fetch('/api/verify-payment', {
+            method:'POST', headers:{'Content-Type':'application/json'},
+            body: JSON.stringify({
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+            }),
+          });
+          const result = await verifyResp.json();
+          if (!verifyResp.ok || !result.verified) {
+            showAlert('step3','Payment verification failed. Contact freeyouforever@outlook.com','error');
+            btn.disabled = false; btn.textContent = '💳 Pay ₹1,499 via UPI / Card';
+            return;
+          }
+          SESSION.paymentId = response.razorpay_payment_id;
+          if (window.posthog) posthog.capture('payment_success', {
+            payment_id: response.razorpay_payment_id,
+            plan: 'companion_1499', auth_method: SESSION.authMethod,
+          });
+          completeOnboarding();
+        } catch (err) {
+          showAlert('step3','Could not verify payment. Contact freeyouforever@outlook.com','error');
+          btn.disabled = false; btn.textContent = '💳 Pay ₹1,499 via UPI / Card';
+        }
+      },
+      modal: { ondismiss: function() {
+        showAlert('step3','Payment cancelled. Try again when ready.','error');
+        btn.disabled = false; btn.textContent = '💳 Pay ₹1,499 via UPI / Card';
+      }},
+    };
+    const rzp = new Razorpay(options);
+    rzp.on('payment.failed', function(resp) {
+      showAlert('step3', `Payment failed: ${resp.error.description}. Please try again.`, 'error');
+      btn.disabled = false; btn.textContent = '💳 Pay ₹1,499 via UPI / Card';
+    });
+    rzp.open();
+
+  } catch (err) {
+    showAlert('step3','Could not initiate payment. Please try again.','error');
+    btn.disabled = false; btn.textContent = '💳 Pay ₹1,499 via UPI / Card';
   }
-
-  // ── Razorpay Subscription Checkout ──
-  const options = {
-    key: CONFIG.RAZORPAY_KEY_ID,
-    subscription_id: null, // Created server-side via n8n
-    plan_id: CONFIG.RAZORPAY_PLAN_ID,
-    quantity: 1,
-    name: 'FreeYou',
-    description: 'Freelancer Companion — Monthly Membership',
-    image: `${CONFIG.SITE_URL}/logo.png`,
-    prefill: {
-      name: `${SESSION.fname} ${SESSION.lname}`,
-      email: SESSION.email,
-      contact: `+91${SESSION.phone}`,
-    },
-    notes: {
-      kyc_verified: SESSION.kycVerified ? 'yes' : 'no',
-      skills: SESSION.skills.join(', '),
-      city: SESSION.city,
-    },
-    theme: { color: '#0D1B4B' },
-    handler: function (response) {
-      SESSION.paymentId = response.razorpay_payment_id;
-      posthog.capture('payment_success', {
-        payment_id: response.razorpay_payment_id,
-        plan: 'companion_1499'
-      });
-      completeOnboarding();
-    },
-    modal: {
-      ondismiss: function () {
-        showAlert('step3', 'Payment cancelled. Try again when ready.', 'error');
-      }
-    }
-  };
-
-  // For UPI Autopay subscriptions, Razorpay needs a subscription_id
-  // TODO: Generate subscription_id server-side (via n8n or Cloudflare Worker):
-  // POST https://api.razorpay.com/v1/subscriptions with plan_id + customer details
-  // Then open checkout with subscription_id instead of plan_id
-
-  const rzp = new Razorpay(options);
-  rzp.open();
 }
 
-// ── Step 4: Welcome ───────────────────────
+// ── Step 4: Welcome ───────────────────────────────────
 function completeOnboarding() {
-  // Generate member ID
   const memberId = 'FY-' + Date.now().toString(36).toUpperCase().slice(-6);
   SESSION.memberId = memberId;
-
   document.getElementById('member-id').textContent = memberId;
   document.getElementById('welcome-email').textContent = SESSION.email;
   document.getElementById('discord-link').href = CONFIG.DISCORD_INVITE_URL;
 
-  posthog.identify(SESSION.email, {
-    name: `${SESSION.fname} ${SESSION.lname}`,
-    phone: SESSION.phone,
-    city: SESSION.city,
-    skills: SESSION.skills,
-    experience: SESSION.experience,
-    member_id: memberId,
-    kyc_verified: SESSION.kycVerified,
-  });
-
-  posthog.capture('onboarding_complete', {
-    member_id: memberId,
-    payment_id: SESSION.paymentId,
-    city: SESSION.city,
-    skills: SESSION.skills,
-  });
-
+  if (window.posthog) {
+    posthog.identify(SESSION.email, {
+      name: `${SESSION.fname} ${SESSION.lname}`,
+      phone: SESSION.phone, city: SESSION.city,
+      skills: SESSION.skills, experience: SESSION.experience,
+      member_id: memberId, kyc_verified: SESSION.kycVerified,
+      auth_method: SESSION.authMethod,
+    });
+    posthog.capture('onboarding_complete', {
+      member_id: memberId, payment_id: SESSION.paymentId,
+      city: SESSION.city, skills: SESSION.skills, auth_method: SESSION.authMethod,
+    });
+  }
   goToStep(4);
 }
 </script>
-
 </body>
 </html>
