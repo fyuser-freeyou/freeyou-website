@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <defs>
+    <!-- Circular text paths -->
+    <path id="outerRing" d="M 200,200 m -155,0 a 155,155 0 1,1 310,0 a 155,155 0 1,1 -310,0"/>
+    <path id="innerRing" d="M 200,200 m -125,0 a 125,125 0 1,1 250,0 a 125,125 0 1,1 -250,0"/>
+    <path id="bottomArc" d="M 200,200 m -130,0 a 130,130 0 0,0 260,0"/>
+    <path id="topArc"    d="M 200,200 m -130,0 a 130,130 0 0,1 260,0"/>
+
+    <!-- Stamp ink effect -->
+    <filter id="stamp" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="turbulence" baseFrequency="0.04" numOctaves="3" result="noise" seed="2"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </defs>
+
+  <!-- Outer double circle border -->
+  <circle cx="200" cy="200" r="172" fill="none" stroke="#1a3a6b" stroke-width="3.5"/>
+  <circle cx="200" cy="200" r="162" fill="none" stroke="#1a3a6b" stroke-width="1.2"/>
+
+  <!-- Inner circle -->
+  <circle cx="200" cy="200" r="118" fill="none" stroke="#1a3a6b" stroke-width="2"/>
+
+  <!-- Outer ring text: FY FREELANCING SOLUTIONS (OPC) PRIVATE LIMITED -->
+  <text font-family="Arial, sans-serif" font-size="13.5" font-weight="700" fill="#1a3a6b" letter-spacing="2.2">
+    <textPath href="#outerRing" startOffset="3%">
+      FY FREELANCING SOLUTIONS (OPC) PRIVATE LIMITED
+    </textPath>
+  </text>
+
+  <!-- Star decorators between text segments at top -->
+  <text font-family="Arial" font-size="11" fill="#1a3a6b">
+    <textPath href="#outerRing" startOffset="88%">✦</textPath>
+  </text>
+
+  <!-- Bottom arc: CHITTOOR · ANDHRA PRADESH -->
+  <text font-family="Arial, sans-serif" font-size="12" font-weight="700" fill="#1a3a6b" letter-spacing="1.8">
+    <textPath href="#bottomArc" startOffset="18%">
+      CHITTOOR  ·  ANDHRA PRADESH
+    </textPath>
+  </text>
+
+  <!-- Center logo block -->
+  <!-- FY monogram box -->
+  <rect x="162" y="148" width="76" height="60" rx="10" ry="10" fill="#1a3a6b"/>
+  <text x="200" y="193" font-family="Arial Black, Arial, sans-serif" font-size="36" font-weight="900" fill="#F5A623" text-anchor="middle" dominant-baseline="auto">FY</text>
+
+  <!-- Company short name below logo -->
+  <text x="200" y="228" font-family="Arial, sans-serif" font-size="10.5" font-weight="700" fill="#1a3a6b" text-anchor="middle" letter-spacing="1.5">FREEYOU PLATFORM</text>
+
+  <!-- Horizontal rule lines -->
+  <line x1="128" y1="237" x2="272" y2="237" stroke="#1a3a6b" stroke-width="0.8"/>
+  <line x1="140" y1="240" x2="260" y2="240" stroke="#1a3a6b" stroke-width="0.5"/>
+
+  <!-- PAN number -->
+  <text x="200" y="255" font-family="Arial, sans-serif" font-size="9.5" fill="#1a3a6b" text-anchor="middle" letter-spacing="1">PAN: AAGCF6483M</text>
+
+  <!-- Incorp date -->
+  <text x="200" y="270" font-family="Arial, sans-serif" font-size="9" fill="#1a3a6b" text-anchor="middle" letter-spacing="0.8">ESTD: 01/10/2025</text>
+
+  <!-- Small decorative stars at sides -->
+  <text x="136" y="212" font-family="Arial" font-size="9" fill="#1a3a6b" text-anchor="middle">✦</text>
+  <text x="264" y="212" font-family="Arial" font-size="9" fill="#1a3a6b" text-anchor="middle">✦</text>
+
+  <!-- Inner ring bottom text: COMMON SEAL -->
+  <text font-family="Arial, sans-serif" font-size="11" font-weight="700" fill="#1a3a6b" letter-spacing="3">
+    <textPath href="#innerRing" startOffset="62%">COMMON SEAL</textPath>
+  </text>
+
+</svg>

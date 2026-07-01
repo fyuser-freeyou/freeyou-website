@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FreeYou — System Architecture & Data Flow</title>
+  <meta name="description" content="Interactive architecture documentation for FreeYou platform — how data flows from lead form to CRM to KYC to verified profile." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --navy: #0A1628; --navy-mid: #0d1e38; --navy-light: #112240;
+      --saffron: #F5A623; --teal: #00C9A7; --purple: #6C63FF; --red: #FF6B6B; --green: #4CAF50;
+      --white: #fff; --text-dim: rgba(255,255,255,0.72); --text-muted: rgba(255,255,255,0.42);
+      --glass: rgba(255,255,255,0.05); --glass-border: rgba(255,255,255,0.10);
+      /* Layer colors */
+      --layer-frontend: rgba(245,166,35,0.12);
+      --layer-worker:   rgba(0,201,167,0.12);
+      --layer-crm:      rgba(108,99,255,0.12);
+      --layer-n8n:      rgba(255,107,107,0.12);
+      --layer-kyc:      rgba(76,175,80,0.12);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--navy); color: var(--white); line-height: 1.6; }
+    a { color: var(--saffron); }
+    code { font-family: 'JetBrains Mono', monospace; font-size: 12px; background: rgba(255,255,255,0.08); padding: 2px 6px; border-radius: 4px; }
+
+    /* ── NAV ── */
+    nav { background: rgba(10,22,40,0.95); border-bottom: 1px solid var(--glass-border); padding: 0 24px; position: sticky; top: 0; z-index: 200; backdrop-filter: blur(12px); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 58px; max-width: 1200px; margin: 0 auto; }
+    .logo { display: flex; align-items: center; gap: 10px; font-family: 'Sora', sans-serif; font-weight: 700; text-decoration: none; color: var(--white); }
+    .logo-mark { width: 28px; height: 28px; background: linear-gradient(135deg,#F5A623,#ff8c00); border-radius: 7px; display: flex; align-items: center; justify-content: center; color: var(--navy); font-weight: 800; font-size: 13px; }
+    .nav-badge { font-size: 11px; padding: 3px 10px; background: rgba(0,201,167,0.12); border: 1px solid rgba(0,201,167,0.25); border-radius: 20px; color: var(--teal); font-weight: 600; }
+
+    /* ── LAYOUT ── */
+    .page { max-width: 1200px; margin: 0 auto; padding: 40px 24px 80px; }
+
+    /* ── HEADER ── */
+    .doc-header { margin-bottom: 48px; }
+    .doc-header h1 { font-family: 'Sora', sans-serif; font-size: 32px; font-weight: 800; margin-bottom: 10px; }
+    .doc-header p { font-size: 15px; color: var(--text-dim); max-width: 640px; line-height: 1.65; }
+    .doc-header .meta { display: flex; gap: 20px; margin-top: 14px; flex-wrap: wrap; }
+    .meta-item { font-size: 12px; color: var(--text-muted); display: flex; align-items: center; gap: 6px; }
+
+    /* ── LEGEND ── */
+    .legend { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 36px; }
+    .legend-item { display: flex; align-items: center; gap: 7px; font-size: 12px; color: var(--text-dim); }
+    .legend-dot { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+
+    /* ── SECTION HEADERS ── */
+    .section-title {
+      font-family: 'Sora', sans-serif; font-size: 20px; font-weight: 700;
+      margin: 52px 0 20px; display: flex; align-items: center; gap: 10px;
+    }
+    .section-title::after { content: ''; flex: 1; height: 1px; background: var(--glass-border); }
+
+    /* ── FLOW DIAGRAM ── */
+    .flow-container {
+      position: relative;
+      margin-bottom: 48px;
+    }
+    .flow-diagram {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      position: relative;
+    }
+    .flow-row {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      position: relative;
+      margin-bottom: 0;
+    }
+    .flow-node {
+      background: var(--node-bg, var(--glass));
+      border: 2px solid var(--node-border, var(--glass-border));
+      border-radius: 12px;
+      padding: 14px 18px;
+      min-width: 160px;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+      flex-shrink: 0;
+    }
+    .flow-node:hover { transform: translateY(-2px); border-color: var(--node-border-hover, var(--saffron)); box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+    .flow-node.active { border-color: var(--node-border-hover, var(--saffron)) !important; box-shadow: 0 0 0 3px var(--node-glow, rgba(245,166,35,0.2)); }
+    .node-icon { font-size: 20px; margin-bottom: 6px; }
+    .node-label { font-family: 'Sora', sans-serif; font-size: 13px; font-weight: 700; }
+    .node-sublabel { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+    .node-badge { position: absolute; top: -8px; right: -8px; font-size: 9px; font-weight: 700; padding: 2px 7px; border-radius: 10px; letter-spacing: 0.5px; }
+    .badge-new { background: var(--teal); color: var(--navy); }
+    .badge-live { background: var(--green); color: var(--navy); }
+
+    /* Arrow */
+    .arrow {
+      display: flex; align-items: center; justify-content: center;
+      width: 50px; flex-shrink: 0; flex-direction: column; gap: 2px;
+    }
+    .arrow-line { height: 2px; background: var(--arrow-color, rgba(255,255,255,0.2)); flex: 1; width: 100%; position: relative; }
+    .arrow-line::after { content: '▶'; position: absolute; right: -8px; top: 50%; transform: translateY(-50%); font-size: 10px; color: var(--arrow-color, rgba(255,255,255,0.2)); }
+    .arrow-label { font-size: 9px; color: var(--text-muted); text-align: center; letter-spacing: 0.3px; white-space: nowrap; }
+    .arrow-down {
+      width: 2px; background: rgba(255,255,255,0.15);
+      margin: 0 auto; position: relative;
+      height: 32px;
+    }
+    .arrow-down::after { content: '▼'; position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); font-size: 10px; color: rgba(255,255,255,0.25); }
+
+    /* Layer wrapper */
+    .layer-block {
+      border: 1px solid var(--layer-border, var(--glass-border));
+      border-radius: 16px;
+      background: var(--layer-bg, var(--glass));
+      padding: 20px 24px;
+      margin-bottom: 16px;
+      position: relative;
+    }
+    .layer-tag {
+      position: absolute;
+      top: -10px; left: 20px;
+      font-size: 10px; font-weight: 700;
+      letter-spacing: 1px; text-transform: uppercase;
+      padding: 2px 10px; border-radius: 10px;
+      background: var(--layer-tag-bg); color: var(--layer-tag-color);
+    }
+    .layer-nodes { display: flex; align-items: center; gap: 0; flex-wrap: wrap; }
+
+    /* ── DETAIL PANEL ── */
+    .detail-panel {
+      background: var(--navy-mid);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      padding: 28px;
+      margin-top: 24px;
+      display: none;
+    }
+    .detail-panel.visible { display: block; }
+    .detail-panel h3 { font-family: 'Sora', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+    .detail-panel .dp-meta { font-size: 12px; color: var(--text-muted); margin-bottom: 18px; }
+    .detail-panel p { font-size: 14px; color: var(--text-dim); margin-bottom: 12px; line-height: 1.65; }
+    .detail-panel h4 { font-family: 'Sora', sans-serif; font-size: 14px; font-weight: 700; margin: 18px 0 8px; color: var(--white); }
+    .dp-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 12px 0; }
+    .dp-item { background: rgba(255,255,255,0.04); border: 1px solid var(--glass-border); border-radius: 8px; padding: 12px 14px; }
+    .dp-item-label { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px; }
+    .dp-item-value { font-size: 13px; color: var(--white); font-family: 'JetBrains Mono', monospace; }
+    .dp-link { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--saffron); text-decoration: none; padding: 5px 12px; border: 1px solid rgba(245,166,35,0.2); border-radius: 6px; margin: 4px 4px 4px 0; transition: all 0.2s; }
+    .dp-link:hover { background: rgba(245,166,35,0.08); }
+    .close-panel { float: right; background: none; border: 1px solid var(--glass-border); border-radius: 6px; padding: 4px 12px; color: var(--text-muted); cursor: pointer; font-size: 12px; }
+    .close-panel:hover { color: var(--white); border-color: rgba(255,255,255,0.2); }
+
+    /* ── JOURNEY TIMELINE ── */
+    .journey { position: relative; padding-left: 28px; margin: 28px 0; }
+    .journey::before { content: ''; position: absolute; left: 7px; top: 0; bottom: 0; width: 2px; background: linear-gradient(180deg, var(--saffron), var(--teal)); }
+    .journey-step { position: relative; margin-bottom: 28px; }
+    .journey-step::before { content: ''; position: absolute; left: -24px; top: 4px; width: 12px; height: 12px; border-radius: 50%; background: var(--step-color, var(--saffron)); border: 2px solid var(--navy); box-shadow: 0 0 0 3px rgba(245,166,35,0.15); }
+    .step-label { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--step-color, var(--saffron)); margin-bottom: 4px; }
+    .step-title { font-family: 'Sora', sans-serif; font-size: 15px; font-weight: 700; margin-bottom: 5px; }
+    .step-desc { font-size: 13px; color: var(--text-dim); line-height: 1.6; }
+    .step-code { font-family: 'JetBrains Mono', monospace; font-size: 11px; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); border-radius: 6px; padding: 8px 12px; margin-top: 8px; color: var(--teal); overflow-x: auto; }
+
+    /* ── DATA TABLES ── */
+    .data-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 13px; }
+    .data-table th { background: rgba(255,255,255,0.06); text-align: left; padding: 10px 14px; font-weight: 600; border-bottom: 1px solid var(--glass-border); font-size: 12px; color: var(--text-muted); letter-spacing: 0.5px; text-transform: uppercase; }
+    .data-table td { padding: 9px 14px; border-bottom: 1px solid rgba(255,255,255,0.05); color: var(--text-dim); vertical-align: top; }
+    .data-table tr:hover td { background: rgba(255,255,255,0.02); }
+    .pill { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 700; }
+    .pill-green { background: rgba(76,175,80,0.15); color: #81C784; }
+    .pill-yellow { background: rgba(245,166,35,0.15); color: var(--saffron); }
+    .pill-blue { background: rgba(108,99,255,0.15); color: #9B8CFF; }
+    .pill-red { background: rgba(255,107,107,0.15); color: #FF8A80; }
+
+    /* ── ENV VARS TABLE ── */
+    .env-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; margin: 16px 0; }
+    .env-card { background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); border-radius: 8px; padding: 12px 14px; }
+    .env-name { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--teal); margin-bottom: 4px; }
+    .env-desc { font-size: 12px; color: var(--text-muted); }
+    .env-where { font-size: 11px; color: var(--saffron); margin-top: 4px; }
+
+    /* ── FUTURE ROADMAP ── */
+    .roadmap-row { display: flex; align-items: flex-start; gap: 14px; padding: 16px; border: 1px solid var(--glass-border); border-radius: 10px; margin-bottom: 10px; background: var(--glass); }
+    .roadmap-num { width: 32px; height: 32px; border-radius: 8px; background: rgba(108,99,255,0.15); color: var(--purple); font-family: 'Sora', sans-serif; font-weight: 800; font-size: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .roadmap-content h4 { font-family: 'Sora', sans-serif; font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+    .roadmap-content p { font-size: 13px; color: var(--text-dim); }
+    .roadmap-content .deps { font-size: 11px; color: var(--text-muted); margin-top: 5px; }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 3px; }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      .layer-nodes { flex-direction: column; align-items: flex-start; }
+      .arrow { transform: rotate(90deg); }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="logo"><div class="logo-mark">F</div> FreeYou</a>
+    <span class="nav-badge">System Docs v1.0</span>
+  </div>
+</nav>
+
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="doc-header">
+    <h1>FreeYou — System Architecture & Data Flow</h1>
+    <p>A plain-English guide to how the FreeYou platform works — how data moves from a lead filling the form to a verified freelancer profile. Click any component to see details. Built for non-technical founders to understand and extend.</p>
+    <div class="meta">
+      <span class="meta-item">📅 Last updated: June 23, 2026</span>
+      <span class="meta-item">🏗️ Version: 1.0</span>
+      <span class="meta-item">👤 Ronald — FreeYou Founder</span>
+    </div>
+  </div>
+
+  <!-- LEGEND -->
+  <div class="legend">
+    <span class="legend-item"><span class="legend-dot" style="background:var(--saffron);"></span> Frontend (Website)</span>
+    <span class="legend-item"><span class="legend-dot" style="background:var(--teal);"></span> Cloudflare Worker (API)</span>
+    <span class="legend-item"><span class="legend-dot" style="background:var(--purple);"></span> Zoho CRM</span>
+    <span class="legend-item"><span class="legend-dot" style="background:#FF8A80;"></span> n8n Automation</span>
+    <span class="legend-item"><span class="legend-dot" style="background:var(--green);"></span> Didit KYC</span>
+    <span class="legend-item"><span class="legend-dot" style="background:rgba(255,255,255,0.3);"></span> Click any block for details</span>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- SECTION 1: FULL FLOW OVERVIEW -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <div class="section-title">1. Complete Data Flow — From Lead to Verified Professional</div>
+
+  <p style="font-size:14px;color:var(--text-dim);margin-bottom:24px;">This is the full journey a person takes from first landing on the FreeYou website to becoming a KYC-verified freelancer on the platform. Each block below is clickable — tap to see what happens inside that component.</p>
+
+  <!-- Flow Steps -->
+  <div class="journey">
+    <div class="journey-step" style="--step-color: var(--saffron)">
+      <div class="step-label">Step 1 — Website</div>
+      <div class="step-title">Lead fills in the early access form on freeyou.co.in</div>
+      <div class="step-desc">The person enters their name, phone, email, skill, and city. When they click "Apply", the browser sends a <code>POST</code> request to the Cloudflare Worker — not directly to Zoho (avoids CORS issues).</div>
+      <div class="step-code">POST https://freeyou.co.in/api/submit-lead
+Body: { "First Name": "Arjun", "Phone": "+919876543210", "Email": "...", "Description": "Web Development", ... }</div>
+    </div>
+
+    <div class="journey-step" style="--step-color: var(--teal)">
+      <div class="step-label">Step 2 — Cloudflare Worker</div>
+      <div class="step-title">Worker receives the data and forwards it to Zoho CRM</div>
+      <div class="step-desc">The Worker (<code>_worker.js</code>) receives the JSON, converts it to a <code>FormData</code> payload that Zoho's WebToLead endpoint expects, and submits it. This is invisible to the user — they just see a success message.</div>
+      <div class="step-code">File: /FreeYou/_worker.js → function handleLeadSubmit()
+Sends to: https://crm.zoho.in/crm/WebToLeadForm (POST)
+Tokens: ZOHO_TOKEN_1, ZOHO_TOKEN_2 (hardcoded in Worker)</div>
+    </div>
+
+    <div class="journey-step" style="--step-color: var(--purple)">
+      <div class="step-label">Step 3 — Zoho CRM</div>
+      <div class="step-title">Lead record created in Zoho CRM → Welcome email triggered</div>
+      <div class="step-desc">A new "Lead" record appears in Zoho CRM. An automated workflow rule fires: if a new lead is created, send a welcome email. This is the "Rule 1" workflow Ronald created manually in Zoho.</div>
+      <div class="step-code">Zoho CRM → Setup → Automation → Workflow Rules
+Rule: "Welcome Email on Lead Created"
+Action: Send email from hello@freeyou.co.in</div>
+    </div>
+
+    <div class="journey-step" style="--step-color: var(--purple)">
+      <div class="step-label">Step 4 — Manual Review</div>
+      <div class="step-title">Team qualifies the lead in Zoho and changes status to "Qualified"</div>
+      <div class="step-desc">Someone on the FreeYou team reviews the lead, has an intro call, and changes the <strong>Lead Status</strong> field to "Qualified". This status change is the trigger for the KYC process to start.</div>
+      <div class="step-code">Zoho CRM → Lead record → Lead Status field → "Qualified"
+This triggers: Workflow Rule 2 → Webhook to n8n</div>
+    </div>
+
+    <div class="journey-step" style="--step-color: #FF8A80)">
+      <div class="step-label">Step 5 — n8n Automation</div>
+      <div class="step-title">Zoho fires a webhook to n8n, which creates a KYC session</div>
+      <div class="step-desc">Zoho's workflow rule sends the lead's data to an n8n webhook URL. n8n extracts the name, email, phone, then calls the Didit API to create a unique KYC verification session for that person.</div>
+      <div class="step-code">File: /FreeYou/freeyou-n8n-didit-workflow.json
+n8n Webhook: POST https://[n8n-url]/webhook/freeyou-kyc
+Calls: POST https://verification.didit.me/v3/session/</div>
+    </div>
+
+    <div class="journey-step" style="--step-color: var(--teal)">
+      <div class="step-label">Step 6 — KYC Email</div>
+      <div class="step-title">n8n emails the lead a secure Didit verification link</div>
+      <div class="step-desc">n8n sends a branded HTML email to the lead with a "Start KYC Verification" button. The link is unique to their session and expires in 24 hours. It simultaneously updates the lead's status in Zoho to "KYC Sent".</div>
+      <div class="step-code">n8n Email node: SMTP via hello@freeyou.co.in
+Link: https://verify.didit.me/s/[unique-session-id]
+Zoho update: Lead_Status → "KYC Sent", KYC_Session_ID saved</div>
+    </div>
+
+    <div class="journey-step" style="--step-color: var(--green)">
+      <div class="step-label">Step 7 — Didit KYC</div>
+      <div class="step-title">Lead completes identity verification on Didit's hosted page</div>
+      <div class="step-desc">The lead clicks the link, lands on Didit's hosted verification page, uploads their Aadhaar/PAN/Passport and takes a selfie. Didit runs liveness detection and document verification. Takes 2–3 minutes.</div>
+      <div class="step-code">Didit hosted at: https://verify.didit.me/s/[session-id]
+Accepts: Aadhaar, PAN, Passport, Driving Licence
+Liveness: Yes (face match required)</div>
+    </div>
+
+    <div class="journey-step" style="--step-color: var(--teal)">
+      <div class="step-label">Step 8 — Webhook Result</div>
+      <div class="step-title">Didit sends the verdict to FreeYou's webhook endpoint</div>
+      <div class="step-desc">After verification, Didit sends a signed webhook to the Cloudflare Worker at <code>/api/didit-webhook</code>. The Worker verifies the HMAC signature (security), then updates the lead's KYC fields in Zoho CRM — Approved or Declined.</div>
+      <div class="step-code">Webhook: POST https://freeyou.co.in/api/didit-webhook
+File: /FreeYou/_worker.js → function handleDigitWebhook()
+Zoho update: KYC_Status, KYC_Verified_At, Lead_Status</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- SECTION 2: COMPONENT MAP -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <div class="section-title">2. Interactive Component Map — Click to Explore</div>
+
+  <!-- Layer: Frontend -->
+  <div class="layer-block" style="--layer-bg: var(--layer-frontend); --layer-border: rgba(245,166,35,0.25); --layer-tag-bg: rgba(245,166,35,0.2); --layer-tag-color: var(--saffron);">
+    <span class="layer-tag">🌐 FRONTEND — Cloudflare Pages (freeyou-landing)</span>
+    <div class="layer-nodes">
+      <div class="flow-node" style="--node-bg: rgba(245,166,35,0.10); --node-border: rgba(245,166,35,0.3); --node-border-hover: var(--saffron); --node-glow: rgba(245,166,35,0.2);" onclick="showDetail('landing')">
+        <span class="node-badge badge-live">LIVE</span>
+        <div class="node-icon">🏠</div>
+        <div class="node-label">freeyou.co.in</div>
+        <div class="node-sublabel">Landing page (index.html)</div>
+      </div>
+      <div class="arrow" style="--arrow-color: rgba(245,166,35,0.4);"><div class="arrow-line"></div><div class="arrow-label">lead form submit</div></div>
+      <div class="flow-node" style="--node-bg: rgba(245,166,35,0.10); --node-border: rgba(245,166,35,0.3); --node-border-hover: var(--saffron);" onclick="showDetail('joinpage')">
+        <div class="node-icon">📝</div>
+        <div class="node-label">join.html</div>
+        <div class="node-sublabel">KYC onboarding page</div>
+      </div>
+      <div class="arrow" style="--arrow-color: rgba(245,166,35,0.4);"><div class="arrow-line"></div><div class="arrow-label">fetch /api/</div></div>
+      <div class="flow-node" style="--node-bg: rgba(0,201,167,0.10); --node-border: rgba(0,201,167,0.3); --node-border-hover: var(--teal); --node-glow: rgba(0,201,167,0.2);" onclick="showDetail('worker')">
+        <span class="node-badge badge-live">LIVE</span>
+        <div class="node-icon">⚙️</div>
+        <div class="node-label">_worker.js</div>
+        <div class="node-sublabel">Cloudflare Worker (API)</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center;"><div class="arrow-down" style="height:24px;"></div></div>
+
+  <!-- Layer: CRM -->
+  <div class="layer-block" style="--layer-bg: var(--layer-crm); --layer-border: rgba(108,99,255,0.25); --layer-tag-bg: rgba(108,99,255,0.2); --layer-tag-color: #9B8CFF;">
+    <span class="layer-tag">📊 ZOHO CRM — Lead Management & Automation</span>
+    <div class="layer-nodes">
+      <div class="flow-node" style="--node-bg: rgba(108,99,255,0.10); --node-border: rgba(108,99,255,0.3); --node-border-hover: var(--purple); --node-glow: rgba(108,99,255,0.2);" onclick="showDetail('zoho-lead')">
+        <span class="node-badge badge-live">LIVE</span>
+        <div class="node-icon">👤</div>
+        <div class="node-label">Lead Record</div>
+        <div class="node-sublabel">Created on form submit</div>
+      </div>
+      <div class="arrow" style="--arrow-color: rgba(108,99,255,0.4);"><div class="arrow-line"></div><div class="arrow-label">status: Qualified</div></div>
+      <div class="flow-node" style="--node-bg: rgba(108,99,255,0.10); --node-border: rgba(108,99,255,0.3); --node-border-hover: var(--purple);" onclick="showDetail('zoho-rule1')">
+        <span class="node-badge badge-live">LIVE</span>
+        <div class="node-icon">📧</div>
+        <div class="node-label">Rule 1: Welcome</div>
+        <div class="node-sublabel">On lead created → email</div>
+      </div>
+      <div class="arrow" style="--arrow-color: rgba(108,99,255,0.4);"><div class="arrow-line"></div><div class="arrow-label">on qualified</div></div>
+      <div class="flow-node" style="--node-bg: rgba(108,99,255,0.10); --node-border: rgba(108,99,255,0.3); --node-border-hover: var(--purple);" onclick="showDetail('zoho-rule2')">
+        <span class="node-badge badge-live">LIVE</span>
+        <div class="node-icon">🔗</div>
+        <div class="node-label">Rule 2: KYC Trigger</div>
+        <div class="node-sublabel">Status=Qualified → webhook</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center;"><div class="arrow-down" style="height:24px;"></div></div>
+
+  <!-- Layer: n8n -->
+  <div class="layer-block" style="--layer-bg: var(--layer-n8n); --layer-border: rgba(255,107,107,0.25); --layer-tag-bg: rgba(255,107,107,0.2); --layer-tag-color: #FF8A80;">
+    <span class="layer-tag">🔄 n8n AUTOMATION — KYC Orchestration</span>
+    <div class="layer-nodes">
+      <div class="flow-node" style="--node-bg: rgba(255,107,107,0.10); --node-border: rgba(255,107,107,0.3); --node-border-hover: #FF6B6B;" onclick="showDetail('n8n-webhook')">
+        <div class="node-icon">📡</div>
+        <div class="node-label">Webhook Trigger</div>
+        <div class="node-sublabel">/webhook/freeyou-kyc</div>
+      </div>
+      <div class="arrow" style="--arrow-color: rgba(255,107,107,0.4);"><div class="arrow-line"></div><div class="arrow-label">extract fields</div></div>
+      <div class="flow-node" style="--node-bg: rgba(255,107,107,0.10); --node-border: rgba(255,107,107,0.3); --node-border-hover: #FF6B6B;" onclick="showDetail('n8n-didit')">
+        <div class="node-icon">🔐</div>
+        <div class="node-label">Create KYC Session</div>
+        <div class="node-sublabel">Didit API call</div>
+      </div>
+      <div class="arrow" style="--arrow-color: rgba(255,107,107,0.4);"><div class="arrow-line"></div><div class="arrow-label">on success</div></div>
+      <div class="flow-node" style="--node-bg: rgba(255,107,107,0.10); --node-border: rgba(255,107,107,0.3); --node-border-hover: #FF6B6B;" onclick="showDetail('n8n-email')">
+        <div class="node-icon">📨</div>
+        <div class="node-label">Send KYC Email</div>
+        <div class="node-sublabel">Via SMTP + update Zoho</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center;"><div class="arrow-down" style="height:24px;"></div></div>
+
+  <!-- Layer: KYC -->
+  <div class="layer-block" style="--layer-bg: var(--layer-kyc); --layer-border: rgba(76,175,80,0.25); --layer-tag-bg: rgba(76,175,80,0.2); --layer-tag-color: #81C784;">
+    <span class="layer-tag">✅ DIDIT — Identity Verification</span>
+    <div class="layer-nodes">
+      <div class="flow-node" style="--node-bg: rgba(76,175,80,0.10); --node-border: rgba(76,175,80,0.3); --node-border-hover: var(--green);" onclick="showDetail('didit-session')">
+        <div class="node-icon">🪪</div>
+        <div class="node-label">KYC Session</div>
+        <div class="node-sublabel">Hosted verification UI</div>
+      </div>
+      <div class="arrow" style="--arrow-color: rgba(76,175,80,0.4);"><div class="arrow-line"></div><div class="arrow-label">verdict</div></div>
+      <div class="flow-node" style="--node-bg: rgba(76,175,80,0.10); --node-border: rgba(76,175,80,0.3); --node-border-hover: var(--green);" onclick="showDetail('didit-webhook')">
+        <div class="node-icon">🔔</div>
+        <div class="node-label">Didit Webhook</div>
+        <div class="node-sublabel">→ /api/didit-webhook</div>
+      </div>
+      <div class="arrow" style="--arrow-color: rgba(76,175,80,0.4);"><div class="arrow-line"></div><div class="arrow-label">update CRM</div></div>
+      <div class="flow-node" style="--node-bg: rgba(108,99,255,0.10); --node-border: rgba(108,99,255,0.3); --node-border-hover: var(--purple);" onclick="showDetail('zoho-verified')">
+        <div class="node-icon">✅</div>
+        <div class="node-label">KYC_Status = Verified</div>
+        <div class="node-sublabel">Zoho CRM updated</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DETAIL PANEL (shown on node click) -->
+  <div class="detail-panel" id="detail-panel">
+    <button class="close-panel" onclick="closeDetail()">✕ Close</button>
+    <div id="detail-content"></div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- SECTION 3: FILE REFERENCE -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <div class="section-title">3. Key Files — What Each File Does</div>
+
+  <table class="data-table">
+    <tr><th>File</th><th>What it does</th><th>Status</th></tr>
+    <tr>
+      <td><code>index.html</code></td>
+      <td>Main landing page. Contains the lead capture form. Submits to <code>/api/submit-lead</code> via the Cloudflare Worker.</td>
+      <td><span class="pill pill-green">LIVE</span></td>
+    </tr>
+    <tr>
+      <td><code>landing-v3.html</code></td>
+      <td>New landing page with Bharat storytelling narrative, blog section, and improved design. Ready to replace index.html.</td>
+      <td><span class="pill pill-yellow">READY TO DEPLOY</span></td>
+    </tr>
+    <tr>
+      <td><code>join.html</code></td>
+      <td>KYC onboarding page. User enters details → calls <code>/api/kyc-session</code> → redirects to Didit hosted verification URL.</td>
+      <td><span class="pill pill-green">LIVE</span></td>
+    </tr>
+    <tr>
+      <td><code>_worker.js</code></td>
+      <td>Cloudflare Worker. Handles 3 routes: submit lead → Zoho, create KYC session → Didit, receive Didit webhook → update Zoho CRM.</td>
+      <td><span class="pill pill-green">LIVE</span></td>
+    </tr>
+    <tr>
+      <td><code>freeyou-n8n-didit-workflow.json</code></td>
+      <td>Import this into n8n. Full workflow: Zoho webhook → extract lead fields → create Didit session → send KYC email → update Zoho status.</td>
+      <td><span class="pill pill-yellow">READY TO IMPORT</span></td>
+    </tr>
+    <tr>
+      <td><code>blog/index.html</code></td>
+      <td>Blog hub page listing all articles. Linked from the main landing page.</td>
+      <td><span class="pill pill-yellow">READY TO DEPLOY</span></td>
+    </tr>
+    <tr>
+      <td><code>blog/ai-tools-for-freelancers-india-2026.html</code></td>
+      <td>SEO blog post: 10 AI tools for Indian freelancers. Targets keywords: "AI tools for freelancers India".</td>
+      <td><span class="pill pill-yellow">READY TO DEPLOY</span></td>
+    </tr>
+    <tr>
+      <td><code>blog/gst-for-freelancers-india-2026.html</code></td>
+      <td>SEO blog post: GST guide for Indian freelancers. Targets keywords: "GST for freelancers India 2026".</td>
+      <td><span class="pill pill-yellow">READY TO DEPLOY</span></td>
+    </tr>
+    <tr>
+      <td><code>blog/how-to-get-freelance-clients-india.html</code></td>
+      <td>SEO blog post: Getting freelance clients in India. Targets keywords: "how to get freelance clients India".</td>
+      <td><span class="pill pill-yellow">READY TO DEPLOY</span></td>
+    </tr>
+    <tr>
+      <td><code>docs/architecture.html</code></td>
+      <td>This file. Interactive system documentation for the FreeYou platform.</td>
+      <td><span class="pill pill-green">CURRENT</span></td>
+    </tr>
+  </table>
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- SECTION 4: ENVIRONMENT VARIABLES -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <div class="section-title">4. Configuration — All Keys & Where They Live</div>
+
+  <p style="font-size:14px;color:var(--text-dim);margin-bottom:16px;">These are the secret keys that make the platform work. They are stored in Cloudflare Worker environment variables — never in the code files themselves. To update them: Cloudflare Dashboard → Workers → freeyou-worker → Settings → Variables.</p>
+
+  <div class="env-grid">
+    <div class="env-card">
+      <div class="env-name">ZOHO_REFRESH_TOKEN</div>
+      <div class="env-desc">Zoho OAuth token for the Worker to update CRM records via API</div>
+      <div class="env-where">📍 Cloudflare Worker secrets</div>
+    </div>
+    <div class="env-card">
+      <div class="env-name">ZOHO_CLIENT_ID</div>
+      <div class="env-desc">Zoho API app client ID (from Zoho API Console)</div>
+      <div class="env-where">📍 Cloudflare Worker secrets</div>
+    </div>
+    <div class="env-card">
+      <div class="env-name">ZOHO_CLIENT_SECRET</div>
+      <div class="env-desc">Zoho API app client secret</div>
+      <div class="env-where">📍 Cloudflare Worker secrets</div>
+    </div>
+    <div class="env-card">
+      <div class="env-name">DIDIT_API_KEY</div>
+      <div class="env-desc">Didit API key for creating KYC sessions</div>
+      <div class="env-where">📍 Cloudflare Worker secrets + n8n credential</div>
+    </div>
+    <div class="env-card">
+      <div class="env-name">DIDIT_WEBHOOK_SECRET</div>
+      <div class="env-desc">Used to verify that webhook calls are genuinely from Didit (security)</div>
+      <div class="env-where">📍 Cloudflare Worker secrets</div>
+    </div>
+    <div class="env-card">
+      <div class="env-name">DIDIT_WORKFLOW_ID</div>
+      <div class="env-desc">The ID of your Didit verification workflow (which documents to accept)</div>
+      <div class="env-where">📍 n8n variable (Settings → Variables)</div>
+    </div>
+    <div class="env-card">
+      <div class="env-name">ZOHO_TOKEN_1 / TOKEN_2</div>
+      <div class="env-desc">Zoho WebToLead tokens. Currently hardcoded in _worker.js — move to env vars for security</div>
+      <div class="env-where">⚠️ Currently in _worker.js (lines 11–12)</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- SECTION 5: EXTERNAL SERVICES -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <div class="section-title">5. External Services & Links</div>
+
+  <table class="data-table">
+    <tr><th>Service</th><th>What we use it for</th><th>Admin Link</th></tr>
+    <tr>
+      <td><strong>Cloudflare Pages</strong></td>
+      <td>Hosts the website. Project: <code>freeyou-landing</code> (live). Direct Upload method — no Git connection.</td>
+      <td><a href="https://dash.cloudflare.com" target="_blank" class="dp-link" style="font-size:11px;">dash.cloudflare.com ↗</a></td>
+    </tr>
+    <tr>
+      <td><strong>Cloudflare Workers</strong></td>
+      <td>Runs <code>_worker.js</code> — the backend API. Handles form submissions, KYC sessions, and Didit webhooks.</td>
+      <td><a href="https://dash.cloudflare.com" target="_blank" class="dp-link" style="font-size:11px;">Workers Dashboard ↗</a></td>
+    </tr>
+    <tr>
+      <td><strong>Zoho CRM</strong></td>
+      <td>Stores all leads. India instance at <code>crm.zoho.in</code>. Org ID: 60074654144. Contains custom KYC fields.</td>
+      <td><a href="https://crm.zoho.in" target="_blank" class="dp-link" style="font-size:11px;">crm.zoho.in ↗</a></td>
+    </tr>
+    <tr>
+      <td><strong>Didit (verification.didit.me)</strong></td>
+      <td>Identity verification. Creates KYC sessions. Accepts Indian govt IDs. Webhooks back with Approved/Declined verdict.</td>
+      <td><a href="https://business.didit.me" target="_blank" class="dp-link" style="font-size:11px;">business.didit.me ↗</a></td>
+    </tr>
+    <tr>
+      <td><strong>n8n</strong></td>
+      <td>Automation platform. Runs the Zoho → Didit KYC workflow. Can be self-hosted or cloud.</td>
+      <td><a href="https://n8n.io" target="_blank" class="dp-link" style="font-size:11px;">n8n.io ↗</a></td>
+    </tr>
+    <tr>
+      <td><strong>PostHog</strong></td>
+      <td>Analytics. Tracks page views, form starts, form submissions, scroll depth. Dashboard at us.posthog.com.</td>
+      <td><a href="https://us.posthog.com" target="_blank" class="dp-link" style="font-size:11px;">us.posthog.com ↗</a></td>
+    </tr>
+  </table>
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- SECTION 6: WHAT TO BUILD NEXT -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <div class="section-title">6. Future Additions — How to Stitch Them In</div>
+
+  <p style="font-size:14px;color:var(--text-dim);margin-bottom:20px;">Each addition below is designed to plug into the existing system without rebuilding anything. The existing lead → CRM → KYC pipeline is the foundation.</p>
+
+  <div class="roadmap-row">
+    <div class="roadmap-num">V2</div>
+    <div class="roadmap-content">
+      <h4>Admin Dashboard</h4>
+      <p>A password-protected page that reads from Zoho CRM API to show all leads, their KYC status, and actions (approve/reject). Built as a separate HTML page calling a new Worker endpoint.</p>
+      <div class="deps">🔗 Requires: Zoho CRM API access (already set up) · New Worker route: /api/admin/leads</div>
+    </div>
+  </div>
+  <div class="roadmap-row">
+    <div class="roadmap-num">V2</div>
+    <div class="roadmap-content">
+      <h4>Freelancer Profile Pages</h4>
+      <p>Public profile pages for verified freelancers. Stored in Zoho CRM (converted from Lead to Contact after KYC), displayed as <code>/profile/[slug]</code> — Worker reads the Contact record and renders the page.</p>
+      <div class="deps">🔗 Requires: KYC flow complete · Zoho Contacts module · New Worker route: /profile/[slug]</div>
+    </div>
+  </div>
+  <div class="roadmap-row">
+    <div class="roadmap-num">V2</div>
+    <div class="roadmap-content">
+      <h4>Team Builder Feature</h4>
+      <p>A page where clients can browse verified freelancers by skill and city, and request an introduction. Form submission goes to a new Worker endpoint, which creates a "deal" in Zoho CRM linking the client to the freelancer.</p>
+      <div class="deps">🔗 Requires: Freelancer profiles complete · New: Client lead module in Zoho · Worker route: /api/connect</div>
+    </div>
+  </div>
+  <div class="roadmap-row">
+    <div class="roadmap-num">V3</div>
+    <div class="roadmap-content">
+      <h4>Daily Blog Content Agent</h4>
+      <p>An n8n workflow that runs daily: fetches trending keywords from Google Search Console API → sends to Claude API → generates a blog post → saves to a /blog/ folder via GitHub API → triggers Cloudflare Pages redeploy.</p>
+      <div class="deps">🔗 Requires: Google Search Console API · Anthropic API key · GitHub repo connected to Cloudflare Pages</div>
+    </div>
+  </div>
+  <div class="roadmap-row">
+    <div class="roadmap-num">V3</div>
+    <div class="roadmap-content">
+      <h4>Payment & Subscription</h4>
+      <p>Razorpay integration for freelancer subscriptions. New Worker route <code>/api/payment</code> → Razorpay webhook → update Zoho subscription fields → email confirmation.</p>
+      <div class="deps">🔗 Requires: Razorpay account · New Worker route: /api/payment · Zoho subscription custom fields</div>
+    </div>
+  </div>
+
+</div><!-- end .page -->
+
+<!-- DETAIL PANEL DATA & SCRIPT -->
+<script>
+const nodeData = {
+  landing: {
+    title: '🏠 freeyou.co.in — Landing Page',
+    meta: 'File: landing-v3.html · Deployed via: Cloudflare Pages (freeyou-landing project)',
+    content: `
+      <p>The main website. Contains the early access lead capture form. When a user submits the form, the page sends a JSON POST request to <code>/api/submit-lead</code> — which is handled by the Cloudflare Worker, not by Zoho directly.</p>
+      <p>Why via the Worker? Because Zoho CRM's WebToLead endpoint doesn't allow cross-origin requests from browsers (CORS restriction). The Worker acts as a server-side proxy — invisible to the user.</p>
+      <h4>Form Fields Captured</h4>
+      <div class="dp-grid">
+        <div class="dp-item"><div class="dp-item-label">Field</div><div class="dp-item-value">First Name, Last Name</div></div>
+        <div class="dp-item"><div class="dp-item-label">Field</div><div class="dp-item-value">Phone (WhatsApp)</div></div>
+        <div class="dp-item"><div class="dp-item-label">Field</div><div class="dp-item-value">Email</div></div>
+        <div class="dp-item"><div class="dp-item-label">Field</div><div class="dp-item-value">Skill (Craft)</div></div>
+        <div class="dp-item"><div class="dp-item-label">Field</div><div class="dp-item-value">City</div></div>
+        <div class="dp-item"><div class="dp-item-label">Field</div><div class="dp-item-value">Lead Source = "Landing Page v3"</div></div>
+      </div>
+      <h4>Links</h4>
+      <a href="https://freeyou.co.in" target="_blank" class="dp-link">🌐 Visit site ↗</a>
+      <a href="https://dash.cloudflare.com" target="_blank" class="dp-link">☁️ Cloudflare Pages ↗</a>
+    `
+  },
+  worker: {
+    title: '⚙️ _worker.js — Cloudflare Worker',
+    meta: 'File: /FreeYou/_worker.js · Hosted on: Cloudflare Workers · Domain: freeyou.co.in',
+    content: `
+      <p>The backend of FreeYou. A single JavaScript file that handles all API routes. It runs on Cloudflare's global network — zero servers to manage.</p>
+      <h4>3 Routes It Handles</h4>
+      <div class="dp-grid">
+        <div class="dp-item"><div class="dp-item-label">Route 1</div><div class="dp-item-value">POST /api/submit-lead → Zoho WebToLead</div></div>
+        <div class="dp-item"><div class="dp-item-label">Route 2</div><div class="dp-item-value">POST /api/kyc-session → Didit create session</div></div>
+        <div class="dp-item"><div class="dp-item-label">Route 3</div><div class="dp-item-value">POST /api/didit-webhook → Verify + update Zoho</div></div>
+      </div>
+      <h4>Security</h4>
+      <p>The Didit webhook is verified using HMAC-SHA256 signature matching (line 166). This ensures only Didit can send verified results — no one can fake a "KYC Approved" notification.</p>
+      <a href="https://dash.cloudflare.com" target="_blank" class="dp-link">☁️ Cloudflare Dashboard ↗</a>
+      <a href="https://developers.cloudflare.com/workers/" target="_blank" class="dp-link">📖 Workers Docs ↗</a>
+    `
+  },
+  'zoho-lead': {
+    title: '👤 Zoho CRM — Lead Record',
+    meta: 'Service: Zoho CRM (India) · URL: crm.zoho.in · Org: 60074654144',
+    content: `
+      <p>Every person who submits the early access form becomes a "Lead" in Zoho CRM. The Lead module stores all contact information plus custom KYC fields added specifically for FreeYou.</p>
+      <h4>Custom KYC Fields (added to Leads module)</h4>
+      <div class="dp-grid">
+        <div class="dp-item"><div class="dp-item-label">API Name</div><div class="dp-item-value">KYC_Status</div></div>
+        <div class="dp-item"><div class="dp-item-label">API Name</div><div class="dp-item-value">KYC_Provider</div></div>
+        <div class="dp-item"><div class="dp-item-label">API Name</div><div class="dp-item-value">KYC_Session_ID</div></div>
+        <div class="dp-item"><div class="dp-item-label">API Name</div><div class="dp-item-value">KYC_Verified_At</div></div>
+      </div>
+      <h4>Lead Status Lifecycle</h4>
+      <p>New → Contacted → Qualified → KYC Sent → KYC Verified</p>
+      <a href="https://crm.zoho.in" target="_blank" class="dp-link">📊 Open Zoho CRM ↗</a>
+    `
+  },
+  'zoho-rule1': {
+    title: '📧 Zoho Workflow Rule 1 — Welcome Email',
+    meta: 'Location: Zoho CRM → Setup → Automation → Workflow Rules',
+    content: `
+      <p>When a new Lead record is created (from any source including the website form), this rule fires and sends a welcome email to the lead.</p>
+      <h4>Trigger</h4>
+      <p>Module: Leads · Event: Record is Created</p>
+      <h4>Action</h4>
+      <p>Send Email using the "Welcome to FreeYou" email template. From: hello@freeyou.co.in. To: lead's email.</p>
+      <a href="https://crm.zoho.in/crm/org60074654144/settings/workflow-rules" target="_blank" class="dp-link">⚙️ View in Zoho ↗</a>
+    `
+  },
+  'zoho-rule2': {
+    title: '🔗 Zoho Workflow Rule 2 — KYC Trigger',
+    meta: 'Location: Zoho CRM → Setup → Automation → Workflow Rules',
+    content: `
+      <p>When a Lead's status is changed to "Qualified", this rule fires a webhook to n8n — starting the KYC process automatically.</p>
+      <h4>Trigger</h4>
+      <p>Module: Leads · Event: Field update · Field: Lead Status → Qualified</p>
+      <h4>Action</h4>
+      <p>Call webhook: POST to n8n webhook URL with lead's name, email, phone, and Lead ID as the body.</p>
+      <h4>How to add the n8n URL</h4>
+      <p>After activating the n8n workflow, copy the webhook URL it generates (format: https://[your-n8n]/webhook/freeyou-kyc). Paste it into this Zoho workflow rule's webhook action.</p>
+    `
+  },
+  'n8n-webhook': {
+    title: '📡 n8n Webhook Trigger',
+    meta: 'File: freeyou-n8n-didit-workflow.json · Path: /webhook/freeyou-kyc',
+    content: `
+      <p>The entry point for the automation. Listens for POST requests from Zoho CRM. When Zoho fires the webhook (lead qualified), n8n receives the payload here and starts processing.</p>
+      <h4>How to set up</h4>
+      <p>1. Import <code>freeyou-n8n-didit-workflow.json</code> into n8n<br/>2. Activate the workflow<br/>3. Copy the webhook URL from the trigger node<br/>4. Paste it into Zoho Workflow Rule 2</p>
+      <a href="https://n8n.io" target="_blank" class="dp-link">🔄 n8n Documentation ↗</a>
+    `
+  },
+  'n8n-didit': {
+    title: '🔐 n8n — Create Didit KYC Session',
+    meta: 'n8n node type: HTTP Request · Calls: https://verification.didit.me/v3/session/',
+    content: `
+      <p>This n8n node calls the Didit API to create a unique, time-limited verification session for the lead. The session URL is what gets emailed to the freelancer.</p>
+      <h4>Inputs</h4>
+      <div class="dp-grid">
+        <div class="dp-item"><div class="dp-item-label">workflow_id</div><div class="dp-item-value">From n8n variable DIDIT_WORKFLOW_ID</div></div>
+        <div class="dp-item"><div class="dp-item-label">vendor_data</div><div class="dp-item-value">fy_[phone]_[timestamp]</div></div>
+        <div class="dp-item"><div class="dp-item-label">prefill.email</div><div class="dp-item-value">Lead's email</div></div>
+        <div class="dp-item"><div class="dp-item-label">prefill.full_name</div><div class="dp-item-value">Lead's full name</div></div>
+      </div>
+      <h4>Output</h4>
+      <p>Returns a session <code>url</code> (e.g. https://verify.didit.me/s/abc123) and session <code>id</code>. The URL is included in the KYC email.</p>
+      <a href="https://docs.didit.me" target="_blank" class="dp-link">📖 Didit API Docs ↗</a>
+    `
+  },
+  'n8n-email': {
+    title: '📨 n8n — Send KYC Email',
+    meta: 'n8n node type: Email Send · From: hello@freeyou.co.in',
+    content: `
+      <p>Sends a branded HTML email to the lead with a "Start KYC Verification" button linking to their unique Didit session URL. Also simultaneously updates the lead in Zoho CRM.</p>
+      <h4>What the email contains</h4>
+      <p>FreeYou logo · Personalised greeting · Short explanation · Orange CTA button → Didit session URL · Valid for 24 hours note · DPDP compliance note</p>
+      <h4>Zoho update</h4>
+      <p>Parallel branch updates the lead record: <code>Lead_Status = "KYC Sent"</code> and <code>KYC_Session_ID = [session id]</code></p>
+      <h4>To configure</h4>
+      <p>Add SMTP credentials in n8n (Settings → Credentials). Use Zoho Mail SMTP or any transactional email service (SendGrid, Mailgun, etc.)</p>
+    `
+  },
+  'didit-session': {
+    title: '🪪 Didit — KYC Verification Session',
+    meta: 'Service: Didit (verification.didit.me) · Dashboard: business.didit.me',
+    content: `
+      <p>Didit hosts a verification page at the unique session URL. The freelancer uploads their government-issued ID (Aadhaar, PAN, Passport, or Driving Licence) and takes a selfie for liveness detection. Takes 2–3 minutes.</p>
+      <h4>What Didit checks</h4>
+      <div class="dp-grid">
+        <div class="dp-item"><div class="dp-item-label">ID Verification</div><div class="dp-item-value">Document authenticity + data extraction</div></div>
+        <div class="dp-item"><div class="dp-item-label">Liveness</div><div class="dp-item-value">Selfie face match to ID photo</div></div>
+        <div class="dp-item"><div class="dp-item-label">DPDP</div><div class="dp-item-value">Data not stored beyond verification</div></div>
+      </div>
+      <h4>Possible verdicts</h4>
+      <p>Approved · Declined · In Review · Abandoned · Expired</p>
+      <a href="https://business.didit.me" target="_blank" class="dp-link">🔐 Didit Dashboard ↗</a>
+      <a href="https://docs.didit.me" target="_blank" class="dp-link">📖 Didit Docs ↗</a>
+    `
+  },
+  'didit-webhook': {
+    title: '🔔 Didit Webhook → Worker',
+    meta: 'Endpoint: POST https://freeyou.co.in/api/didit-webhook · File: _worker.js line 159',
+    content: `
+      <p>After the freelancer completes (or fails) verification, Didit sends a signed webhook to FreeYou's Worker. The Worker verifies the signature first (HMAC-SHA256) to confirm it's genuinely from Didit — then updates Zoho CRM.</p>
+      <h4>Security: HMAC Verification</h4>
+      <p>Every Didit webhook includes an <code>X-Signature-V2</code> header. The Worker recomputes the signature using <code>DIDIT_WEBHOOK_SECRET</code> and compares. If they don't match, the request is rejected (401).</p>
+      <h4>To configure</h4>
+      <p>In Didit dashboard → Webhook settings → set URL to <code>https://freeyou.co.in/api/didit-webhook</code>. Copy the webhook secret into the Cloudflare Worker environment variable <code>DIDIT_WEBHOOK_SECRET</code>.</p>
+    `
+  },
+  'zoho-verified': {
+    title: '✅ Zoho CRM — KYC Status Updated',
+    meta: 'Updated by: Cloudflare Worker (_worker.js) → updateZohoCRM() function',
+    content: `
+      <p>After receiving and verifying the Didit webhook, the Worker updates the Lead record in Zoho CRM with the KYC result. No document data is stored — only the verification status.</p>
+      <h4>Fields Updated</h4>
+      <div class="dp-grid">
+        <div class="dp-item"><div class="dp-item-label">KYC_Status</div><div class="dp-item-value">"Verified" or "Failed"</div></div>
+        <div class="dp-item"><div class="dp-item-label">KYC_Provider</div><div class="dp-item-value">"Didit"</div></div>
+        <div class="dp-item"><div class="dp-item-label">KYC_Session_ID</div><div class="dp-item-value">Didit session ID</div></div>
+        <div class="dp-item"><div class="dp-item-label">KYC_Verified_At</div><div class="dp-item-value">Timestamp</div></div>
+        <div class="dp-item"><div class="dp-item-label">Lead_Status</div><div class="dp-item-value">"Qualified" (if Verified)</div></div>
+      </div>
+      <p>DPDP Act 2023 compliance: Aadhaar, PAN, and passport data is never stored in Zoho CRM — only the verification outcome.</p>
+    `
+  },
+  joinpage: {
+    title: '📝 join.html — KYC Onboarding Page',
+    meta: 'File: /FreeYou/join.html · Hosted: Cloudflare Pages (freeyou-landing)',
+    content: `
+      <p>A multi-step onboarding page. After a freelancer is invited (post-qualification), they land here to complete their profile and start the KYC process.</p>
+      <h4>Flow inside join.html</h4>
+      <p>Step 1: User fills profile details → Step 2: "Start KYC" button clicked → Browser calls <code>/api/kyc-session</code> → Worker creates Didit session → User is redirected to Didit's hosted verification URL.</p>
+      <h4>Note</h4>
+      <p>This is separate from the n8n automated flow. The n8n flow sends the KYC link via email; this page lets users initiate KYC directly from the website.</p>
+    `
+  }
+};
+
+function showDetail(id) {
+  const data = nodeData[id];
+  if (!data) return;
+
+  const panel = document.getElementById('detail-panel');
+  const content = document.getElementById('detail-content');
+
+  content.innerHTML = `
+    <h3>${data.title}</h3>
+    <div class="dp-meta">${data.meta}</div>
+    ${data.content}
+  `;
+
+  panel.classList.add('visible');
+  panel.scrollIntoView({behavior: 'smooth', block: 'nearest'});
+
+  // Highlight active node
+  document.querySelectorAll('.flow-node').forEach(n => n.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+}
+
+function closeDetail() {
+  document.getElementById('detail-panel').classList.remove('visible');
+  document.querySelectorAll('.flow-node').forEach(n => n.classList.remove('active'));
+}
+</script>
+
+</body>
+</html>

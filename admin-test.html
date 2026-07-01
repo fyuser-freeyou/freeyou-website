@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FreeYou Admin — Test</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root { --navy:#0A1628;--saffron:#F5A623;--teal:#00C9A7;--purple:#7c3aed;--text:#1C1C2E;--muted:#6B7280;--border:#E5E7EB;--bg:#F3F4F8;--white:#fff;--red:#ef4444;--green:#10b981;--amber:#f59e0b; }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);display:flex;min-height:100vh;font-size:14px;}
+
+    /* LOGIN */
+    .login-screen{position:fixed;inset:0;background:var(--navy);display:flex;align-items:center;justify-content:center;z-index:999;}
+    .login-box{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:40px;width:340px;text-align:center;}
+    .login-logo{font-family:'Sora',sans-serif;font-size:22px;font-weight:800;color:var(--saffron);margin-bottom:4px;}
+    .login-sub{font-size:12px;color:rgba(255,255,255,0.4);margin-bottom:28px;}
+    .login-input{width:100%;padding:11px 14px;border:1.5px solid rgba(255,255,255,0.15);border-radius:9px;background:rgba(255,255,255,0.07);color:#fff;font-size:14px;font-family:inherit;margin-bottom:12px;outline:none;}
+    .login-input::placeholder{color:rgba(255,255,255,0.3);}
+    .login-btn{width:100%;padding:11px;background:var(--saffron);color:var(--navy);border:none;border-radius:9px;font-weight:700;font-size:14px;cursor:pointer;}
+    .login-err{font-size:12px;color:#fca5a5;margin-top:8px;display:none;}
+
+    /* SIDEBAR */
+    .sidebar{width:220px;background:var(--navy);min-height:100vh;display:flex;flex-direction:column;flex-shrink:0;position:fixed;top:0;left:0;bottom:0;z-index:50;}
+    .sidebar-logo{padding:20px;border-bottom:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;gap:8px;}
+    .logo-icon{width:30px;height:30px;background:linear-gradient(135deg,#F5A623,#ff8c00);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Sora',sans-serif;font-weight:800;font-size:13px;color:var(--navy);}
+    .logo-text{font-family:'Sora',sans-serif;font-weight:700;font-size:15px;color:#fff;}
+    .admin-badge{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;background:rgba(245,166,35,0.2);color:var(--saffron);padding:2px 6px;border-radius:4px;margin-left:4px;}
+    .nav{flex:1;padding:10px 0;}
+    .nav-item{display:flex;align-items:center;gap:10px;padding:10px 20px;font-size:13px;color:rgba(255,255,255,0.55);cursor:pointer;border-left:3px solid transparent;transition:all 0.15s;}
+    .nav-item:hover{color:#fff;background:rgba(255,255,255,0.05);}
+    .nav-item.active{color:#fff;border-left-color:var(--saffron);background:rgba(255,255,255,0.07);}
+    .nav-icon{font-size:15px;width:18px;text-align:center;}
+    .sidebar-footer{padding:14px 20px;border-top:1px solid rgba(255,255,255,0.08);font-size:11px;color:rgba(255,255,255,0.3);}
+
+    /* MAIN */
+    .main{margin-left:220px;flex:1;}
+    .topbar{background:var(--white);border-bottom:1px solid var(--border);padding:0 28px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:40;}
+    .topbar-title{font-family:'Sora',sans-serif;font-size:16px;font-weight:700;color:var(--navy);}
+    .admin-tag{background:rgba(124,58,237,0.1);color:var(--purple);font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;}
+    .content{padding:24px 28px;}
+    .section{display:none;}.section.active{display:block;}
+
+    /* STAT CARDS */
+    .stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;margin-bottom:24px;}
+    .stat-card{background:var(--white);border-radius:12px;padding:18px 20px;border:1px solid var(--border);}
+    .stat-label{font-size:11px;font-weight:600;letter-spacing:0.5px;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
+    .stat-val{font-family:'Sora',sans-serif;font-size:26px;font-weight:800;color:var(--navy);}
+    .stat-sub{font-size:11px;color:var(--muted);margin-top:3px;}
+    .stat-trend{font-size:11px;font-weight:600;margin-top:4px;}
+    .up{color:var(--green);}
+    .down{color:var(--red);}
+
+    /* TABLE */
+    .table-wrap{background:var(--white);border-radius:12px;border:1px solid var(--border);overflow:hidden;margin-bottom:20px;}
+    .table-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+    .table-title{font-size:14px;font-weight:700;color:var(--navy);}
+    .table-filters{display:flex;gap:8px;flex-wrap:wrap;}
+    .filter-btn{padding:5px 12px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;border:1.5px solid var(--border);background:var(--white);color:var(--muted);}
+    .filter-btn.active{background:var(--navy);color:#fff;border-color:var(--navy);}
+    table{width:100%;border-collapse:collapse;}
+    th{padding:10px 16px;text-align:left;font-size:11px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;color:var(--muted);background:#f8f9fa;border-bottom:1px solid var(--border);}
+    td{padding:12px 16px;font-size:13px;border-bottom:1px solid var(--border);}
+    tr:last-child td{border-bottom:none;}
+    tr:hover td{background:#fafafa;}
+    .badge{display:inline-flex;align-items:center;font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;letter-spacing:0.3px;}
+    .badge-free{background:#f3f4f8;color:var(--muted);}
+    .badge-paid{background:rgba(124,58,237,0.1);color:var(--purple);}
+    .badge-verified{background:rgba(16,185,129,0.1);color:#065f46;}
+    .badge-pending{background:rgba(245,158,11,0.1);color:#92400e;}
+    .badge-active{background:rgba(16,185,129,0.1);color:#065f46;}
+    .badge-expired{background:rgba(239,68,68,0.1);color:#991b1b;}
+    .action-btn{padding:4px 10px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;border:1.5px solid var(--border);background:transparent;color:var(--text);}
+    .action-btn:hover{background:var(--navy);color:#fff;border-color:var(--navy);}
+
+    /* SEARCH */
+    .search-bar{padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;outline:none;width:220px;}
+    .search-bar:focus{border-color:var(--navy);}
+
+    /* SECTION TITLE */
+    .section-title{font-family:'Sora',sans-serif;font-size:18px;font-weight:700;color:var(--navy);margin-bottom:4px;}
+    .section-sub{font-size:13px;color:var(--muted);margin-bottom:20px;}
+
+    /* REVENUE CHART (simple bars) */
+    .chart-wrap{background:var(--white);border-radius:12px;padding:20px;border:1px solid var(--border);margin-bottom:20px;}
+    .chart-title{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:16px;}
+    .bar-chart{display:flex;align-items:flex-end;gap:10px;height:120px;}
+    .bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;}
+    .bar{width:100%;background:var(--navy);border-radius:4px 4px 0 0;transition:height 0.5s ease;}
+    .bar-label{font-size:10px;color:var(--muted);text-align:center;}
+    .bar-val{font-size:10px;font-weight:700;color:var(--navy);}
+
+    /* MODAL */
+    .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:200;display:flex;align-items:center;justify-content:center;display:none;}
+    .modal{background:var(--white);border-radius:14px;padding:28px;width:480px;max-width:92vw;}
+    .modal-title{font-family:'Sora',sans-serif;font-size:16px;font-weight:700;color:var(--navy);margin-bottom:16px;}
+    .modal-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;}
+    .modal-row:last-child{border-bottom:none;}
+    .modal-key{color:var(--muted);}
+    .modal-val{font-weight:600;}
+    .modal-close{margin-top:20px;padding:9px 20px;background:var(--navy);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;width:100%;}
+  </style>
+</head>
+<body>
+
+<!-- LOGIN GATE -->
+<div class="login-screen" id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">FreeYou Admin</div>
+    <div class="login-sub">Founder access only</div>
+    <input type="text" class="login-input" id="login-user" placeholder="Username" />
+    <input type="password" class="login-input" id="login-pass" placeholder="Password" onkeydown="if(event.key==='Enter')doLogin()" />
+    <button class="login-btn" onclick="doLogin()">Sign In</button>
+    <div class="login-err" id="login-err">Incorrect credentials</div>
+    <div style="font-size:11px;color:rgba(255,255,255,0.2);margin-top:16px;">Demo: admin / freeyou2026</div>
+  </div>
+</div>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-icon">F</div>
+    <span class="logo-text">FreeYou</span>
+    <span class="admin-badge">Admin</span>
+  </div>
+  <nav class="nav">
+    <div class="nav-item active" onclick="showSection('overview')"><span class="nav-icon">📊</span><span>Overview</span></div>
+    <div class="nav-item" onclick="showSection('members')"><span class="nav-icon">👥</span><span>Members</span></div>
+    <div class="nav-item" onclick="showSection('subscriptions')"><span class="nav-icon">💳</span><span>Subscriptions</span></div>
+    <div class="nav-item" onclick="showSection('projects')"><span class="nav-icon">💼</span><span>Projects</span></div>
+    <div class="nav-item" onclick="showSection('contracts')"><span class="nav-icon">📄</span><span>Contracts</span></div>
+    <div class="nav-item" onclick="showSection('settings')"><span class="nav-icon">⚙️</span><span>Settings</span></div>
+  </nav>
+  <div class="sidebar-footer">TAN: HYDF05467A · FY OPC</div>
+</aside>
+
+<!-- MAIN -->
+<main class="main" id="main-app" style="display:none;">
+  <div class="topbar">
+    <div class="topbar-title" id="topbar-title">Overview</div>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <span class="admin-tag">Admin Panel · Test v0.1</span>
+      <button onclick="doLogout()" style="padding:5px 12px;background:transparent;border:1.5px solid var(--border);border-radius:8px;font-size:12px;cursor:pointer;color:var(--muted);">Logout</button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- OVERVIEW -->
+    <section class="section active" id="section-overview">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">Total Members</div>
+          <div class="stat-val" id="stat-total">0</div>
+          <div class="stat-trend up" id="stat-total-trend">↑ Growing</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Paid (Companion)</div>
+          <div class="stat-val" id="stat-paid">0</div>
+          <div class="stat-sub">Active subscriptions</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Free (Verified)</div>
+          <div class="stat-val" id="stat-free">0</div>
+          <div class="stat-sub">Upgrade opportunity</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Monthly Revenue</div>
+          <div class="stat-val" id="stat-mrr">₹0</div>
+          <div class="stat-sub">MRR (Companion × ₹1,499)</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">KYC Pending</div>
+          <div class="stat-val" id="stat-kyc-pending">0</div>
+          <div class="stat-sub">Awaiting verification</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Active Projects</div>
+          <div class="stat-val">0</div>
+          <div class="stat-sub">Add first project →</div>
+        </div>
+      </div>
+
+      <div class="chart-wrap">
+        <div class="chart-title">Signups — Last 7 days (mock data)</div>
+        <div class="bar-chart" id="signups-chart"></div>
+      </div>
+
+      <div class="table-wrap">
+        <div class="table-header"><div class="table-title">Recent Signups</div></div>
+        <table id="recent-table">
+          <thead><tr><th>Name</th><th>Phone</th><th>KYC</th><th>Tier</th><th>Joined</th></tr></thead>
+          <tbody id="recent-tbody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- MEMBERS -->
+    <section class="section" id="section-members">
+      <div class="section-title">All Members</div>
+      <div class="section-sub">Manage verified and paid members</div>
+      <div class="table-wrap">
+        <div class="table-header">
+          <div class="table-filters">
+            <button class="filter-btn active" onclick="filterMembers('all',this)">All</button>
+            <button class="filter-btn" onclick="filterMembers('paid',this)">Paid</button>
+            <button class="filter-btn" onclick="filterMembers('free',this)">Free</button>
+            <button class="filter-btn" onclick="filterMembers('pending',this)">KYC Pending</button>
+          </div>
+          <input type="text" class="search-bar" placeholder="Search name or phone..." oninput="searchMembers(this.value)" />
+        </div>
+        <table>
+          <thead><tr><th>Name</th><th>Phone</th><th>Skill</th><th>KYC</th><th>Tier</th><th>Joined</th><th>Action</th></tr></thead>
+          <tbody id="members-tbody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SUBSCRIPTIONS -->
+    <section class="section" id="section-subscriptions">
+      <div class="section-title">Subscriptions</div>
+      <div class="section-sub">Track active, expiring, and cancelled Companion memberships</div>
+      <div class="stats-grid" style="grid-template-columns:repeat(3,1fr);">
+        <div class="stat-card"><div class="stat-label">Active</div><div class="stat-val" id="sub-active">0</div></div>
+        <div class="stat-card"><div class="stat-label">Expiring in 7 days</div><div class="stat-val" id="sub-expiring">0</div></div>
+        <div class="stat-card"><div class="stat-label">Cancelled</div><div class="stat-val">0</div></div>
+      </div>
+      <div class="table-wrap">
+        <div class="table-header"><div class="table-title">Companion Members</div></div>
+        <table>
+          <thead><tr><th>Member</th><th>Payment ID</th><th>Start</th><th>Renewal</th><th>Status</th><th>MRR</th></tr></thead>
+          <tbody id="subs-tbody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section class="section" id="section-projects">
+      <div class="section-title">Projects</div>
+      <div class="section-sub">Client projects available to Companion members</div>
+      <div style="display:flex;justify-content:flex-end;margin-bottom:16px;">
+        <button class="action-btn" onclick="alert('Project creation form — coming in production build')" style="padding:8px 16px;background:var(--navy);color:#fff;border-color:var(--navy);">+ Add Project</button>
+      </div>
+      <div class="table-wrap">
+        <div class="table-header"><div class="table-title">Active Projects</div></div>
+        <table>
+          <thead><tr><th>Title</th><th>Client</th><th>Budget</th><th>Skills</th><th>Applications</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>React Developer — SaaS Dashboard</td><td>Bangalore Startup</td><td>₹80,000/mo</td><td>React, TypeScript</td><td>0</td><td><span class="badge badge-active">Open</span></td></tr>
+            <tr><td>Content Writer — Finance</td><td>Mumbai Media Co.</td><td>₹30,000/mo</td><td>Writing, Finance</td><td>0</td><td><span class="badge badge-active">Open</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- CONTRACTS -->
+    <section class="section" id="section-contracts">
+      <div class="section-title">Contracts</div>
+      <div class="section-sub">Freelancer Service Agreements and Client Service Agreements managed by FY OPC</div>
+      <div class="table-wrap">
+        <div class="table-header"><div class="table-title">Contracts (TAN: HYDF05467A)</div></div>
+        <table>
+          <thead><tr><th>Freelancer</th><th>Client</th><th>Value</th><th>Type</th><th>Status</th><th>TDS Deducted</th></tr></thead>
+          <tbody>
+            <tr><td colspan="6" style="text-align:center;color:var(--muted);padding:24px;">No contracts yet. Will appear here once a Companion member accepts a project.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SETTINGS -->
+    <section class="section" id="section-settings">
+      <div class="section-title">Settings</div>
+      <div class="section-sub">Platform configuration</div>
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div class="table-wrap" style="padding:20px;">
+          <div style="font-size:13px;font-weight:700;color:var(--navy);margin-bottom:12px;">Company Details</div>
+          <div class="modal-row"><span class="modal-key">Company</span><span class="modal-val">FY Freelancing Solutions (OPC) Pvt. Ltd.</span></div>
+          <div class="modal-row"><span class="modal-key">PAN</span><span class="modal-val">AAGCF6483M</span></div>
+          <div class="modal-row"><span class="modal-key">GSTIN</span><span class="modal-val">37AAGCF6483M1ZY</span></div>
+          <div class="modal-row"><span class="modal-key">TAN</span><span class="modal-val">HYDF05467A</span></div>
+          <div class="modal-row"><span class="modal-key">Companion Plan Price</span><span class="modal-val">₹1,499/month</span></div>
+          <div class="modal-row"><span class="modal-key">Platform Fee</span><span class="modal-val">10–15% of project value</span></div>
+          <div class="modal-row"><span class="modal-key">TDS Rate</span><span class="modal-val">10% (Section 194J)</span></div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<!-- MEMBER DETAIL MODAL -->
+<div class="modal-bg" id="member-modal">
+  <div class="modal">
+    <div class="modal-title" id="modal-title">Member Details</div>
+    <div id="modal-body"></div>
+    <button class="modal-close" onclick="closeModal()">Close</button>
+  </div>
+</div>
+
+<script>
+// ── MOCK DATA ──
+const MOCK_MEMBERS = [
+  { id:1, name:'Arjun Sharma', phone:'9876543210', skill:'Software Dev', kyc:'verified', tier:'paid', joined:'2026-06-01', city:'Bangalore', exp:'3–5 years', rate:'₹80,000–1 lakh', payment_id:'pay_test_001', sub_start:'2026-06-01', sub_expiry:'2026-07-01' },
+  { id:2, name:'Priya Nair', phone:'9123456789', skill:'UI/UX Design', kyc:'verified', tier:'paid', joined:'2026-06-05', city:'Mumbai', exp:'1–3 years', rate:'₹50,000–80,000', payment_id:'pay_test_002', sub_start:'2026-06-05', sub_expiry:'2026-07-05' },
+  { id:3, name:'Ravi Kumar', phone:'8876543210', skill:'Content Writing', kyc:'verified', tier:'free', joined:'2026-06-10', city:'Chennai', exp:'5–10 years', rate:'₹25,000–50,000' },
+  { id:4, name:'Anitha Reddy', phone:'7765432109', skill:'Digital Marketing', kyc:'verified', tier:'free', joined:'2026-06-12', city:'Hyderabad', exp:'3–5 years', rate:'₹50,000–80,000' },
+  { id:5, name:'Mohammed Asif', phone:'9654321098', skill:'Finance & Accounting', kyc:'pending', tier:'free', joined:'2026-06-15', city:'Delhi', exp:'10+ years', rate:'₹1–2 lakh' },
+  { id:6, name:'Deepa Menon', phone:'8543210987', skill:'Legal & Compliance', kyc:'verified', tier:'paid', joined:'2026-06-18', city:'Kochi', exp:'5–10 years', rate:'₹1–2 lakh', payment_id:'pay_test_003', sub_start:'2026-06-18', sub_expiry:'2026-07-18' },
+  { id:7, name:'Vikram Singh', phone:'9432109876', skill:'Software Dev', kyc:'verified', tier:'free', joined:'2026-06-20', city:'Pune', exp:'1–3 years', rate:'₹50,000–80,000' },
+  { id:8, name:'Sneha Iyer', phone:'8321098765', skill:'Data Analysis', kyc:'pending', tier:'free', joined:'2026-06-22', city:'Bangalore', exp:'1–3 years', rate:'₹30,000–50,000' },
+];
+
+let filteredMembers = [...MOCK_MEMBERS];
+let activeFilter = 'all';
+
+// ── LOGIN ──
+function doLogin() {
+  const u = document.getElementById('login-user').value;
+  const p = document.getElementById('login-pass').value;
+  if (u === 'admin' && p === 'freeyou2026') {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('main-app').style.display = 'flex';
+    document.getElementById('main-app').style.flexDirection = 'column';
+    initAdmin();
+  } else {
+    document.getElementById('login-err').style.display = 'block';
+  }
+}
+function doLogout() { document.getElementById('login-screen').style.display = 'flex'; document.getElementById('main-app').style.display = 'none'; }
+
+// ── INIT ──
+function initAdmin() {
+  updateStats();
+  renderRecentTable();
+  renderMembersTable(MOCK_MEMBERS);
+  renderSubsTable();
+  renderChart();
+}
+
+function updateStats() {
+  const total = MOCK_MEMBERS.length;
+  const paid = MOCK_MEMBERS.filter(m=>m.tier==='paid').length;
+  const free = MOCK_MEMBERS.filter(m=>m.tier==='free').length;
+  const pending = MOCK_MEMBERS.filter(m=>m.kyc==='pending').length;
+  const mrr = paid * 1499;
+  document.getElementById('stat-total').textContent = total;
+  document.getElementById('stat-paid').textContent = paid;
+  document.getElementById('stat-free').textContent = free;
+  document.getElementById('stat-mrr').textContent = '₹' + mrr.toLocaleString('en-IN');
+  document.getElementById('stat-kyc-pending').textContent = pending;
+  document.getElementById('sub-active').textContent = paid;
+  document.getElementById('sub-expiring').textContent = 1;
+}
+
+function renderRecentTable() {
+  const tbody = document.getElementById('recent-tbody');
+  const recent = [...MOCK_MEMBERS].sort((a,b)=>new Date(b.joined)-new Date(a.joined)).slice(0,5);
+  tbody.innerHTML = recent.map(m=>`
+    <tr>
+      <td><strong>${m.name}</strong></td>
+      <td>+91 ${m.phone}</td>
+      <td><span class="badge ${m.kyc==='verified'?'badge-verified':'badge-pending'}">${m.kyc==='verified'?'✓ Verified':'⏳ Pending'}</span></td>
+      <td><span class="badge ${m.tier==='paid'?'badge-paid':'badge-free'}">${m.tier==='paid'?'Companion':'Free'}</span></td>
+      <td>${formatDate(m.joined)}</td>
+    </tr>`).join('');
+}
+
+function renderMembersTable(members) {
+  const tbody = document.getElementById('members-tbody');
+  tbody.innerHTML = members.map(m=>`
+    <tr>
+      <td><strong>${m.name}</strong></td>
+      <td>+91 ${m.phone}</td>
+      <td>${m.skill}</td>
+      <td><span class="badge ${m.kyc==='verified'?'badge-verified':'badge-pending'}">${m.kyc==='verified'?'✓ Verified':'⏳ Pending'}</span></td>
+      <td><span class="badge ${m.tier==='paid'?'badge-paid':'badge-free'}">${m.tier==='paid'?'Companion':'Free'}</span></td>
+      <td>${formatDate(m.joined)}</td>
+      <td><button class="action-btn" onclick="showMemberDetail(${m.id})">View</button></td>
+    </tr>`).join('');
+}
+
+function renderSubsTable() {
+  const paid = MOCK_MEMBERS.filter(m=>m.tier==='paid');
+  const tbody = document.getElementById('subs-tbody');
+  tbody.innerHTML = paid.map(m=>{
+    const expiry = new Date(m.sub_expiry);
+    const daysLeft = Math.ceil((expiry - new Date()) / (1000*60*60*24));
+    const status = daysLeft > 7 ? 'active' : daysLeft > 0 ? 'expiring' : 'expired';
+    return `<tr>
+      <td><strong>${m.name}</strong><br><span style="font-size:11px;color:var(--muted);">+91 ${m.phone}</span></td>
+      <td style="font-size:11px;font-family:monospace;">${m.payment_id}</td>
+      <td>${formatDate(m.sub_start)}</td>
+      <td>${formatDate(m.sub_expiry)}</td>
+      <td><span class="badge badge-${status==='expiring'?'pending':status}">${status==='active'?'✓ Active':status==='expiring'?'⚠ Expiring':'Expired'}</span></td>
+      <td style="font-weight:700;">₹1,499</td>
+    </tr>`;
+  }).join('');
+}
+
+function renderChart() {
+  const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const vals = [1, 2, 0, 3, 1, 2, 1];
+  const max = Math.max(...vals);
+  const chart = document.getElementById('signups-chart');
+  chart.innerHTML = days.map((d,i)=>`
+    <div class="bar-col">
+      <div class="bar-val">${vals[i]}</div>
+      <div class="bar" style="height:${max>0?(vals[i]/max*80)+20:20}px;opacity:${vals[i]>0?1:0.2};"></div>
+      <div class="bar-label">${d}</div>
+    </div>`).join('');
+}
+
+// ── NAVIGATION ──
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.getElementById('section-'+id).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  const titles={overview:'Overview',members:'Members',subscriptions:'Subscriptions',projects:'Projects',contracts:'Contracts',settings:'Settings'};
+  document.getElementById('topbar-title').textContent = titles[id]||id;
+}
+
+// ── FILTERS ──
+function filterMembers(type, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  activeFilter = type;
+  let list = MOCK_MEMBERS;
+  if (type==='paid') list = list.filter(m=>m.tier==='paid');
+  else if (type==='free') list = list.filter(m=>m.tier==='free');
+  else if (type==='pending') list = list.filter(m=>m.kyc==='pending');
+  renderMembersTable(list);
+}
+
+function searchMembers(q) {
+  const lower = q.toLowerCase();
+  let list = MOCK_MEMBERS;
+  if (activeFilter==='paid') list=list.filter(m=>m.tier==='paid');
+  else if (activeFilter==='free') list=list.filter(m=>m.tier==='free');
+  else if (activeFilter==='pending') list=list.filter(m=>m.kyc==='pending');
+  if (q) list=list.filter(m=>m.name.toLowerCase().includes(lower)||m.phone.includes(q));
+  renderMembersTable(list);
+}
+
+// ── MODAL ──
+function showMemberDetail(id) {
+  const m = MOCK_MEMBERS.find(x=>x.id===id);
+  if (!m) return;
+  document.getElementById('modal-title').textContent = m.name;
+  document.getElementById('modal-body').innerHTML = [
+    ['Phone', '+91 '+m.phone],
+    ['City', m.city||'—'],
+    ['Primary Skill', m.skill],
+    ['Experience', m.exp||'—'],
+    ['Expected Rate', m.rate||'—'],
+    ['KYC Status', m.kyc==='verified'?'✓ Verified':'⏳ Pending'],
+    ['Membership', m.tier==='paid'?'⚡ Companion':'Free Member'],
+    ['Joined', formatDate(m.joined)],
+    m.payment_id ? ['Payment ID', m.payment_id] : null,
+    m.sub_expiry ? ['Subscription Expiry', formatDate(m.sub_expiry)] : null,
+  ].filter(Boolean).map(([k,v])=>`<div class="modal-row"><span class="modal-key">${k}</span><span class="modal-val">${v}</span></div>`).join('');
+  document.getElementById('member-modal').style.display = 'flex';
+}
+function closeModal() { document.getElementById('member-modal').style.display = 'none'; }
+
+function formatDate(d) { return new Date(d).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}); }
+</script>
+</body>
+</html>

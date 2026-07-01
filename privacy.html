@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Policy — FreeYou (FY Freelancing Solutions OPC Pvt. Ltd.)</title>
+  <meta name="description" content="FreeYou Privacy Policy — how we collect, use, and protect your personal data under India's DPDP Act 2023." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://freeyou.co.in/privacy.html" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --navy: #0A1628; --saffron: #F5A623; --teal: #00C9A7;
+      --text: #1C1C2E; --muted: #6B7280; --border: #E5E7EB;
+      --bg: #FAFAFA; --white: #fff;
+      --accent-bg: rgba(0,201,167,0.06); --accent-border: rgba(0,201,167,0.2);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; font-size: 15px; }
+    a { color: #1a6dcc; text-decoration: underline; }
+    a:hover { color: #0a4fa0; }
+
+    nav { background: var(--navy); padding: 0 24px; position: sticky; top: 0; z-index: 100; }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 58px; max-width: 900px; margin: 0 auto; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-mark { width: 32px; height: 32px; background: linear-gradient(135deg,#F5A623,#ff8c00); border-radius: 9px; display: flex; align-items: center; justify-content: center; font-family: 'Sora',sans-serif; font-weight: 800; font-size: 14px; color: var(--navy); }
+    .logo-text { font-family: 'Sora',sans-serif; font-weight: 700; font-size: 16px; color: #fff; }
+    .nav-links { display: flex; gap: 20px; }
+    .nav-links a { font-size: 13px; color: rgba(255,255,255,0.55); text-decoration: none; }
+    .nav-links a:hover, .nav-links a.active { color: #fff; }
+
+    .legal-hero { background: var(--navy); padding: 40px 24px 36px; border-bottom: 3px solid var(--teal); }
+    .legal-hero-inner { max-width: 900px; margin: 0 auto; }
+    .legal-tag { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--teal); background: rgba(0,201,167,0.12); border: 1px solid rgba(0,201,167,0.25); border-radius: 20px; padding: 4px 12px; margin-bottom: 14px; }
+    .legal-hero h1 { font-family: 'Sora',sans-serif; font-size: 30px; font-weight: 800; color: #fff; margin-bottom: 10px; }
+    .legal-hero p { font-size: 14px; color: rgba(255,255,255,0.55); }
+    .legal-hero p span { color: rgba(255,255,255,0.8); }
+
+    .legal-layout { max-width: 900px; margin: 0 auto; padding: 48px 24px 80px; display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start; }
+    @media (max-width: 700px) { .legal-layout { grid-template-columns: 1fr; } .toc { display: none; } }
+
+    .toc { position: sticky; top: 78px; background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+    .toc-title { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; }
+    .toc a { display: block; font-size: 12px; color: var(--muted); text-decoration: none; padding: 5px 0; border-left: 2px solid transparent; padding-left: 10px; transition: all 0.15s; line-height: 1.4; }
+    .toc a:hover, .toc a.active { color: var(--text); border-left-color: var(--teal); }
+
+    .legal-section { margin-bottom: 44px; scroll-margin-top: 90px; }
+    .legal-section h2 { font-family: 'Sora',sans-serif; font-size: 18px; font-weight: 700; color: var(--navy); margin-bottom: 14px; padding-bottom: 10px; border-bottom: 2px solid var(--teal); display: inline-block; }
+    .legal-section h3 { font-family: 'Sora',sans-serif; font-size: 15px; font-weight: 700; color: var(--text); margin: 20px 0 8px; }
+    .legal-section p { font-size: 14px; color: #374151; margin-bottom: 12px; line-height: 1.75; }
+    .legal-section ul, .legal-section ol { margin: 10px 0 16px 20px; }
+    .legal-section li { font-size: 14px; color: #374151; margin-bottom: 7px; line-height: 1.65; }
+    .legal-section strong { color: var(--text); font-weight: 600; }
+
+    .data-table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 14px 0 20px; }
+    .data-table th { background: var(--navy); color: #fff; text-align: left; padding: 10px 14px; font-weight: 600; }
+    .data-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.55; }
+    .data-table tr:last-child td { border-bottom: none; }
+    .data-table tr:nth-child(even) td { background: #f8f9fa; }
+
+    .highlight-box { background: var(--accent-bg); border: 1px solid var(--accent-border); border-radius: 8px; padding: 14px 18px; margin: 14px 0; font-size: 13px; color: #1a5a50; line-height: 1.65; }
+    .highlight-box strong { color: #0d3d35; }
+
+    .warning-box { background: rgba(245,166,35,0.06); border: 1px solid rgba(245,166,35,0.25); border-radius: 8px; padding: 14px 18px; margin: 14px 0; font-size: 13px; color: #7a5c00; line-height: 1.65; }
+
+    .rights-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr)); gap: 12px; margin: 16px 0; }
+    .right-card { background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
+    .right-card .icon { font-size: 22px; margin-bottom: 8px; }
+    .right-card .title { font-size: 13px; font-weight: 700; color: var(--navy); margin-bottom: 5px; }
+    .right-card .desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+    .grievance-box { background: var(--navy); border-radius: 12px; padding: 24px 28px; margin-top: 8px; }
+    .grievance-box h3 { font-family: 'Sora',sans-serif; font-size: 15px; font-weight: 700; color: var(--teal); margin-bottom: 12px; }
+    .grievance-box p { font-size: 13px; color: rgba(255,255,255,0.7); margin-bottom: 6px; }
+    .grievance-box p strong { color: #fff; }
+
+    footer { background: var(--navy); padding: 28px 24px; }
+    .footer-inner { max-width: 900px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+    .footer-text { font-size: 12px; color: rgba(255,255,255,0.4); }
+    .footer-links { display: flex; gap: 20px; flex-wrap: wrap; }
+    .footer-links a { font-size: 12px; color: rgba(255,255,255,0.5); text-decoration: none; }
+    .footer-links a:hover { color: var(--teal); }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="logo"><div class="logo-mark">F</div><span class="logo-text">FreeYou</span></a>
+    <div class="nav-links">
+      <a href="/terms.html">Terms</a>
+      <a href="/privacy.html" class="active">Privacy</a>
+      <a href="/refund-policy.html">Refund Policy</a>
+      <a href="mailto:freeyouforever@outlook.com">freeyouforever@outlook.com</a>
+    </div>
+  </div>
+</nav>
+
+<div class="legal-hero">
+  <div class="legal-hero-inner">
+    <span class="legal-tag">Legal Document</span>
+    <h1>Privacy Policy</h1>
+    <p>Effective Date: <span>25 June 2026</span> &nbsp;·&nbsp; Last Updated: <span>25 June 2026</span> &nbsp;·&nbsp; Version: 1.0</p>
+    <p style="margin-top:6px;">This Policy explains how <span>FY Freelancing Solutions (OPC) Pvt. Ltd.</span> collects, uses, and protects your personal data in compliance with India's <span>DPDP Act 2023</span>.</p>
+  </div>
+</div>
+
+<div class="legal-layout">
+  <aside class="toc">
+    <div class="toc-title">Contents</div>
+    <a href="#s1">1. Who We Are</a>
+    <a href="#s2">2. Data We Collect</a>
+    <a href="#s3">3. How We Use Your Data</a>
+    <a href="#s4">4. Legal Basis</a>
+    <a href="#s5">5. Data Sharing</a>
+    <a href="#s6">6. Third-Party Processors</a>
+    <a href="#s7">7. KYC &amp; Identity Data</a>
+    <a href="#s8">8. Analytics</a>
+    <a href="#s9">9. Cookies</a>
+    <a href="#s10">10. Data Retention</a>
+    <a href="#s11">11. Your Rights (DPDP)</a>
+    <a href="#s12">12. Data Security</a>
+    <a href="#s13">13. Children's Privacy</a>
+    <a href="#s14">14. Cross-Border Transfers</a>
+    <a href="#s15">15. Changes to Policy</a>
+    <a href="#s16">16. Grievance Officer</a>
+    <a href="#s17">17. Contact</a>
+  </aside>
+
+  <main>
+
+    <div class="legal-section" id="s1">
+      <h2>1. Who We Are (Data Fiduciary)</h2>
+      <p>Under India's <strong>Digital Personal Data Protection Act, 2023 (DPDP Act)</strong>, <strong>FY Freelancing Solutions (OPC) Private Limited</strong> ("FreeYou", "we", "us") is the <strong>Data Fiduciary</strong> — the entity that determines the purpose and means of processing your personal data.</p>
+      <ul>
+        <li><strong>Platform:</strong> freeyou.co.in</li>
+        <li><strong>Registered Office:</strong> Bangalore, Karnataka – 560001, India</li>
+        <li><strong>Data Protection Contact:</strong> <a href="mailto:freeyouforever@outlook.com">freeyouforever@outlook.com</a></li>
+      </ul>
+      <div class="highlight-box">
+        <strong>Our commitment:</strong> We collect the minimum personal data necessary. We do not sell your personal data to third parties for advertising. We are built for India's independent professionals, and your trust is foundational to everything we do.
+      </div>
+    </div>
+
+    <div class="legal-section" id="s2">
+      <h2>2. Data We Collect</h2>
+      <h3>2.1 Data You Provide Directly</h3>
+      <table class="data-table">
+        <thead><tr><th>Category</th><th>Data Points</th><th>When Collected</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Registration Data</strong></td><td>First name, last name, email address, phone number, city</td><td>On sign-up / lead form submission</td></tr>
+          <tr><td><strong>Professional Profile</strong></td><td>Skills, craft/trade, years of experience, portfolio links, bio, profile photo</td><td>During profile creation</td></tr>
+          <tr><td><strong>KYC Data</strong></td><td>Government ID type (Aadhaar/PAN/Passport/DL), document images, selfie — processed by Didit, not stored by FreeYou</td><td>During identity verification</td></tr>
+          <tr><td><strong>Payment Data</strong></td><td>Transaction reference, payment status, GST details — card/UPI credentials NOT stored by FreeYou</td><td>On subscription purchase</td></tr>
+          <tr><td><strong>Communication</strong></td><td>Emails, support messages, feedback sent to FreeYou</td><td>When you contact us</td></tr>
+        </tbody>
+      </table>
+
+      <h3>2.2 Data Collected Automatically</h3>
+      <table class="data-table">
+        <thead><tr><th>Category</th><th>Data Points</th><th>Source</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Usage Data</strong></td><td>Pages visited, features used, click events, session duration, form interactions</td><td>PostHog analytics</td></tr>
+          <tr><td><strong>Device &amp; Technical</strong></td><td>IP address, browser type, device type, operating system, screen resolution</td><td>Cloudflare, PostHog</td></tr>
+          <tr><td><strong>Cookies</strong></td><td>Session identifiers, preference cookies — see Section 9</td><td>Browser cookies</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="legal-section" id="s3">
+      <h2>3. How We Use Your Data</h2>
+      <table class="data-table">
+        <thead><tr><th>Purpose</th><th>Data Used</th><th>Legal Basis</th></tr></thead>
+        <tbody>
+          <tr><td>Account creation and platform access</td><td>Registration data</td><td>Contract performance</td></tr>
+          <tr><td>KYC identity verification</td><td>KYC data (via Didit)</td><td>Consent + Legal obligation</td></tr>
+          <tr><td>Processing subscription payments</td><td>Payment data (via Razorpay)</td><td>Contract performance</td></tr>
+          <tr><td>Matching freelancers with client opportunities</td><td>Profile, skills, city, KYC status</td><td>Contract performance</td></tr>
+          <tr><td>Sending platform notifications and updates</td><td>Email, phone</td><td>Consent</td></tr>
+          <tr><td>Improving platform features and UX</td><td>Usage data, analytics</td><td>Legitimate interest</td></tr>
+          <tr><td>Preventing fraud and enforcing Terms</td><td>Account data, device data</td><td>Legitimate interest / Legal obligation</td></tr>
+          <tr><td>Compliance with Indian law (IT Act, GST, DPDP)</td><td>As required</td><td>Legal obligation</td></tr>
+          <tr><td>Customer support</td><td>Communication data</td><td>Contract performance</td></tr>
+        </tbody>
+      </table>
+      <p>We will not use your personal data for purposes beyond those listed above without your explicit consent.</p>
+    </div>
+
+    <div class="legal-section" id="s4">
+      <h2>4. Legal Basis for Processing</h2>
+      <p>Under the DPDP Act 2023, we process your personal data on the following lawful bases:</p>
+      <ul>
+        <li><strong>Consent:</strong> Where you have provided explicit consent (e.g., for marketing communications, KYC);</li>
+        <li><strong>Contract Performance:</strong> Where processing is necessary to fulfil our services to you (account management, payments, matching);</li>
+        <li><strong>Legal Obligation:</strong> Where required by applicable Indian law (e.g., GST invoicing, law enforcement requests);</li>
+        <li><strong>Legitimate Interest:</strong> For fraud prevention, platform security, and product analytics — balanced against your privacy rights.</li>
+      </ul>
+      <p>You may withdraw consent at any time for consent-based processing. Withdrawal of consent does not affect the lawfulness of processing done before withdrawal.</p>
+    </div>
+
+    <div class="legal-section" id="s5">
+      <h2>5. Data Sharing</h2>
+      <p>We <strong>do not sell</strong> your personal data. We share data only in the following circumstances:</p>
+      <ul>
+        <li><strong>Service Providers:</strong> Third-party processors listed in Section 6, acting on our behalf;</li>
+        <li><strong>Client Introductions:</strong> Your verified profile information (name, skills, city, KYC badge) may be shown to prospective Clients as part of the matching process — this is the core purpose of the Platform;</li>
+        <li><strong>Business Transfers:</strong> In the event of a merger, acquisition, or sale of assets, your data may be transferred to the acquiring entity — we will notify you in advance;</li>
+        <li><strong>Legal Requirements:</strong> When required by court order, government authority, or applicable Indian law;</li>
+        <li><strong>Consent:</strong> With any other party when you have given explicit consent.</li>
+      </ul>
+    </div>
+
+    <div class="legal-section" id="s6">
+      <h2>6. Third-Party Data Processors</h2>
+      <p>We engage the following third-party processors, each of whom has agreed to process data only as instructed and in compliance with applicable law:</p>
+      <table class="data-table">
+        <thead><tr><th>Processor</th><th>Purpose</th><th>Data Shared</th><th>Privacy Policy</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Razorpay</strong><br/><small>Razorpay Software Pvt. Ltd.</small></td>
+            <td>Payment processing</td>
+            <td>Name, email, phone, transaction details</td>
+            <td><a href="https://razorpay.com/privacy/" target="_blank">razorpay.com/privacy</a></td>
+          </tr>
+          <tr>
+            <td><strong>Didit</strong></td>
+            <td>KYC identity verification</td>
+            <td>Government ID, selfie, phone (session reference only retained by FreeYou)</td>
+            <td><a href="https://didit.me/privacy" target="_blank">didit.me/privacy</a></td>
+          </tr>
+          <tr>
+            <td><strong>Zoho CRM</strong><br/><small>Zoho Corporation Pvt. Ltd.</small></td>
+            <td>Customer data management</td>
+            <td>Name, email, phone, city, skill, KYC status</td>
+            <td><a href="https://www.zoho.com/privacy.html" target="_blank">zoho.com/privacy</a></td>
+          </tr>
+          <tr>
+            <td><strong>Cloudflare</strong></td>
+            <td>Website hosting, CDN, DDoS protection</td>
+            <td>IP address, request metadata</td>
+            <td><a href="https://www.cloudflare.com/privacypolicy/" target="_blank">cloudflare.com/privacy</a></td>
+          </tr>
+          <tr>
+            <td><strong>PostHog</strong></td>
+            <td>Product analytics</td>
+            <td>Anonymous usage events, device data</td>
+            <td><a href="https://posthog.com/privacy" target="_blank">posthog.com/privacy</a></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="warning-box">
+        <strong>Note on Zoho:</strong> We use Zoho CRM India instance (crm.zoho.in) — data is stored in Zoho's Indian data centres.
+      </div>
+    </div>
+
+    <div class="legal-section" id="s7">
+      <h2>7. KYC and Identity Data</h2>
+      <p>Identity verification is conducted by <strong>Didit</strong>, an independent third-party provider. During KYC, you will be required to share:</p>
+      <ul>
+        <li>A government-issued photo ID (Aadhaar, PAN Card, Passport, or Driving Licence);</li>
+        <li>A real-time selfie for liveness detection.</li>
+      </ul>
+      <div class="highlight-box">
+        <strong>FreeYou does NOT retain copies of your identity documents or biometric images.</strong> Only the KYC session outcome (Approved / Declined / Pending) and a session reference ID are stored in our CRM. All identity documents are processed and stored by Didit according to their privacy policy and applicable biometric data protection standards.
+      </div>
+      <p>You may request information about your KYC session data directly from Didit at any time. KYC data is retained by Didit for a period specified in their terms, typically to support regulatory audits and re-verification requests.</p>
+    </div>
+
+    <div class="legal-section" id="s8">
+      <h2>8. Analytics and Tracking</h2>
+      <p>We use <strong>PostHog</strong> for product analytics to understand how Users interact with the Platform. PostHog is configured to:</p>
+      <ul>
+        <li>Capture anonymised page views, click events, and feature usage;</li>
+        <li>Not collect personally identifiable information unless you are signed in (in which case, a user ID may be linked to your events);</li>
+        <li>Respect browser-level do-not-track signals.</li>
+      </ul>
+      <p>We do not use Google Analytics, Facebook Pixel, or any cross-site advertising trackers. We do not serve targeted ads on the Platform.</p>
+    </div>
+
+    <div class="legal-section" id="s9">
+      <h2>9. Cookies and Local Storage</h2>
+      <p>The Platform uses cookies and browser local storage for the following purposes:</p>
+      <table class="data-table">
+        <thead><tr><th>Cookie Type</th><th>Purpose</th><th>Duration</th><th>Essential?</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Session Cookie</strong></td><td>Maintains your login session</td><td>Session (deleted on browser close)</td><td>Yes</td></tr>
+          <tr><td><strong>PostHog Analytics</strong></td><td>Anonymous usage analytics</td><td>12 months</td><td>No (can opt out)</td></tr>
+          <tr><td><strong>Preference Cookie</strong></td><td>Remembers UI settings (language, theme)</td><td>12 months</td><td>No</td></tr>
+          <tr><td><strong>Cloudflare</strong></td><td>Security, bot protection</td><td>Session / 1 year</td><td>Yes (security)</td></tr>
+        </tbody>
+      </table>
+      <p>You can control cookies through your browser settings. Disabling essential cookies may affect Platform functionality. We do not use advertising cookies or cross-site tracking cookies.</p>
+    </div>
+
+    <div class="legal-section" id="s10">
+      <h2>10. Data Retention</h2>
+      <table class="data-table">
+        <thead><tr><th>Data Type</th><th>Retention Period</th><th>Reason</th></tr></thead>
+        <tbody>
+          <tr><td>Account / Profile data</td><td>Duration of account + 3 years after deletion</td><td>Legal compliance, dispute resolution</td></tr>
+          <tr><td>Payment transaction records</td><td>7 years from date of transaction</td><td>GST / Income Tax Act requirement</td></tr>
+          <tr><td>KYC session reference</td><td>5 years from verification date</td><td>Regulatory compliance</td></tr>
+          <tr><td>Analytics data</td><td>24 months (anonymised thereafter)</td><td>Product improvement</td></tr>
+          <tr><td>Support communications</td><td>3 years from last contact</td><td>Customer service record</td></tr>
+          <tr><td>Log files (Cloudflare)</td><td>30 days</td><td>Security monitoring</td></tr>
+        </tbody>
+      </table>
+      <p>At the end of the retention period, data is securely deleted or anonymised. You may request early deletion where legally permissible (see Section 11).</p>
+    </div>
+
+    <div class="legal-section" id="s11">
+      <h2>11. Your Rights Under DPDP Act 2023</h2>
+      <p>As a Data Principal under India's Digital Personal Data Protection Act, 2023, you have the following rights:</p>
+      <div class="rights-grid">
+        <div class="right-card"><div class="icon">📋</div><div class="title">Right to Access</div><div class="desc">Request a summary of personal data we hold about you and how it is being processed.</div></div>
+        <div class="right-card"><div class="icon">✏️</div><div class="title">Right to Correction</div><div class="desc">Request correction of inaccurate or incomplete personal data.</div></div>
+        <div class="right-card"><div class="icon">🗑️</div><div class="title">Right to Erasure</div><div class="desc">Request deletion of your personal data (subject to legal retention obligations).</div></div>
+        <div class="right-card"><div class="icon">📵</div><div class="title">Right to Withdraw Consent</div><div class="desc">Withdraw previously given consent for data processing at any time.</div></div>
+        <div class="right-card"><div class="icon">⚖️</div><div class="title">Right to Grievance Redressal</div><div class="desc">Lodge a complaint with our Grievance Officer (see Section 16).</div></div>
+        <div class="right-card"><div class="icon">🏛️</div><div class="title">Right to Nominate</div><div class="desc">Nominate another person to exercise your rights in the event of your death or incapacity.</div></div>
+      </div>
+      <p style="margin-top:16px;">To exercise any of these rights, email <a href="mailto:freeyouforever@outlook.com">freeyouforever@outlook.com</a> with the subject line "DPDP Data Request — [Your Name]". We will acknowledge within 48 hours and respond within <strong>30 days</strong>. We may ask you to verify your identity before fulfilling any request.</p>
+      <div class="highlight-box">
+        <strong>Right to complain:</strong> If you are unsatisfied with our response, you have the right to complain to the <strong>Data Protection Board of India</strong> once it is constituted under the DPDP Act, 2023.
+      </div>
+    </div>
+
+    <div class="legal-section" id="s12">
+      <h2>12. Data Security</h2>
+      <p>FreeYou implements appropriate technical and organisational measures to protect your personal data, including:</p>
+      <ul>
+        <li><strong>Encryption in transit:</strong> All data transmitted between your browser and our servers is encrypted using TLS 1.2+ (HTTPS enforced via Cloudflare);</li>
+        <li><strong>Access controls:</strong> Only authorised personnel with a need-to-know basis can access personal data in our CRM;</li>
+        <li><strong>API security:</strong> Our Cloudflare Worker API uses HMAC-SHA256 signature verification for all webhook communications;</li>
+        <li><strong>Payment security:</strong> Payment card data is handled entirely by Razorpay's PCI DSS Level 1 certified infrastructure — FreeYou never stores card numbers or CVV;</li>
+        <li><strong>Incident response:</strong> In the event of a data breach, we will notify affected Users and the Data Protection Board of India as required under the DPDP Act.</li>
+      </ul>
+      <p>No method of transmission over the internet is 100% secure. While we use commercially reasonable measures, we cannot guarantee absolute security. You are responsible for maintaining the confidentiality of your account credentials.</p>
+    </div>
+
+    <div class="legal-section" id="s13">
+      <h2>13. Children's Privacy</h2>
+      <p>The FreeYou Platform is intended for users who are <strong>18 years of age or older</strong>. We do not knowingly collect personal data from children under 18. If you believe a child under 18 has provided personal data to us, please contact <a href="mailto:freeyouforever@outlook.com">freeyouforever@outlook.com</a> and we will promptly delete the data.</p>
+    </div>
+
+    <div class="legal-section" id="s14">
+      <h2>14. Cross-Border Data Transfers</h2>
+      <p>FreeYou primarily stores and processes data within India. Our primary service providers (Zoho CRM India) operate within India. However, some processors (Cloudflare, PostHog) may process data on servers outside India.</p>
+      <p>Where data is transferred outside India, we ensure that adequate safeguards are in place in accordance with the DPDP Act, 2023 and any rules notified by the Central Government regarding cross-border data transfers. We will update this section as applicable rules are notified.</p>
+    </div>
+
+    <div class="legal-section" id="s15">
+      <h2>15. Changes to This Privacy Policy</h2>
+      <p>We may update this Privacy Policy from time to time. Changes will be posted on this page with an updated "Last Updated" date. Material changes will be communicated via email to registered users at least <strong>14 days</strong> before they take effect.</p>
+      <p>Your continued use of the Platform after changes take effect constitutes acceptance of the updated Policy.</p>
+    </div>
+
+    <div class="legal-section" id="s16">
+      <h2>16. Grievance Officer (DPDP Act / IT Rules 2021)</h2>
+      <p>In accordance with the DPDP Act 2023 and IT (Intermediary Guidelines) Rules 2021, our Grievance Officer is:</p>
+      <div class="grievance-box">
+        <h3>Grievance Officer — Data Privacy</h3>
+        <p><strong>Name:</strong> Ronald T</p>
+        <p><strong>Designation:</strong> Founder &amp; Grievance Officer</p>
+        <p><strong>Organisation:</strong> FY Freelancing Solutions (OPC) Private Limited</p>
+        <p><strong>Email:</strong> <a href="mailto:freeyouforever@outlook.com" style="color:var(--teal);">freeyouforever@outlook.com</a></p>
+        <p><strong>Privacy-specific:</strong> <a href="mailto:freeyouforever@outlook.com" style="color:var(--teal);">freeyouforever@outlook.com</a></p>
+        <p><strong>Address:</strong> Bangalore, Karnataka – 560001, India</p>
+        <p style="margin-top:12px; font-size:12px; color:rgba(255,255,255,0.45);">Complaints acknowledged within 24 hours · Resolved within 15 days</p>
+      </div>
+    </div>
+
+    <div class="legal-section" id="s17">
+      <h2>17. Contact Information</h2>
+      <ul>
+        <li><strong>Privacy Requests:</strong> <a href="mailto:freeyouforever@outlook.com">freeyouforever@outlook.com</a></li>
+        <li><strong>Grievances:</strong> <a href="mailto:freeyouforever@outlook.com">freeyouforever@outlook.com</a></li>
+        <li><strong>General:</strong> <a href="mailto:freeyouforever@outlook.com">freeyouforever@outlook.com</a></li>
+        <li><strong>Website:</strong> <a href="https://freeyou.co.in">freeyou.co.in</a></li>
+      </ul>
+      <p style="margin-top:20px; font-size:13px; color:var(--muted);">This Privacy Policy was last updated on 25 June 2026. © 2026 FY Freelancing Solutions (OPC) Private Limited. All rights reserved.</p>
+    </div>
+
+  </main>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="logo" style="text-decoration:none;"><div class="logo-mark">F</div><div><div class="logo-text">FreeYou</div><div style="font-size:10px;color:rgba(255,255,255,0.3);">FY Freelancing Solutions (OPC) Pvt. Ltd.</div></div></div>
+    <div class="footer-text">© 2026 FY Freelancing Solutions (OPC) Pvt. Ltd.</div>
+    <div class="footer-links">
+      <a href="/terms.html">Terms of Service</a>
+      <a href="/privacy.html">Privacy Policy</a>
+      <a href="/refund-policy.html">Refund Policy</a>
+      <a href="/">Back to Home</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+const sections = document.querySelectorAll('.legal-section');
+const tocLinks = document.querySelectorAll('.toc a');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      tocLinks.forEach(l => l.classList.remove('active'));
+      const link = document.querySelector(`.toc a[href="#${e.target.id}"]`);
+      if (link) link.classList.add('active');
+    }
+  });
+}, { rootMargin: '-20% 0px -70% 0px' });
+sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>

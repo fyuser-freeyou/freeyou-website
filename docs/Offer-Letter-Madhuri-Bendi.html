@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Offer Letter — Madhuri Bendi</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', -apple-system, sans-serif; background: #f4f5f7; color: #1f2d3d; padding: 32px 16px; font-size: 13.5px; line-height: 1.7; }
+  .page { max-width: 760px; margin: 0 auto; background: #fff; border: 1px solid #e0e4e8; border-radius: 6px; overflow: hidden; }
+  .accent-bar { height: 3px; background: #0069d9; }
+  .header { padding: 28px 48px 24px; border-bottom: 1px solid #e8ebef; display: flex; align-items: flex-start; justify-content: space-between; }
+  .org-name { font-size: 17px; font-weight: 700; color: #1f2d3d; letter-spacing: -0.3px; }
+  .org-name span { color: #0069d9; }
+  .org-entity { font-size: 11px; color: #6b7a99; margin-top: 3px; font-weight: 500; }
+  .doc-type { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; color: #0069d9; background: #e8f0fe; padding: 4px 10px; border-radius: 3px; display: inline-block; }
+  .doc-ref { font-size: 11px; color: #8896ab; margin-top: 6px; }
+  .body { padding: 40px 48px; }
+  .date-line { font-size: 13px; color: #4a5568; margin-bottom: 28px; }
+  .addressee { margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid #f0f2f5; }
+  .addressee .name { font-size: 15px; font-weight: 700; color: #1f2d3d; }
+  .addressee .detail { font-size: 12.5px; color: #6b7a99; margin-top: 2px; }
+  .letter-subject { font-size: 15px; font-weight: 700; color: #1f2d3d; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 2px solid #0069d9; }
+  .letter-subject .ref { font-weight: 400; color: #6b7a99; font-size: 12px; }
+  p { color: #374151; margin-bottom: 14px; font-size: 13.5px; }
+  .section-title { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #6b7a99; margin: 28px 0 12px; }
+  .details-table { width: 100%; border-collapse: collapse; border: 1px solid #e0e4e8; font-size: 13px; margin-bottom: 24px; }
+  .details-table tr { border-bottom: 1px solid #f0f2f5; }
+  .details-table tr:last-child { border-bottom: none; }
+  .details-table td { padding: 10px 16px; vertical-align: top; }
+  .details-table td:first-child { width: 38%; color: #6b7a99; font-weight: 500; background: #f8f9fb; }
+  .details-table td:last-child { font-weight: 600; color: #1f2d3d; }
+  .details-table tr.highlight td:last-child { color: #0069d9; }
+  .salary-table { width: 100%; border-collapse: collapse; border: 1px solid #e0e4e8; font-size: 13px; margin-bottom: 24px; }
+  .salary-table thead tr { background: #f8f9fb; border-bottom: 1px solid #e0e4e8; }
+  .salary-table thead th { padding: 9px 16px; text-align: left; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: #6b7a99; }
+  .salary-table tbody tr { border-bottom: 1px solid #f0f2f5; }
+  .salary-table tbody tr:last-child { border-bottom: none; border-top: 1px solid #e0e4e8; background: #f8f9fb; }
+  .salary-table tbody td { padding: 9px 16px; color: #374151; }
+  .salary-table tbody tr:last-child td { font-weight: 700; color: #1f2d3d; }
+  .salary-table .amount { text-align: right; }
+  .role-list { margin: 0 0 20px 0; padding: 0; list-style: none; }
+  .role-list li { padding: 6px 0 6px 20px; position: relative; font-size: 13px; color: #374151; border-bottom: 1px solid #f5f6f8; }
+  .role-list li:last-child { border-bottom: none; }
+  .role-list li::before { content: ''; position: absolute; left: 4px; top: 14px; width: 6px; height: 6px; border-radius: 50%; background: #0069d9; }
+  .terms-list { margin: 0 0 20px 0; padding: 0; list-style: none; counter-reset: terms; }
+  .terms-list li { padding: 7px 0 7px 28px; position: relative; font-size: 13px; color: #374151; border-bottom: 1px solid #f5f6f8; counter-increment: terms; }
+  .terms-list li:last-child { border-bottom: none; }
+  .terms-list li::before { content: counter(terms); position: absolute; left: 0; top: 8px; width: 18px; height: 18px; border-radius: 50%; background: #e8f0fe; color: #0069d9; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+  .signature-section { margin-top: 36px; display: grid; grid-template-columns: 1fr 1fr; gap: 32px; padding-top: 24px; border-top: 1px solid #e8ebef; }
+  .sig-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.7px; color: #8896ab; font-weight: 600; margin-bottom: 36px; }
+.sig-line { border-top: 1.5px solid #d0d7e0; padding-top: 8px; }
+  .sig-name { font-size: 13.5px; font-weight: 700; color: #1f2d3d; }
+  .sig-title { font-size: 11.5px; color: #6b7a99; margin-top: 2px; }
+  .sig-dept { font-size: 11px; color: #0069d9; font-weight: 500; margin-top: 1px; }
+  .acceptance-box { margin-top: 32px; border: 1px dashed #c4cdd6; border-radius: 5px; padding: 20px 24px; background: #fafbfc; }
+  .acceptance-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.7px; color: #6b7a99; margin-bottom: 10px; }
+  .acceptance-fields { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-top: 14px; }
+  .field-group .field-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; color: #8896ab; margin-bottom: 20px; }
+  .field-group .field-line { border-top: 1px solid #c4cdd6; }
+  .footer { padding: 16px 48px; background: #f8f9fb; border-top: 1px solid #e8ebef; display: flex; justify-content: space-between; align-items: center; }
+  .footer-text { font-size: 11px; color: #8896ab; }
+  .footer-page { font-size: 11px; color: #b0bec5; }
+
+  /* Download bar */
+  .download-bar {
+    max-width: 760px; margin: 20px auto 0;
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  }
+  .download-bar button {
+    background: #0069d9; color: #fff; border: none;
+    padding: 10px 22px; border-radius: 5px; font-size: 13px;
+    font-weight: 600; cursor: pointer; font-family: inherit;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .download-bar button:hover { background: #0054ae; }
+  .download-bar button:disabled { opacity: 0.6; cursor: wait; }
+  .download-bar .docx-btn { background: #fff; color: #1f2d3d; border: 1px solid #d0d7e0; }
+  .download-bar .docx-btn:hover { background: #f4f5f7; }
+  .download-bar .note { font-size: 11.5px; color: #6b7a99; margin-left: 4px; }
+
+  @media print {
+    @page { size: A4; margin: 0; }
+    body { background: #fff; padding: 0; }
+    .page { border: none; border-radius: 0; box-shadow: none; }
+    .download-bar { display: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+  <div class="accent-bar"></div>
+  <div class="header">
+    <div>
+      <div class="org-name">Free<span>You</span></div>
+      <div class="org-entity">FY Freelancing Solutions (OPC) Private Limited · Bangalore, Karnataka</div>
+    </div>
+    <div style="text-align:right">
+      <div class="doc-type">Offer Letter</div>
+      <div class="doc-ref">Ref: FY/HR/2026/006</div>
+    </div>
+  </div>
+
+  <div class="body">
+    <div class="date-line">22nd June, 2026</div>
+
+    <div class="addressee">
+      <div class="name">Ms. Madhuri Bendi</div>
+      <div class="detail">Hyderabad, Telangana, India</div>
+      <div class="detail">bendi.madhuri@gmail.com &nbsp;·&nbsp; +91 8897391563</div>
+    </div>
+
+    <div class="letter-subject">
+      Letter of Offer — Junior Data Scientist
+      <span class="ref">&nbsp;|&nbsp; Ref: FY/HR/2026/006</span>
+    </div>
+
+    <p>Dear Madhuri,</p>
+    <p>We are pleased to offer you employment at <strong>FY Freelancing Solutions (OPC) Private Limited</strong> (operating as <strong>FreeYou</strong>) for the position of <strong>Junior Data Scientist</strong>. Following our evaluation of your profile, we are confident your expertise in machine learning, deep learning, and NLP aligns with our data objectives.</p>
+    <p>This offer is conditional on the terms and conditions outlined below.</p>
+
+    <div class="section-title">Appointment Details</div>
+    <table class="details-table">
+      <tr><td>Position</td><td>Junior Data Scientist</td></tr>
+      <tr><td>Department</td><td>Data &amp; Technology</td></tr>
+      <tr><td>Reporting To</td><td>Founder / Tech Lead</td></tr>
+      <tr><td>Work Location</td><td>Bangalore, Karnataka (Hybrid)</td></tr>
+      <tr><td>Employment Type</td><td>Full-Time, Permanent</td></tr>
+      <tr><td>Date of Joining</td><td>To be mutually agreed upon</td></tr>
+      <tr class="highlight"><td>Annual CTC</td><td>&#8377;5,00,000/- (Rupees Five Lakhs Only)</td></tr>
+    </table>
+
+    <div class="section-title">Indicative Salary Structure (Annual)</div>
+    <table class="salary-table">
+      <thead><tr><th>Component</th><th>Per Month</th><th class="amount">Per Annum</th></tr></thead>
+      <tbody>
+        <tr><td>Basic Salary</td><td>&#8377;20,833</td><td class="amount">&#8377;2,50,000</td></tr>
+        <tr><td>House Rent Allowance (HRA)</td><td>&#8377;8,333</td><td class="amount">&#8377;1,00,000</td></tr>
+        <tr><td>Special Allowance</td><td>&#8377;6,250</td><td class="amount">&#8377;75,000</td></tr>
+        <tr><td>Provident Fund (Employer)</td><td>&#8377;2,500</td><td class="amount">&#8377;30,000</td></tr>
+        <tr><td>Medical &amp; Other Benefits</td><td>&#8377;3,750</td><td class="amount">&#8377;45,000</td></tr>
+        <tr><td><strong>Total CTC</strong></td><td><strong>&#8377;41,667</strong></td><td class="amount"><strong>&#8377;5,00,000</strong></td></tr>
+      </tbody>
+    </table>
+
+    <div class="section-title">Role &amp; Responsibilities</div>
+    <ul class="role-list">
+      <li>Build, train, and deploy machine learning and deep learning models to support FreeYou's product and data intelligence initiatives.</li>
+      <li>Conduct exploratory data analysis on member and platform data to surface actionable insights for product and growth teams.</li>
+      <li>Develop NLP pipelines for text classification, recommendation, and sentiment analysis across member-generated content.</li>
+      <li>Collaborate with product and engineering to translate data insights into measurable product features.</li>
+      <li>Maintain documentation of ML models, pipelines, and evaluation metrics.</li>
+    </ul>
+
+    <div class="section-title">Terms &amp; Conditions</div>
+    <ul class="terms-list">
+      <li>This offer is contingent on successful completion of background verification and submission of all required documents prior to joining.</li>
+      <li>The probationary period shall be <strong>three (3) months</strong> from the date of joining, after which performance will be reviewed.</li>
+      <li>Notice period post-confirmation shall be <strong>one (1) month</strong> by either party, in writing.</li>
+      <li>You will be required to sign a Non-Disclosure Agreement (NDA) and an Intellectual Property Assignment Agreement on or before the date of joining.</li>
+      <li>This offer shall lapse if not accepted in writing within <strong>seven (7) days</strong> from the date of this letter.</li>
+      <li>The company reserves the right to withdraw this offer if any information provided is found to be false or misleading.</li>
+    </ul>
+
+    <p>We are building India's most trusted freelancer companion platform and we look forward to having you on the team. Your skills in data science and NLP are a direct fit for what we are building next.</p>
+    <p>Please sign and return this letter to confirm your acceptance.</p>
+    <p style="margin-top:4px;margin-bottom:28px;">Warm regards,</p>
+
+    <div class="signature-section">
+      <div>
+        <div class="sig-label">Authorised Signatory</div>
+<div class="sig-line">
+          <div class="sig-name">Yogesh</div>
+          <div class="sig-title">Authorised Signatory</div>
+          <div class="sig-dept">Human Possibility Team</div>
+          <div class="sig-title" style="margin-top:2px;">FY Freelancing Solutions (OPC) Pvt. Ltd.</div>
+        </div>
+      </div>
+      <div>
+        <div class="sig-label">Candidate Acceptance</div>
+        <div style="height:74px;"></div>
+        <div class="sig-line">
+          <div class="sig-name" style="color:#6b7a99;font-weight:500;">Madhuri Bendi</div>
+          <div class="sig-title">Signature &amp; Date: _______________</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="acceptance-box" style="margin-top:32px;">
+      <div class="acceptance-title">Declaration of Acceptance</div>
+      <p style="font-size:12.5px;margin-bottom:0;">I, <strong>Madhuri Bendi</strong>, accept the offer of employment for the position of <strong>Junior Data Scientist</strong> at FY Freelancing Solutions (OPC) Private Limited on the terms stated above.</p>
+      <div class="acceptance-fields">
+        <div class="field-group"><div class="field-label">Signature</div><div class="field-line"></div></div>
+        <div class="field-group"><div class="field-label">Date of Acceptance</div><div class="field-line"></div></div>
+        <div class="field-group"><div class="field-label">Expected Date of Joining</div><div class="field-line"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="footer-text">FY Freelancing Solutions (OPC) Pvt. Ltd. · Bangalore, Karnataka, India</div>
+    <div class="footer-page">Confidential · Page 1 of 1</div>
+  </div>
+</div>
+
+<!-- Download bar -->
+<div class="download-bar">
+  <button onclick="downloadPDF(this)">&#8595; Download PDF</button>
+  <span class="note">No browser headers or footers — file is email-ready</span>
+</div>
+
+<script>
+// ── Utility ───────────────────────────────────────────────────────────────────
+function loadScript(src) {
+  return new Promise((res, rej) => {
+    if (document.querySelector('script[src="' + src + '"]')) { res(); return; }
+    const s = document.createElement('script');
+    s.src = src; s.onload = res; s.onerror = rej;
+    document.head.appendChild(s);
+  });
+}
+function setBtn(btn, text, disabled) { btn.textContent = text; btn.disabled = disabled; }
+
+// ── PDF via html2canvas + jsPDF ───────────────────────────────────────────────
+async function downloadPDF(btn) {
+  setBtn(btn, 'Generating PDF…', true);
+  try {
+    await loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js');
+    await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
+
+    const el = document.querySelector('.page');
+    const canvas = await html2canvas(el, { scale: 2, useCORS: true, logging: false, backgroundColor: '#ffffff' });
+
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+    const pw = pdf.internal.pageSize.getWidth();
+    const ph = pdf.internal.pageSize.getHeight();
+    const ratio = canvas.width / pw;
+    const pageHeightPx = ph * ratio;
+    let yOffset = 0;
+
+    while (yOffset < canvas.height) {
+      const sliceH = Math.min(pageHeightPx, canvas.height - yOffset);
+      const tmp = document.createElement('canvas');
+      tmp.width = canvas.width; tmp.height = sliceH;
+      tmp.getContext('2d').drawImage(canvas, 0, yOffset, canvas.width, sliceH, 0, 0, canvas.width, sliceH);
+      if (yOffset > 0) pdf.addPage();
+      pdf.addImage(tmp.toDataURL('image/png'), 'PNG', 0, 0, pw, (sliceH / ratio));
+      yOffset += sliceH;
+    }
+
+    pdf.save('Offer-Letter-Madhuri-Bendi.pdf');
+    setBtn(btn, '✓ PDF Downloaded', false);
+  } catch (e) {
+    console.error(e);
+    setBtn(btn, '⚠ Error — try again', false);
+  }
+  setTimeout(() => setBtn(btn, '↓ Download PDF', false), 3000);
+}
+
+// ── DOCX via JSZip ────────────────────────────────────────────────────────────
+async function downloadDOCX(btn) {
+  setBtn(btn, 'Generating DOCX…', true);
+  try {
+    await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js');
+
+    const zip = new JSZip();
+    zip.file('[Content_Types].xml', contentTypesXML());
+    zip.folder('_rels').file('.rels', relsXML());
+    const word = zip.folder('word');
+    word.file('document.xml', documentXML());
+    word.file('styles.xml', stylesXML());
+    word.file('numbering.xml', numberingXML());
+    word.folder('_rels').file('document.xml.rels', wordRelsXML());
+
+    const blob = await zip.generateAsync({ type: 'blob', mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'Offer-Letter-Madhuri-Bendi.docx';
+    a.click();
+    URL.revokeObjectURL(a.href);
+    setBtn(btn, '✓ DOCX Downloaded', false);
+  } catch (e) {
+    console.error(e);
+    setBtn(btn, '⚠ Error — try again', false);
+  }
+  setTimeout(() => setBtn(btn, '↓ Download DOCX', false), 3000);
+}
+
+// ── XML Helpers ───────────────────────────────────────────────────────────────
+function x(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function rpr(bold, size, color, font) {
+  font = font || 'Arial';
+  size = size || 22;
+  let s = '<w:rFonts w:ascii="' + font + '" w:hAnsi="' + font + '"/><w:sz w:val="' + size + '"/><w:szCs w:val="' + size + '"/>';
+  if (bold) s += '<w:b/>';
+  if (color) s += '<w:color w:val="' + color + '"/>';
+  return '<w:rPr>' + s + '</w:rPr>';
+}
+
+function run(text, bold, size, color) {
+  return '<w:r>' + rpr(bold, size, color) + '<w:t xml:space="preserve">' + x(text) + '</w:t></w:r>';
+}
+
+function para(content, opts) {
+  opts = opts || {};
+  var before = opts.before !== undefined ? opts.before : 0;
+  var after  = opts.after  !== undefined ? opts.after  : 100;
+  var align  = opts.align  || '';
+  var bb     = opts.borderBottom || '';
+  var sp = '<w:spacing w:before="' + before + '" w:after="' + after + '"/>';
+  if (align) sp += '<w:jc w:val="' + align + '"/>';
+  if (bb) sp += '<w:pBdr><w:bottom w:val="single" w:sz="6" w:space="1" w:color="' + bb + '"/></w:pBdr>';
+  if (typeof content === 'string') content = run(content, false, 22, '');
+  return '<w:p><w:pPr>' + sp + '</w:pPr>' + content + '</w:p>';
+}
+
+function blank(after) { return '<w:p><w:pPr><w:spacing w:before="0" w:after="' + (after||60) + '"/></w:pPr></w:p>'; }
+
+function sectionLabel(text) {
+  return para(run(text, true, 18, '6B7A99'), { before: 200, after: 80 });
+}
+
+function bullet(text) {
+  return '<w:p><w:pPr><w:numPr><w:ilvl w:val="0"/><w:numId w:val="1"/></w:numPr><w:spacing w:before="0" w:after="80"/></w:pPr>'
+       + run(text, false, 21, '') + '</w:p>';
+}
+
+function numbered(text) {
+  return '<w:p><w:pPr><w:numPr><w:ilvl w:val="0"/><w:numId w:val="2"/></w:numPr><w:spacing w:before="0" w:after="80"/></w:pPr>'
+       + run(text, false, 21, '') + '</w:p>';
+}
+
+// ── Table Helpers ─────────────────────────────────────────────────────────────
+var BORDER = '<w:top w:val="single" w:sz="2" w:space="0" w:color="E0E4E8"/><w:bottom w:val="single" w:sz="2" w:space="0" w:color="E0E4E8"/><w:left w:val="single" w:sz="2" w:space="0" w:color="E0E4E8"/><w:right w:val="single" w:sz="2" w:space="0" w:color="E0E4E8"/>';
+var MARGINS = '<w:tcMar><w:top w:w="80" w:type="dxa"/><w:bottom w:w="80" w:type="dxa"/><w:left w:w="120" w:type="dxa"/><w:right w:w="120" w:type="dxa"/></w:tcMar>';
+
+function tc(text, width, bold, fill, align, color) {
+  var shading = fill ? '<w:shading w:val="clear" w:color="auto" w:fill="' + fill + '"/>' : '';
+  var jc = align ? '<w:jc w:val="' + align + '"/>' : '';
+  return '<w:tc><w:tcPr><w:tcW w:w="' + width + '" w:type="dxa"/><w:tcBorders>' + BORDER + '</w:tcBorders>' + shading + MARGINS + '</w:tcPr>'
+       + '<w:p><w:pPr><w:spacing w:before="0" w:after="0"/>' + jc + '</w:pPr>'
+       + run(text, bold, 21, color || '') + '</w:p></w:tc>';
+}
+
+function trow(cells) { return '<w:tr>' + cells.join('') + '</w:tr>'; }
+
+function tbl(rows, colWidths) {
+  var total = colWidths.reduce(function(a,b){return a+b;}, 0);
+  var grid = colWidths.map(function(w){return '<w:gridCol w:w="' + w + '"/>';}).join('');
+  return '<w:tbl><w:tblPr><w:tblW w:w="' + total + '" w:type="dxa"/>'
+       + '<w:tblBorders>' + BORDER + '<w:insideH w:val="single" w:sz="2" w:space="0" w:color="E0E4E8"/><w:insideV w:val="single" w:sz="2" w:space="0" w:color="E0E4E8"/></w:tblBorders>'
+       + '</w:tblPr><w:tblGrid>' + grid + '</w:tblGrid>'
+       + rows.join('') + '</w:tbl>';
+}
+
+// ── Document XML ──────────────────────────────────────────────────────────────
+function documentXML() {
+  var CW = 9026; // A4 width minus 1-inch margins
+  var C1 = 3500, C2 = CW - C1;
+  var S1 = 3600, S2 = 2600, S3 = CW - S1 - S2;
+
+  // Header
+  var headerRow = trow([
+    run('FreeYou', true, 26, '0D1B4B') + run('  —  FY Freelancing Solutions (OPC) Pvt. Ltd.', false, 19, '6B7A99'),
+    run('OFFER LETTER', true, 18, '0069D9')
+  ].map(function(c, i) {
+    return tc('', i === 0 ? CW - 2200 : 2200, false, 'FFFFFF', i === 1 ? 'right' : '');
+  }));
+  // Actually just create the header as paragraphs instead of a table
+  var header =
+    para(run('FreeYou', true, 28, '0D1B4B') + run('   ·   FY Freelancing Solutions (OPC) Pvt. Ltd.', false, 20, '6B7A99'), { after: 40 }) +
+    para(run('Ref: FY/HR/2026/006', false, 19, '8896AB'), { borderBottom: 'E0E4E8', after: 160 });
+
+  // Appointment table
+  var apptRows = [
+    ['Position', 'Junior Data Scientist', false],
+    ['Department', 'Data & Technology', false],
+    ['Reporting To', 'Founder / Tech Lead', false],
+    ['Work Location', 'Bangalore, Karnataka (Hybrid)', false],
+    ['Employment Type', 'Full-Time, Permanent', false],
+    ['Date of Joining', 'To be mutually agreed upon', false],
+    ['Annual CTC', '₹5,00,000/- (Rupees Five Lakhs Only)', true],
+  ].map(function(row) {
+    return trow([tc(row[0], C1, false, 'F8F9FB', '', '6B7A99'), tc(row[1], C2, row[2], '', '', row[2] ? '0069D9' : '1F2D3D')]);
+  });
+
+  // Salary table
+  var salaryHeader = trow([tc('Component', S1, true, 'F8F9FB', '', '374151'), tc('Per Month', S2, true, 'F8F9FB', '', '374151'), tc('Per Annum', S3, true, 'F8F9FB', 'right', '374151')]);
+  var salaryRows = [
+    ['Basic Salary', '₹20,833', '₹2,50,000'],
+    ['House Rent Allowance (HRA)', '₹8,333', '₹1,00,000'],
+    ['Special Allowance', '₹6,250', '₹75,000'],
+    ['Provident Fund (Employer)', '₹2,500', '₹30,000'],
+    ['Medical & Other Benefits', '₹3,750', '₹45,000'],
+    ['Total CTC', '₹41,667', '₹5,00,000'],
+  ].map(function(row, i) {
+    var isTotal = i === 5;
+    return trow([tc(row[0], S1, isTotal, isTotal ? 'F8F9FB' : ''), tc(row[1], S2, isTotal, isTotal ? 'F8F9FB' : ''), tc(row[2], S3, isTotal, isTotal ? 'F8F9FB' : '', 'right')]);
+  });
+
+  // Signature table (2 cols)
+  var sigRow = trow([
+    tc('Yogesh\nAuthorised Signatory\nHuman Possibility Team\nFY Freelancing Solutions (OPC) Pvt. Ltd.', Math.floor(CW/2), false, 'FFFFFF'),
+    tc('Madhuri Bendi\nSignature & Date: _______________', CW - Math.floor(CW/2), false, 'FFFFFF'),
+  ]);
+  // Actually, use separate paragraphs for signature block
+  var sigBlock =
+    para(run('For FY Freelancing Solutions (OPC) Pvt. Ltd.', true, 21, '1F2D3D'), {before: 200, after: 60}) +
+    para(run('', false, 22, '') , {after: 200}) + // space for signature
+    para(run('Yogesh', true, 22, '1F2D3D'), {after: 40}) +
+    para(run('Authorised Signatory  |  Human Possibility Team', false, 20, '0069D9'), {after: 20}) +
+    para(run('FY Freelancing Solutions (OPC) Pvt. Ltd.', false, 20, '6B7A99'), {after: 0, borderBottom: 'E0E4E8'});
+
+  var body =
+    header +
+    para(run('22nd June, 2026', false, 21, '4A5568'), {after: 160}) +
+    para(run('Ms. Madhuri Bendi', true, 24, '1F2D3D'), {after: 40}) +
+    para(run('Hyderabad, Telangana, India', false, 21, '6B7A99'), {after: 20}) +
+    para(run('bendi.madhuri@gmail.com  ·  +91 8897391563', false, 21, '6B7A99'), {after: 160}) +
+    para(run('Letter of Offer — Junior Data Scientist', true, 26, '1F2D3D'), {borderBottom: '0069D9', after: 160}) +
+    para(run('Dear Madhuri,', false, 22, '374151'), {after: 100}) +
+    para(
+      run('We are pleased to offer you employment at ', false, 22, '374151') +
+      run('FY Freelancing Solutions (OPC) Private Limited', true, 22, '374151') +
+      run(' (operating as ', false, 22, '374151') +
+      run('FreeYou', true, 22, '0069D9') +
+      run(') for the position of ', false, 22, '374151') +
+      run('Junior Data Scientist', true, 22, '374151') +
+      run('. Following our evaluation of your profile, we are confident your expertise in machine learning, deep learning, and NLP aligns with our data objectives.', false, 22, '374151'),
+      {after: 100}
+    ) +
+    para(run('This offer is conditional on the terms and conditions outlined below.', false, 22, '374151'), {after: 160}) +
+
+    sectionLabel('APPOINTMENT DETAILS') +
+    tbl(apptRows, [C1, C2]) +
+    blank(160) +
+
+    sectionLabel('INDICATIVE SALARY STRUCTURE (ANNUAL)') +
+    tbl([salaryHeader].concat(salaryRows), [S1, S2, S3]) +
+    blank(160) +
+
+    sectionLabel('ROLE & RESPONSIBILITIES') +
+    bullet('Build, train, and deploy machine learning and deep learning models to support FreeYou’s product and data intelligence initiatives.') +
+    bullet('Conduct exploratory data analysis on member and platform data to surface actionable insights for product and growth teams.') +
+    bullet('Develop NLP pipelines for text classification, recommendation, and sentiment analysis across member-generated content.') +
+    bullet('Collaborate with product and engineering to translate data insights into measurable product features.') +
+    bullet('Maintain documentation of ML models, pipelines, and evaluation metrics.') +
+    blank(120) +
+
+    sectionLabel('TERMS & CONDITIONS') +
+    numbered('This offer is contingent on successful completion of background verification and submission of all required documents prior to joining.') +
+    numbered('The probationary period shall be three (3) months from the date of joining, after which performance will be reviewed.') +
+    numbered('Notice period post-confirmation shall be one (1) month by either party, in writing.') +
+    numbered('You will be required to sign a Non-Disclosure Agreement (NDA) and an Intellectual Property Assignment Agreement on or before the date of joining.') +
+    numbered('This offer shall lapse if not accepted in writing within seven (7) days from the date of this letter.') +
+    numbered('The company reserves the right to withdraw this offer if any information provided is found to be false or misleading.') +
+    blank(120) +
+
+    para(run('We are building India’s most trusted freelancer companion platform and we look forward to having you on the team. Your skills in data science and NLP are a direct fit for what we are building next.', false, 22, '374151'), {after: 100}) +
+    para(run('Please sign and return this letter to confirm your acceptance.', false, 22, '374151'), {after: 100}) +
+    para(run('Warm regards,', false, 22, '374151'), {after: 200}) +
+
+    sigBlock +
+
+    blank(200) +
+    para(run('DECLARATION OF ACCEPTANCE', true, 18, '6B7A99'), {before: 200, after: 80}) +
+    para(
+      run('I, ', false, 21, '374151') + run('Madhuri Bendi', true, 21, '374151') +
+      run(', accept the offer of employment for the position of ', false, 21, '374151') +
+      run('Junior Data Scientist', true, 21, '374151') +
+      run(' at FY Freelancing Solutions (OPC) Private Limited on the terms stated above.', false, 21, '374151'),
+      {after: 120}
+    ) +
+    para(run('Signature: ____________________________     Date of Acceptance: _______________     Expected Date of Joining: _______________', false, 20, '8896AB'), {after: 0}) +
+
+    '<w:sectPr><w:pgSz w:w="11906" w:h="16838"/><w:pgMar w:top="1134" w:right="1440" w:bottom="1134" w:left="1440"/></w:sectPr>';
+
+  return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+    + '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">'
+    + '<w:body>' + body + '</w:body></w:document>';
+}
+
+// ── Support XML files ─────────────────────────────────────────────────────────
+function contentTypesXML() {
+  return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+    + '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">'
+    + '<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>'
+    + '<Default Extension="xml" ContentType="application/xml"/>'
+    + '<Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>'
+    + '<Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/>'
+    + '<Override PartName="/word/numbering.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.numbering+xml"/>'
+    + '</Types>';
+}
+
+function relsXML() {
+  return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+    + '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
+    + '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/>'
+    + '</Relationships>';
+}
+
+function wordRelsXML() {
+  return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+    + '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
+    + '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>'
+    + '<Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/numbering" Target="numbering.xml"/>'
+    + '</Relationships>';
+}
+
+function stylesXML() {
+  return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+    + '<w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">'
+    + '<w:docDefaults><w:rPrDefault><w:rPr>'
+    + '<w:rFonts w:ascii="Arial" w:hAnsi="Arial"/><w:sz w:val="22"/><w:szCs w:val="22"/>'
+    + '</w:rPr></w:rPrDefault></w:docDefaults>'
+    + '<w:style w:type="paragraph" w:default="1" w:styleId="Normal">'
+    + '<w:name w:val="Normal"/><w:pPr><w:spacing w:after="100"/></w:pPr>'
+    + '<w:rPr><w:rFonts w:ascii="Arial" w:hAnsi="Arial"/><w:sz w:val="22"/></w:rPr>'
+    + '</w:style>'
+    + '<w:style w:type="table" w:styleId="TableGrid">'
+    + '<w:name w:val="Table Grid"/>'
+    + '<w:tblPr><w:tblBorders>'
+    + '<w:top w:val="single" w:sz="4" w:color="E0E4E8"/>'
+    + '<w:bottom w:val="single" w:sz="4" w:color="E0E4E8"/>'
+    + '<w:left w:val="single" w:sz="4" w:color="E0E4E8"/>'
+    + '<w:right w:val="single" w:sz="4" w:color="E0E4E8"/>'
+    + '<w:insideH w:val="single" w:sz="4" w:color="E0E4E8"/>'
+    + '<w:insideV w:val="single" w:sz="4" w:color="E0E4E8"/>'
+    + '</w:tblBorders></w:tblPr>'
+    + '</w:style>'
+    + '</w:styles>';
+}
+
+function numberingXML() {
+  return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+    + '<w:numbering xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">'
+    // Abstract: bullets
+    + '<w:abstractNum w:abstractNumId="1">'
+    + '<w:lvl w:ilvl="0"><w:start w:val="1"/><w:numFmt w:val="bullet"/><w:lvlText w:val="&#x2022;"/>'
+    + '<w:lvlJc w:val="left"/><w:pPr><w:ind w:left="360" w:hanging="360"/></w:pPr>'
+    + '<w:rPr><w:rFonts w:ascii="Arial" w:hAnsi="Arial"/></w:rPr></w:lvl>'
+    + '</w:abstractNum>'
+    // Abstract: decimal
+    + '<w:abstractNum w:abstractNumId="2">'
+    + '<w:lvl w:ilvl="0"><w:start w:val="1"/><w:numFmt w:val="decimal"/><w:lvlText w:val="%1."/>'
+    + '<w:lvlJc w:val="left"/><w:pPr><w:ind w:left="400" w:hanging="400"/></w:pPr>'
+    + '<w:rPr><w:rFonts w:ascii="Arial" w:hAnsi="Arial"/></w:rPr></w:lvl>'
+    + '</w:abstractNum>'
+    // Concrete instances
+    + '<w:num w:numId="1"><w:abstractNumId w:val="1"/></w:num>'
+    + '<w:num w:numId="2"><w:abstractNumId w:val="2"/></w:num>'
+    + '</w:numbering>';
+}
+</script>
+</body>
+</html>

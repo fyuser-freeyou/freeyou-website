@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FreeYou — India's Freelancer Companion</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script>
+!function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+" (stub)"},o="init bs ws capture createAlias identify reset on once off reloadFeatureFlags getFeatureFlag getFeatureFlagPayload isFeatureEnabled addGroup setPersonProperties groupIdentify setPersonPropertiesForFlags setGroupPropertiesForFlags".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+posthog.init('phc_Chj2S9pvBJEaQfhRHuDoxyx3GvJGMPSy3r6AUSTueH2z',{api_host:'https://us.i.posthog.com',capture_pageview:true,capture_pageleave:true,session_recording:{maskAllInputs:true}});
+</script>
+<style>
+:root {
+  --navy: #0A1628;
+  --navy2: #0f1e3d;
+  --purple: #1a1560;
+  --saffron: #F5A623;
+  --saffron2: #ff8c00;
+  --teal: #00C9A7;
+  --teal2: #00897B;
+  --white: #ffffff;
+  --off-white: #F0F4FF;
+  --glass: rgba(255,255,255,0.06);
+  --glass-border: rgba(255,255,255,0.12);
+  --text-muted: rgba(255,255,255,0.55);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--navy);
+  color: var(--white);
+  overflow-x: hidden;
+}
+
+/* ── TYPOGRAPHY ── */
+h1, h2, h3 { font-family: 'Sora', sans-serif; }
+
+.gradient-text {
+  background: linear-gradient(135deg, #F5A623 0%, #FFD166 50%, #FF8C00 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.gradient-text-teal {
+  background: linear-gradient(135deg, #00C9A7 0%, #00F5D4 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── ANIMATED BG ── */
+.hero-bg {
+  position: absolute; inset: 0; overflow: hidden; z-index: 0;
+}
+.orb {
+  position: absolute; border-radius: 50%;
+  filter: blur(80px); opacity: 0.35;
+  animation: float 8s ease-in-out infinite;
+}
+.orb-1 { width: 600px; height: 600px; background: radial-gradient(circle, #F5A623, transparent); top: -200px; right: -100px; animation-delay: 0s; }
+.orb-2 { width: 500px; height: 500px; background: radial-gradient(circle, #00C9A7, transparent); bottom: -100px; left: -150px; animation-delay: -3s; }
+.orb-3 { width: 400px; height: 400px; background: radial-gradient(circle, #6C63FF, transparent); top: 30%; left: 30%; animation-delay: -6s; }
+@keyframes float {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-30px) scale(1.05); }
+}
+
+/* Grid overlay */
+.grid-overlay {
+  position: absolute; inset: 0;
+  background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  z-index: 1;
+}
+
+/* ── NAVBAR ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 16px 40px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(10, 22, 40, 0.8);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  transition: all 0.3s;
+}
+.nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.nav-logo-mark {
+  width: 34px; height: 34px; border-radius: 8px;
+  background: linear-gradient(135deg, #F5A623, #FF8C00);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Sora', sans-serif; font-weight: 800; font-size: 16px; color: var(--navy);
+}
+.nav-logo-text { font-family: 'Sora', sans-serif; font-weight: 700; font-size: 18px; }
+.nav-links { display: flex; gap: 32px; align-items: center; }
+.nav-links a { color: rgba(255,255,255,0.7); text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s; }
+.nav-links a:hover { color: #fff; }
+.nav-cta {
+  background: linear-gradient(135deg, #F5A623, #FF8C00);
+  color: var(--navy) !important;
+  font-weight: 700 !important;
+  padding: 10px 22px;
+  border-radius: 8px;
+  transition: transform 0.2s, box-shadow 0.2s !important;
+}
+.nav-cta:hover { transform: translateY(-1px); box-shadow: 0 4px 20px rgba(245,166,35,0.4) !important; color: var(--navy) !important; }
+
+/* ── HERO ── */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex; align-items: center;
+  padding: 120px 40px 80px;
+  overflow: hidden;
+}
+.hero-inner {
+  position: relative; z-index: 2;
+  max-width: 1200px; margin: 0 auto; width: 100%;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(0,201,167,0.15);
+  border: 1px solid rgba(0,201,167,0.3);
+  border-radius: 20px; padding: 6px 16px;
+  font-size: 12px; font-weight: 600; color: var(--teal);
+  letter-spacing: 0.5px; text-transform: uppercase;
+  margin-bottom: 20px;
+}
+.badge-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--teal); box-shadow: 0 0 8px var(--teal); animation: blink 2s infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+.hero-h1 {
+  font-size: clamp(40px, 5vw, 62px);
+  font-weight: 800; line-height: 1.1;
+  margin-bottom: 20px;
+  letter-spacing: -1px;
+}
+.hero-sub {
+  font-size: 18px; line-height: 1.7;
+  color: rgba(255,255,255,0.7);
+  margin-bottom: 32px;
+  max-width: 480px;
+}
+.hero-stats {
+  display: flex; gap: 32px; margin-bottom: 36px;
+}
+.stat-item { }
+.stat-num { font-family: 'Sora', sans-serif; font-size: 26px; font-weight: 800; }
+.stat-num span { font-size: 14px; font-weight: 600; }
+.stat-label { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+/* Lead form card */
+.form-card {
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(30px);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 24px;
+  padding: 36px;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.4);
+  position: relative;
+  overflow: hidden;
+}
+.form-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, #F5A623, #00C9A7, #F5A623);
+  background-size: 200% 100%;
+  animation: shimmer 3s linear infinite;
+}
+@keyframes shimmer { 0%{background-position:100% 0} 100%{background-position:-100% 0} }
+
+.form-card-title { font-family: 'Sora', sans-serif; font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+.form-card-sub { font-size: 13px; color: var(--text-muted); margin-bottom: 28px; }
+
+.form-group { margin-bottom: 16px; }
+.form-label { display: block; font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.6); margin-bottom: 7px; letter-spacing: 0.3px; text-transform: uppercase; }
+.form-input {
+  width: 100%; padding: 12px 16px;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 10px; color: #fff;
+  font-family: 'Inter', sans-serif; font-size: 15px;
+  transition: border-color 0.2s, background 0.2s;
+  outline: none;
+  -webkit-appearance: none;
+}
+.form-input::placeholder { color: rgba(255,255,255,0.3); }
+.form-input:focus { border-color: rgba(245,166,35,0.6); background: rgba(255,255,255,0.1); }
+.form-input option { background: #1a1a2e; color: #fff; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+.submit-btn {
+  width: 100%; padding: 15px;
+  background: linear-gradient(135deg, #F5A623 0%, #FF8C00 100%);
+  color: var(--navy); font-family: 'Sora', sans-serif;
+  font-size: 16px; font-weight: 700;
+  border: none; border-radius: 12px; cursor: pointer;
+  transition: all 0.2s; margin-top: 8px;
+  box-shadow: 0 4px 24px rgba(245,166,35,0.4);
+  position: relative; overflow: hidden;
+}
+.submit-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(245,166,35,0.5); }
+.submit-btn:active { transform: translateY(0); }
+.submit-btn::after { content: '→'; margin-left: 8px; }
+
+.form-note { font-size: 11px; color: var(--text-muted); text-align: center; margin-top: 12px; }
+.form-success {
+  display: none; text-align: center; padding: 20px;
+}
+.form-success .check { font-size: 48px; margin-bottom: 12px; }
+.form-success h3 { font-family: 'Sora', sans-serif; font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+.form-success p { font-size: 14px; color: var(--text-muted); }
+
+/* ── MARQUEE STRIP ── */
+.strip {
+  background: linear-gradient(135deg, #F5A623 0%, #FF8C00 100%);
+  padding: 14px 0; overflow: hidden;
+}
+.marquee { display: flex; animation: marquee 20s linear infinite; white-space: nowrap; }
+.marquee-item {
+  flex-shrink: 0; padding: 0 40px;
+  font-family: 'Sora', sans-serif; font-size: 14px; font-weight: 700;
+  color: var(--navy); display: flex; align-items: center; gap: 12px;
+}
+.marquee-dot { width: 5px; height: 5px; background: var(--navy); border-radius: 50%; opacity: 0.5; }
+@keyframes marquee { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+
+/* ── SECTIONS ── */
+section { padding: 100px 40px; }
+.section-inner { max-width: 1200px; margin: 0 auto; }
+
+.section-label {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--saffron);
+  margin-bottom: 16px;
+}
+.section-label::before { content: ''; width: 20px; height: 2px; background: var(--saffron); }
+
+.section-h2 {
+  font-size: clamp(32px, 4vw, 48px); font-weight: 800;
+  line-height: 1.15; letter-spacing: -0.5px;
+  margin-bottom: 16px;
+}
+.section-sub-text {
+  font-size: 17px; color: rgba(255,255,255,0.6);
+  max-width: 560px; line-height: 1.7; margin-bottom: 60px;
+}
+
+/* ── PAIN SECTION ── */
+.pain-section { background: linear-gradient(180deg, var(--navy) 0%, #0d1f42 100%); }
+.pain-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.pain-card {
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px; padding: 32px;
+  transition: transform 0.3s, border-color 0.3s;
+}
+.pain-card:hover { transform: translateY(-4px); border-color: rgba(245,166,35,0.3); }
+.pain-icon {
+  width: 52px; height: 52px; border-radius: 14px;
+  background: rgba(245,166,35,0.12); display: flex; align-items: center; justify-content: center;
+  font-size: 24px; margin-bottom: 20px;
+}
+.pain-title { font-family: 'Sora', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 10px; }
+.pain-text { font-size: 14px; color: rgba(255,255,255,0.55); line-height: 1.7; }
+
+/* ── SOLUTION / PILLARS ── */
+.pillars-section { background: var(--navy2); }
+.pillars-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+.pillar-card {
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: 24px; padding: 36px;
+  display: flex; gap: 24px;
+  transition: all 0.3s;
+  position: relative; overflow: hidden;
+}
+.pillar-card::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(245,166,35,0.05), transparent);
+  opacity: 0; transition: opacity 0.3s;
+}
+.pillar-card:hover { border-color: rgba(245,166,35,0.25); }
+.pillar-card:hover::after { opacity: 1; }
+.pillar-icon {
+  width: 56px; height: 56px; border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px; flex-shrink: 0;
+}
+.pi-1 { background: rgba(245,166,35,0.15); }
+.pi-2 { background: rgba(0,201,167,0.15); }
+.pi-3 { background: rgba(108,99,255,0.15); }
+.pi-4 { background: rgba(255,87,87,0.15); }
+.pillar-title { font-family: 'Sora', sans-serif; font-size: 19px; font-weight: 700; margin-bottom: 8px; }
+.pillar-text { font-size: 14px; color: rgba(255,255,255,0.55); line-height: 1.7; }
+.pillar-tag {
+  display: inline-block; font-size: 11px; font-weight: 600;
+  padding: 4px 10px; border-radius: 20px; margin-top: 12px;
+  letter-spacing: 0.3px;
+}
+.pt-1 { background: rgba(245,166,35,0.15); color: var(--saffron); }
+.pt-2 { background: rgba(0,201,167,0.15); color: var(--teal); }
+.pt-3 { background: rgba(108,99,255,0.15); color: #a5b4fc; }
+.pt-4 { background: rgba(255,87,87,0.15); color: #fca5a5; }
+
+/* ── HOW IT WORKS ── */
+.hiw-section { background: linear-gradient(180deg, var(--navy2), #0d1535); }
+.hiw-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; position: relative; }
+.hiw-steps::before {
+  content: ''; position: absolute;
+  top: 40px; left: 16.66%; right: 16.66%; height: 2px;
+  background: linear-gradient(90deg, var(--saffron), var(--teal));
+  z-index: 0;
+}
+.hiw-step { text-align: center; padding: 0 24px; position: relative; z-index: 1; }
+.step-circle {
+  width: 80px; height: 80px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--navy), var(--navy2));
+  border: 2px solid rgba(245,166,35,0.4);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 24px;
+  font-family: 'Sora', sans-serif; font-size: 28px; font-weight: 800;
+  position: relative;
+}
+.step-circle.active {
+  background: linear-gradient(135deg, #F5A623, #FF8C00);
+  color: var(--navy); border-color: transparent;
+  box-shadow: 0 0 30px rgba(245,166,35,0.4);
+}
+.step-label {
+  font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--saffron); margin-bottom: 8px;
+}
+.step-title { font-family: 'Sora', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+.step-text { font-size: 13px; color: rgba(255,255,255,0.5); line-height: 1.7; }
+.phase-tag {
+  display: inline-block; font-size: 10px; font-weight: 700;
+  padding: 3px 10px; border-radius: 20px; margin-top: 10px;
+  background: rgba(0,201,167,0.15); color: var(--teal); letter-spacing: 0.5px;
+}
+
+/* ── WHO IT'S FOR ── */
+.for-section { background: var(--navy); }
+.skills-grid { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 48px; }
+.skill-pill {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--glass); border: 1px solid var(--glass-border);
+  border-radius: 40px; padding: 12px 20px;
+  font-size: 14px; font-weight: 600;
+  transition: all 0.2s; cursor: default;
+}
+.skill-pill:hover { border-color: rgba(245,166,35,0.4); background: rgba(245,166,35,0.08); }
+.skill-emoji { font-size: 20px; }
+
+/* ── BOTTOM CTA ── */
+.cta-section {
+  background: linear-gradient(135deg, #0A1628 0%, #1a1560 50%, #0A1628 100%);
+  position: relative; overflow: hidden;
+}
+.cta-section .orb-cta {
+  position: absolute;
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(245,166,35,0.15), transparent);
+  border-radius: 50%; filter: blur(60px);
+  top: -100px; right: -100px;
+}
+.cta-inner {
+  max-width: 900px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 80px;
+  align-items: start; position: relative; z-index: 1;
+}
+.cta-left .big-h2 {
+  font-family: 'Sora', sans-serif;
+  font-size: clamp(32px, 4vw, 48px); font-weight: 800; line-height: 1.1;
+  margin-bottom: 20px;
+}
+.cta-left p { font-size: 16px; color: rgba(255,255,255,0.6); line-height: 1.7; margin-bottom: 28px; }
+.trust-items { display: flex; flex-direction: column; gap: 12px; }
+.trust-item { display: flex; align-items: center; gap: 10px; font-size: 14px; color: rgba(255,255,255,0.7); }
+.trust-check {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: rgba(0,201,167,0.15); display: flex; align-items: center; justify-content: center;
+  font-size: 12px; flex-shrink: 0;
+}
+
+/* ── FOOTER ── */
+footer {
+  background: #050d1a;
+  padding: 40px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 16px;
+}
+.footer-logo { display: flex; align-items: center; gap: 10px; }
+.footer-text { font-size: 13px; color: rgba(255,255,255,0.35); }
+.footer-links { display: flex; gap: 24px; }
+.footer-links a { font-size: 12px; color: rgba(255,255,255,0.35); text-decoration: none; }
+.footer-links a:hover { color: rgba(255,255,255,0.7); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .hero-inner { grid-template-columns: 1fr; gap: 40px; }
+  .pain-grid { grid-template-columns: 1fr; }
+  .pillars-grid { grid-template-columns: 1fr; }
+  .hiw-steps { grid-template-columns: 1fr; }
+  .hiw-steps::before { display: none; }
+  .cta-inner { grid-template-columns: 1fr; }
+  nav { padding: 14px 20px; }
+  .nav-links { display: none; }
+  section { padding: 60px 20px; }
+  .hero { padding: 100px 20px 60px; }
+  .form-row { grid-template-columns: 1fr; }
+  footer { flex-direction: column; text-align: center; padding: 30px 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-mark">F</div>
+    <span class="nav-logo-text">FreeYou</span>
+  </a>
+  <div class="nav-links">
+    <a href="#how-it-works">How it works</a>
+    <a href="#benefits">Benefits</a>
+    <a href="#for-who">For who</a>
+    <a href="#apply" class="nav-cta">Join waitlist</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="grid-overlay"></div>
+  </div>
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div class="hero-badge">
+        <div class="badge-dot"></div>
+        Now accepting applications
+      </div>
+      <h1 class="hero-h1">
+        Freelance in India<br>
+        <span class="gradient-text">Without the Fear.</span>
+      </h1>
+      <p class="hero-sub">
+        FreeYou is India's first freelancer companion — not a marketplace.
+        Legal protection, financial tools, community, and real client work.
+        Everything you need to freelance like a professional.
+      </p>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <div class="stat-num gradient-text">500<span>+</span></div>
+          <div class="stat-label">Waitlist members</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num gradient-text-teal">12<span>+</span></div>
+          <div class="stat-label">Cities represented</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num" style="color:#a5b4fc">₹1,499<span>/mo</span></div>
+          <div class="stat-label">All-inclusive</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LEAD FORM -->
+    <div class="form-card" id="hero-form-card">
+      <div class="form-card-title">Apply to Join</div>
+      <div class="form-card-sub">Limited spots open. We'll reach out to schedule your intro call.</div>
+      <form id="hero-form" onsubmit="handleSubmit(event, 'hero')">
+        <div class="form-group">
+          <label class="form-label" for="h-name">Full name</label>
+          <input class="form-input" type="text" id="h-name" placeholder="Priya Sharma" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="h-phone">WhatsApp number</label>
+            <input class="form-input" type="tel" id="h-phone" placeholder="+91 98765 43210" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="h-email">Email</label>
+            <input class="form-input" type="email" id="h-email" placeholder="priya@gmail.com" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="h-skill">Primary skill</label>
+            <select class="form-input" id="h-skill" required>
+              <option value="" disabled selected>Select skill</option>
+              <option value="web_dev">Web Development</option>
+              <option value="mobile_dev">Mobile Development</option>
+              <option value="design">UI/UX Design</option>
+              <option value="content">Content Writing</option>
+              <option value="marketing">Digital Marketing</option>
+              <option value="video">Video / Motion</option>
+              <option value="finance_ca">Finance / CA</option>
+              <option value="data">Data / Analytics</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="h-city">City</label>
+            <select class="form-input" id="h-city" required>
+              <option value="" disabled selected>Your city</option>
+              <option>Bangalore</option>
+              <option>Mumbai</option>
+              <option>Delhi / NCR</option>
+              <option>Hyderabad</option>
+              <option>Chennai</option>
+              <option>Pune</option>
+              <option>Kolkata</option>
+              <option>Ahmedabad</option>
+              <option>Jaipur</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+        <button class="submit-btn" type="submit">Apply for early access</button>
+        <p class="form-note">🔒 No spam. We'll only contact you to schedule your intro call.</p>
+      </form>
+      <div class="form-success" id="hero-success">
+        <div class="check">🎉</div>
+        <h3>You're on the list!</h3>
+        <p>We'll WhatsApp you within 48 hours to schedule your intro call. Welcome to FreeYou.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="strip">
+  <div class="marquee">
+    <div class="marquee-item">Legal protection for freelancers <div class="marquee-dot"></div></div>
+    <div class="marquee-item">₹1,499/month all-inclusive <div class="marquee-dot"></div></div>
+    <div class="marquee-item">Aadhaar-verified professional profiles <div class="marquee-dot"></div></div>
+    <div class="marquee-item">Real client projects via Studio <div class="marquee-dot"></div></div>
+    <div class="marquee-item">Not a marketplace. A companion. <div class="marquee-dot"></div></div>
+    <div class="marquee-item">Community of India's best freelancers <div class="marquee-dot"></div></div>
+    <div class="marquee-item">Legal protection for freelancers <div class="marquee-dot"></div></div>
+    <div class="marquee-item">₹1,499/month all-inclusive <div class="marquee-dot"></div></div>
+    <div class="marquee-item">Aadhaar-verified professional profiles <div class="marquee-dot"></div></div>
+    <div class="marquee-item">Real client projects via Studio <div class="marquee-dot"></div></div>
+    <div class="marquee-item">Not a marketplace. A companion. <div class="marquee-dot"></div></div>
+    <div class="marquee-item">Community of India's best freelancers <div class="marquee-dot"></div></div>
+  </div>
+</div>
+
+<!-- PAIN SECTION -->
+<section class="pain-section">
+  <div class="section-inner">
+    <div class="section-label">The problem</div>
+    <h2 class="section-h2">Freelancing in India is<br><span class="gradient-text">broken by design.</span></h2>
+    <p class="section-sub-text">Platforms take 20%. Clients ghost. No contracts. No benefits. No community. You're on your own — until now.</p>
+    <div class="pain-grid">
+      <div class="pain-card">
+        <div class="pain-icon">⚠️</div>
+        <div class="pain-title">No legal protection</div>
+        <p class="pain-text">Clients delay payments, change scope, or disappear. Without a contract or support, you have no recourse. You lose money and time.</p>
+      </div>
+      <div class="pain-card">
+        <div class="pain-icon">💸</div>
+        <div class="pain-title">No financial safety net</div>
+        <p class="pain-text">Banks don't trust freelancers. No payslip means no loan, no credit, no insurance. Variable income is treated as risky income.</p>
+      </div>
+      <div class="pain-card">
+        <div class="pain-icon">🏝️</div>
+        <div class="pain-title">Complete isolation</div>
+        <p class="pain-text">No colleagues, no water cooler, no team. Building a career alone is exhausting. Growth happens in community — which freelancers rarely have.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PILLARS / SOLUTION -->
+<section class="pillars-section" id="benefits">
+  <div class="section-inner">
+    <div class="section-label">What FreeYou gives you</div>
+    <h2 class="section-h2">Everything a company gives<br><span class="gradient-text">its employees. Yours.</span></h2>
+    <p class="section-sub-text">One subscription. Four pillars. The full infrastructure of a professional career — without giving up your freedom.</p>
+    <div class="pillars-grid">
+      <div class="pillar-card">
+        <div class="pillar-icon pi-1">⚖️</div>
+        <div>
+          <div class="pillar-title">Legal Shield</div>
+          <p class="pillar-text">Professional service agreements, payment protection clauses, dispute support, and verified profile to attract serious clients. You'll never work without a contract again.</p>
+          <span class="pillar-tag pt-1">Phase 1</span>
+        </div>
+      </div>
+      <div class="pillar-card">
+        <div class="pillar-icon pi-2">💰</div>
+        <div>
+          <div class="pillar-title">Financial Power</div>
+          <p class="pillar-text">Invoicing tools, ITR filing support, access to NBFC credit lines, and banking partnerships that recognize freelance income as real income.</p>
+          <span class="pillar-tag pt-2">Phase 2</span>
+        </div>
+      </div>
+      <div class="pillar-card">
+        <div class="pillar-icon pi-3">🏛️</div>
+        <div>
+          <div class="pillar-title">Community & Growth</div>
+          <p class="pillar-text">A curated Discord community of verified freelancers. City chapters, weekly skill sessions, mentors, and a network that actually helps you grow.</p>
+          <span class="pillar-tag pt-3">Phase 1</span>
+        </div>
+      </div>
+      <div class="pillar-card">
+        <div class="pillar-icon pi-4">🚀</div>
+        <div>
+          <div class="pillar-title">Studio — Real Work</div>
+          <p class="pillar-text">FreeYou brings client projects to the Studio. Members form teams, pitch, deliver, and share revenue. Build your portfolio on real projects with real pay.</p>
+          <span class="pillar-tag pt-4">Phase 2</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="hiw-section" id="how-it-works">
+  <div class="section-inner">
+    <div class="section-label">How it works</div>
+    <h2 class="section-h2">Three steps to<br><span class="gradient-text">professional freedom.</span></h2>
+    <p class="section-sub-text" style="margin-bottom: 80px;">We've kept it simple. Apply, get verified, then access everything FreeYou has to offer.</p>
+    <div class="hiw-steps">
+      <div class="hiw-step">
+        <div class="step-circle active">1</div>
+        <div class="step-label">Now open</div>
+        <div class="step-title">Apply & Connect</div>
+        <p class="step-text">Fill the form. We'll WhatsApp you to schedule a 20-minute intro call. We want to know your story, skills, and goals.</p>
+        <span class="phase-tag">Phase 1 — Live</span>
+      </div>
+      <div class="hiw-step">
+        <div class="step-circle">2</div>
+        <div class="step-label">Coming soon</div>
+        <div class="step-title">Get Verified</div>
+        <p class="step-text">Aadhaar-based eKYC via Didit platform. Build a verified professional profile that clients can trust. Your identity, secured.</p>
+        <span class="phase-tag">Phase 2 — Q3 2026</span>
+      </div>
+      <div class="hiw-step">
+        <div class="step-circle">3</div>
+        <div class="step-label">Coming soon</div>
+        <div class="step-title">Access Everything</div>
+        <p class="step-text">Your member portal: contracts, invoicing, community, Studio projects, financial tools, and your verified FreeYou profile.</p>
+        <span class="phase-tag">Phase 2 — Q3 2026</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHO IT'S FOR -->
+<section class="for-section" id="for-who">
+  <div class="section-inner">
+    <div class="section-label">Who it's for</div>
+    <h2 class="section-h2">Built for India's best<br><span class="gradient-text">independent professionals.</span></h2>
+    <p class="section-sub-text">If you're serious about your freelance career and ready to professionalize it — FreeYou is for you.</p>
+    <div class="skills-grid">
+      <div class="skill-pill"><span class="skill-emoji">💻</span> Web Developers</div>
+      <div class="skill-pill"><span class="skill-emoji">📱</span> Mobile Developers</div>
+      <div class="skill-pill"><span class="skill-emoji">🎨</span> UI/UX Designers</div>
+      <div class="skill-pill"><span class="skill-emoji">✍️</span> Content Writers</div>
+      <div class="skill-pill"><span class="skill-emoji">📣</span> Digital Marketers</div>
+      <div class="skill-pill"><span class="skill-emoji">🎬</span> Video Creators</div>
+      <div class="skill-pill"><span class="skill-emoji">📊</span> Data Analysts</div>
+      <div class="skill-pill"><span class="skill-emoji">💼</span> Finance & CA</div>
+      <div class="skill-pill"><span class="skill-emoji">🤖</span> AI/ML Engineers</div>
+      <div class="skill-pill"><span class="skill-emoji">📐</span> Product Managers</div>
+    </div>
+    <div style="background: var(--glass); border: 1px solid var(--glass-border); border-radius: 20px; padding: 32px; max-width: 640px;">
+      <p style="font-size: 15px; color: rgba(255,255,255,0.6); line-height: 1.8; font-style: italic;">"FreeYou isn't for people hunting their first gig. It's for freelancers who've proven themselves and want the infrastructure to go further — legally protected, financially empowered, community-backed."</p>
+      <div style="margin-top: 16px; font-size: 13px; font-weight: 600; color: var(--saffron);">— Ronald, Founder</div>
+    </div>
+  </div>
+</section>
+
+<!-- BOTTOM CTA -->
+<section class="cta-section" id="apply">
+  <div class="orb-cta"></div>
+  <div class="cta-inner">
+    <div class="cta-left">
+      <div class="section-label">Limited spots</div>
+      <h2 class="big-h2">Ready to freelance<br><span class="gradient-text">without limits?</span></h2>
+      <p>We're onboarding our first cohort personally. Every member gets a direct intro call with the founder. Apply now before spots fill up.</p>
+      <div class="trust-items">
+        <div class="trust-item"><div class="trust-check">✓</div> No commitment until your intro call</div>
+        <div class="trust-item"><div class="trust-check">✓</div> Aadhaar eKYC verification (Phase 2)</div>
+        <div class="trust-item"><div class="trust-check">✓</div> Cancel anytime after joining</div>
+        <div class="trust-item"><div class="trust-check">✓</div> First cohort pricing locked in forever</div>
+      </div>
+    </div>
+    <div class="form-card" id="cta-form-card">
+      <div class="form-card-title">Apply Now</div>
+      <div class="form-card-sub">Takes 60 seconds. We'll reach out within 48 hours.</div>
+      <form id="cta-form" onsubmit="handleSubmit(event, 'cta')">
+        <div class="form-group">
+          <label class="form-label" for="c-name">Full name</label>
+          <input class="form-input" type="text" id="c-name" placeholder="Arjun Mehta" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="c-phone">WhatsApp</label>
+            <input class="form-input" type="tel" id="c-phone" placeholder="+91 98765 43210" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="c-email">Email</label>
+            <input class="form-input" type="email" id="c-email" placeholder="arjun@gmail.com" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="c-skill">Primary skill</label>
+            <select class="form-input" id="c-skill" required>
+              <option value="" disabled selected>Select skill</option>
+              <option value="web_dev">Web Development</option>
+              <option value="mobile_dev">Mobile Development</option>
+              <option value="design">UI/UX Design</option>
+              <option value="content">Content Writing</option>
+              <option value="marketing">Digital Marketing</option>
+              <option value="video">Video / Motion</option>
+              <option value="finance_ca">Finance / CA</option>
+              <option value="data">Data / Analytics</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="c-city">City</label>
+            <select class="form-input" id="c-city" required>
+              <option value="" disabled selected>Your city</option>
+              <option>Bangalore</option>
+              <option>Mumbai</option>
+              <option>Delhi / NCR</option>
+              <option>Hyderabad</option>
+              <option>Chennai</option>
+              <option>Pune</option>
+              <option>Kolkata</option>
+              <option>Ahmedabad</option>
+              <option>Jaipur</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+        <button class="submit-btn" type="submit">Apply for early access</button>
+        <p class="form-note">🔒 We'll only contact you to schedule your intro call.</p>
+      </form>
+      <div class="form-success" id="cta-success">
+        <div class="check">🎉</div>
+        <h3>Application received!</h3>
+        <p>We'll WhatsApp you within 48 hours. Welcome to FreeYou.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">
+    <div class="nav-logo-mark">F</div>
+    <div>
+      <div style="font-family:'Sora',sans-serif; font-weight:700; font-size:15px;">FreeYou</div>
+      <div style="font-size:11px; color:rgba(255,255,255,0.3);">FY Freelancing Solutions (OPC) Pvt. Ltd.</div>
+    </div>
+  </div>
+  <div class="footer-text">© 2026 FY Freelancing Solutions (OPC) Pvt. Ltd. · Bangalore, India</div>
+  <div class="footer-links">
+    <a href="#">Privacy Policy</a>
+    <a href="#">Terms</a>
+    <a href="mailto:hello@freeyou.co.in">Contact</a>
+  </div>
+</footer>
+
+<script>
+// UTM tracking
+(function() {
+  const params = new URLSearchParams(window.location.search);
+  const utm = {};
+  ['source','medium','campaign','content','term'].forEach(k => {
+    if(params.get('utm_'+k)) utm['utm_'+k] = params.get('utm_'+k);
+  });
+  if(Object.keys(utm).length) {
+    sessionStorage.setItem('freeyou_utm', JSON.stringify(utm));
+    if(window.posthog) posthog.register(utm);
+  }
+})();
+
+// Scroll depth
+const depths = {25:false,50:false,75:false,100:false};
+window.addEventListener('scroll', function() {
+  const pct = Math.round((window.scrollY/(document.body.scrollHeight - window.innerHeight))*100);
+  [25,50,75,100].forEach(d => {
+    if(pct >= d && !depths[d]) {
+      depths[d] = true;
+      posthog.capture('scroll_depth', {depth: d, page: 'landing_v2'});
+    }
+  });
+});
+
+// Form tracking
+document.querySelectorAll('.form-input').forEach(el => {
+  el.addEventListener('focus', function() {
+    posthog.capture('form_start', {form: this.closest('form').id});
+  }, {once: true});
+});
+
+// ── Google Sheets endpoint (Apps Script Web App URL) ─────────────
+const SHEET_URL = 'PASTE_YOUR_SCRIPT_URL_HERE';
+
+// Submit handler
+function handleSubmit(e, formId) {
+  e.preventDefault();
+  const f = e.target;
+  const prefix = formId === 'hero' ? 'h' : 'c';
+  const nameFull = document.getElementById(prefix+'-name').value.trim();
+  const nameParts = nameFull.split(' ');
+  const data = {
+    firstName:  nameParts[0] || nameFull,
+    lastName:   nameParts.slice(1).join(' ') || '',
+    phone:      document.getElementById(prefix+'-phone').value.trim(),
+    email:      document.getElementById(prefix+'-email').value.trim(),
+    skill:      document.getElementById(prefix+'-skill').value,
+    city:       document.getElementById(prefix+'-city').value,
+    source:     'landing_v2_' + formId
+  };
+
+  // 1. PostHog analytics
+  const utm = JSON.parse(sessionStorage.getItem('freeyou_utm') || '{}');
+  if (window.posthog) {
+    posthog.capture('form_submit', {...data, ...utm});
+    posthog.identify(data.email, {name: nameFull, phone: data.phone, skill: data.skill, city: data.city});
+  }
+
+  // 2. Google Sheets — fire and forget (don't block UX on network)
+  if (SHEET_URL !== 'PASTE_YOUR_SCRIPT_URL_HERE') {
+    fetch(SHEET_URL, {
+      method: 'POST',
+      mode: 'no-cors', // Apps Script requires no-cors
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    }).catch(function(err) { console.warn('[FreeYou] Sheet save failed:', err); });
+  }
+
+  // 3. Show success immediately — don't wait for network
+  f.style.display = 'none';
+  document.getElementById(formId+'-success').style.display = 'block';
+}
+</script>
+</body>
+</html>

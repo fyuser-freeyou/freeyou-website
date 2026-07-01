@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Career Cafe — Builder's Lab</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --purple: #7C6FF7;
+    --purple-light: #A89BFF;
+    --teal: #1DB87B;
+    --teal-light: #4DD9A0;
+    --amber: #F5A623;
+    --coral: #F26B4E;
+    --blue: #3B9EF5;
+    --bg: #0D0D14;
+    --surface: #14141F;
+    --surface2: #1C1C2C;
+    --surface3: #242438;
+    --border: rgba(255,255,255,0.08);
+    --text: #F0EEF8;
+    --muted: rgba(240,238,248,0.5);
+    --muted2: rgba(240,238,248,0.25);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1rem 2rem;
+    background: rgba(13,13,20,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-size: 14px; font-weight: 600; letter-spacing: 0.04em;
+    color: var(--purple-light);
+  }
+  .nav-links { display: flex; gap: 2rem; }
+  .nav-links a {
+    font-size: 13px; color: var(--muted); text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--text); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; text-align: center;
+    padding: 6rem 2rem 4rem;
+    position: relative; overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0; pointer-events: none;
+    background:
+      radial-gradient(ellipse 60% 50% at 50% 0%, rgba(124,111,247,0.15) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 30% at 80% 60%, rgba(29,184,123,0.08) 0%, transparent 60%);
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(124,111,247,0.12); border: 1px solid rgba(124,111,247,0.3);
+    border-radius: 100px; padding: 6px 16px; font-size: 13px;
+    color: var(--purple-light); margin-bottom: 2rem;
+  }
+  .hero-badge .dot {
+    width: 7px; height: 7px; border-radius: 50%; background: var(--teal);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+  .hero h1 {
+    font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 700;
+    line-height: 1.05; letter-spacing: -0.03em; margin-bottom: 1.5rem;
+    max-width: 900px;
+  }
+  .hero h1 .accent-purple { color: var(--purple-light); }
+  .hero h1 .accent-teal { color: var(--teal-light); }
+  .hero-sub {
+    font-size: clamp(1rem, 2vw, 1.2rem); color: var(--muted);
+    max-width: 600px; line-height: 1.7; margin-bottom: 3rem;
+  }
+  .hero-stats {
+    display: flex; gap: 2.5rem; justify-content: center; flex-wrap: wrap;
+    margin-bottom: 3rem;
+  }
+  .hero-stat { text-align: center; }
+  .hero-stat .num {
+    font-size: 2.5rem; font-weight: 700; letter-spacing: -0.03em;
+    display: block;
+  }
+  .hero-stat .lbl {
+    font-size: 12px; color: var(--muted); text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .hero-cta {
+    display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;
+  }
+  .btn-primary {
+    background: var(--purple); color: #fff; border: none;
+    padding: 14px 28px; border-radius: 10px; font-size: 15px;
+    font-weight: 500; cursor: pointer; transition: all 0.2s;
+    text-decoration: none; display: inline-block;
+  }
+  .btn-primary:hover { background: var(--purple-light); transform: translateY(-1px); }
+  .btn-ghost {
+    background: transparent; color: var(--text); border: 1px solid var(--border);
+    padding: 14px 28px; border-radius: 10px; font-size: 15px;
+    font-weight: 500; cursor: pointer; transition: all 0.2s;
+    text-decoration: none; display: inline-block;
+  }
+  .btn-ghost:hover { background: var(--surface2); border-color: rgba(255,255,255,0.2); }
+
+  /* SCROLL ARROW */
+  .scroll-hint {
+    position: absolute; bottom: 2rem;
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    color: var(--muted2); font-size: 12px; letter-spacing: 0.08em;
+    text-transform: uppercase; animation: bob 2s ease-in-out infinite;
+  }
+  @keyframes bob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(6px)} }
+  .scroll-hint svg { opacity: 0.4; }
+
+  /* SECTIONS */
+  section { padding: 6rem 2rem; }
+  .container { max-width: 1100px; margin: 0 auto; }
+  .section-label {
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em;
+    color: var(--purple-light); margin-bottom: 1rem; font-weight: 600;
+  }
+  .section-title {
+    font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 700;
+    letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 1rem;
+  }
+  .section-sub {
+    font-size: 1.05rem; color: var(--muted); line-height: 1.7;
+    max-width: 580px; margin-bottom: 3rem;
+  }
+
+  /* SKILL UNIVERSE */
+  #universe { background: var(--surface); }
+  .skill-bubbles {
+    display: flex; flex-wrap: wrap; gap: 12px;
+    justify-content: center; padding: 2rem 0;
+  }
+  .skill-bubble {
+    border-radius: 100px; padding: 10px 20px; font-size: 13px;
+    font-weight: 500; cursor: default; transition: transform 0.2s;
+    border: 1px solid transparent; user-select: none;
+    animation: floatIn 0.5s ease both;
+  }
+  .skill-bubble:hover { transform: scale(1.08); }
+  @keyframes floatIn {
+    from { opacity: 0; transform: translateY(10px) scale(0.9); }
+    to { opacity: 1; transform: none; }
+  }
+  .bubble-aiml { background: rgba(124,111,247,0.18); border-color: rgba(124,111,247,0.4); color: var(--purple-light); font-size: 15px; padding: 13px 26px; }
+  .bubble-backend { background: rgba(29,184,123,0.15); border-color: rgba(29,184,123,0.35); color: var(--teal-light); }
+  .bubble-data { background: rgba(59,158,245,0.15); border-color: rgba(59,158,245,0.35); color: #7EC8FF; }
+  .bubble-fullstack { background: rgba(245,166,35,0.15); border-color: rgba(245,166,35,0.35); color: #FFD080; }
+  .bubble-cloud { background: rgba(242,107,78,0.15); border-color: rgba(242,107,78,0.35); color: #FFAA90; }
+  .bubble-content { background: rgba(240,238,248,0.08); border-color: rgba(240,238,248,0.2); color: var(--muted); }
+  .bubble-hardware { background: rgba(200,100,200,0.15); border-color: rgba(200,100,200,0.3); color: #DDA0DD; }
+  .bubble-big { font-size: 16px; padding: 14px 28px; }
+  .bubble-xl { font-size: 18px; padding: 16px 32px; }
+
+  .skill-legend {
+    display: flex; flex-wrap: wrap; gap: 1.5rem; justify-content: center;
+    margin-top: 1.5rem;
+  }
+  .legend-item {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 12px; color: var(--muted);
+  }
+  .legend-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+  }
+
+  /* TEAM BUILDER */
+  #builder { background: var(--bg); }
+  .builder-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;
+  }
+  @media (max-width: 700px) { .builder-grid { grid-template-columns: 1fr; } }
+
+  .project-picker {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 16px; padding: 1.5rem; height: fit-content;
+  }
+  .project-picker h3 { font-size: 15px; font-weight: 600; margin-bottom: 1rem; color: var(--muted); }
+  .project-cards { display: flex; flex-direction: column; gap: 10px; }
+  .project-card {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1rem 1.2rem; cursor: pointer;
+    transition: all 0.2s; display: flex; align-items: center; gap: 12px;
+  }
+  .project-card:hover { border-color: rgba(124,111,247,0.5); background: var(--surface3); }
+  .project-card.active {
+    border-color: var(--purple); background: rgba(124,111,247,0.12);
+  }
+  .project-card .picon {
+    width: 36px; height: 36px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; flex-shrink: 0;
+  }
+  .project-card .pname { font-size: 14px; font-weight: 500; }
+  .project-card .ptype { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+  .team-result {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 16px; padding: 1.5rem;
+  }
+  .team-result h3 { font-size: 15px; font-weight: 600; margin-bottom: 0.5rem; color: var(--muted); }
+  .project-headline {
+    font-size: 1.4rem; font-weight: 700; margin-bottom: 0.75rem;
+  }
+  .project-desc { font-size: 13px; color: var(--muted); margin-bottom: 1.5rem; line-height: 1.6; }
+  .team-slots { display: flex; flex-direction: column; gap: 10px; margin-bottom: 1.5rem; }
+  .team-slot {
+    display: flex; align-items: center; gap: 12px;
+    background: var(--surface2); border-radius: 10px; padding: 12px 14px;
+    border: 1px solid var(--border);
+  }
+  .slot-avatar {
+    width: 36px; height: 36px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 600; flex-shrink: 0;
+    border: 2px solid transparent;
+  }
+  .slot-info { flex: 1; }
+  .slot-role { font-size: 13px; font-weight: 500; }
+  .slot-skills { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .slot-available {
+    font-size: 11px; padding: 3px 10px; border-radius: 100px;
+    background: rgba(29,184,123,0.15); color: var(--teal-light);
+    border: 1px solid rgba(29,184,123,0.3); flex-shrink: 0;
+  }
+  .slot-needed {
+    font-size: 11px; padding: 3px 10px; border-radius: 100px;
+    background: rgba(245,166,35,0.12); color: #FFD080;
+    border: 1px solid rgba(245,166,35,0.3); flex-shrink: 0;
+  }
+
+  .feasibility-bar {
+    margin-top: 1rem;
+  }
+  .feas-label { font-size: 12px; color: var(--muted); margin-bottom: 6px; display: flex; justify-content: space-between; }
+  .feas-track {
+    height: 6px; background: var(--surface3); border-radius: 100px; overflow: hidden;
+  }
+  .feas-fill {
+    height: 100%; border-radius: 100px;
+    background: linear-gradient(90deg, var(--purple), var(--teal));
+    transition: width 0.6s cubic-bezier(0.34,1.56,0.64,1);
+  }
+
+  .launch-timeline {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 1.2rem;
+  }
+  .timeline-step {
+    background: var(--surface2); border-radius: 8px; padding: 10px;
+    text-align: center; border: 1px solid var(--border);
+  }
+  .timeline-step .t-week { font-size: 10px; color: var(--muted2); text-transform: uppercase; letter-spacing: 0.08em; }
+  .timeline-step .t-action { font-size: 11px; font-weight: 500; margin-top: 3px; }
+
+  /* POSSIBILITIES */
+  #possibilities { background: var(--surface); }
+  .poss-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+  .poss-card {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 16px; padding: 1.5rem; position: relative; overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .poss-card:hover { border-color: rgba(124,111,247,0.4); transform: translateY(-2px); }
+  .poss-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  }
+  .poss-card.purple::before { background: linear-gradient(90deg, var(--purple), var(--purple-light)); }
+  .poss-card.teal::before { background: linear-gradient(90deg, var(--teal), var(--teal-light)); }
+  .poss-card.amber::before { background: linear-gradient(90deg, var(--amber), #FFD080); }
+  .poss-card.blue::before { background: linear-gradient(90deg, var(--blue), #7EC8FF); }
+  .poss-card.coral::before { background: linear-gradient(90deg, var(--coral), #FFB09A); }
+  .poss-card.pink::before { background: linear-gradient(90deg, #D4537E, #ED93B1); }
+
+  .poss-num {
+    font-size: 3rem; font-weight: 700; letter-spacing: -0.04em;
+    line-height: 1; margin-bottom: 4px;
+  }
+  .poss-num.purple { color: var(--purple-light); }
+  .poss-num.teal { color: var(--teal-light); }
+  .poss-num.amber { color: #FFD080; }
+  .poss-num.blue { color: #7EC8FF; }
+  .poss-num.coral { color: #FFAA90; }
+  .poss-num.pink { color: #ED93B1; }
+
+  .poss-title { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+  .poss-body { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+  /* INTEREST MATCHER */
+  #matcher { background: var(--bg); }
+  .matcher-tabs {
+    display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 2rem;
+  }
+  .tab-btn {
+    padding: 8px 18px; border-radius: 100px; font-size: 13px; font-weight: 500;
+    cursor: pointer; transition: all 0.2s; border: 1px solid var(--border);
+    background: var(--surface2); color: var(--muted);
+  }
+  .tab-btn:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+  .tab-btn.active { background: var(--purple); border-color: var(--purple); color: #fff; }
+
+  .match-content { display: none; }
+  .match-content.visible { display: block; }
+
+  .collab-row {
+    display: flex; align-items: center; gap: 1.5rem; margin-bottom: 1.2rem;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 14px; padding: 1.2rem 1.5rem; flex-wrap: wrap;
+  }
+  .collab-skill-a {
+    font-size: 14px; font-weight: 600; min-width: 130px;
+  }
+  .collab-arrow {
+    color: var(--muted2); font-size: 18px; flex-shrink: 0;
+  }
+  .collab-skill-b {
+    font-size: 14px; font-weight: 600; min-width: 130px;
+  }
+  .collab-plus { color: var(--muted2); font-size: 14px; flex-shrink: 0; margin: 0 4px; }
+  .collab-outcome {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 8px 14px; margin-left: auto;
+  }
+  .collab-outcome .what { font-size: 13px; font-weight: 500; }
+  .collab-outcome .why { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .member-count {
+    font-size: 11px; padding: 4px 10px; border-radius: 100px;
+    flex-shrink: 0;
+  }
+
+  /* INSIGHT PROVOCATIONS */
+  #insights { background: var(--surface); }
+  .insight-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+  .insight-card {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 16px; padding: 1.5rem;
+  }
+  .insight-q {
+    font-size: 1rem; font-weight: 600; line-height: 1.5; margin-bottom: 0.75rem;
+  }
+  .insight-a { font-size: 13px; color: var(--muted); line-height: 1.7; }
+  .insight-tag {
+    display: inline-block; margin-top: 1rem;
+    font-size: 11px; padding: 3px 10px; border-radius: 100px;
+    background: rgba(124,111,247,0.15); color: var(--purple-light);
+    border: 1px solid rgba(124,111,247,0.3);
+  }
+
+  /* MANIFESTO */
+  #manifesto {
+    background: var(--bg);
+    text-align: center;
+  }
+  .manifesto-box {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 24px; padding: 4rem 3rem; max-width: 700px; margin: 0 auto;
+    position: relative; overflow: hidden;
+  }
+  .manifesto-box::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(124,111,247,0.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .manifesto-box blockquote {
+    font-size: clamp(1.2rem, 3vw, 1.6rem); font-weight: 500;
+    line-height: 1.6; letter-spacing: -0.01em; margin-bottom: 1.5rem;
+    font-style: italic; color: var(--text);
+  }
+  .manifesto-box cite {
+    font-size: 13px; color: var(--muted); font-style: normal;
+  }
+  .manifesto-actions {
+    display: flex; gap: 1rem; justify-content: center; margin-top: 2rem; flex-wrap: wrap;
+  }
+
+  /* FOOTER */
+  footer {
+    padding: 2rem; text-align: center;
+    font-size: 12px; color: var(--muted2);
+    border-top: 1px solid var(--border);
+  }
+
+  /* CANVAS for chart */
+  .chart-wrap { position: relative; width: 100%; height: 280px; margin-top: 2rem; }
+
+  /* MISC */
+  .tag {
+    display: inline-block; font-size: 11px; padding: 3px 10px; border-radius: 100px;
+    font-weight: 500;
+  }
+  .tag-purple { background: rgba(124,111,247,0.18); color: var(--purple-light); border: 1px solid rgba(124,111,247,0.3); }
+  .tag-teal { background: rgba(29,184,123,0.15); color: var(--teal-light); border: 1px solid rgba(29,184,123,0.3); }
+  .tag-amber { background: rgba(245,166,35,0.12); color: #FFD080; border: 1px solid rgba(245,166,35,0.3); }
+  .tag-blue { background: rgba(59,158,245,0.15); color: #7EC8FF; border: 1px solid rgba(59,158,245,0.3); }
+  .tag-coral { background: rgba(242,107,78,0.12); color: #FFAA90; border: 1px solid rgba(242,107,78,0.3); }
+
+  .divider { height: 1px; background: var(--border); margin: 3rem 0; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">☕ The Career Cafe</div>
+  <div class="nav-links">
+    <a href="#universe">Skills</a>
+    <a href="#builder">Team Builder</a>
+    <a href="#possibilities">Possibilities</a>
+    <a href="#matcher">Collaborations</a>
+    <a href="#insights">Insights</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-badge">
+    <span class="dot"></span>
+    Builder's Lab — Community Intelligence
+  </div>
+  <h1>
+    80 builders.<br>
+    <span class="accent-purple">One community.</span><br>
+    <span class="accent-teal">Infinite possibilities.</span>
+  </h1>
+  <p class="hero-sub">
+    You joined The Career Cafe. But here's what most people miss —
+    the real opportunity isn't just learning from the community.
+    It's <strong>building with it.</strong>
+  </p>
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <span class="num" style="color:var(--purple-light);" data-target="80">0</span>
+      <span class="lbl">builders</span>
+    </div>
+    <div class="hero-stat">
+      <span class="num" style="color:var(--teal-light);" data-target="7">0</span>
+      <span class="lbl">skill domains</span>
+    </div>
+    <div class="hero-stat">
+      <span class="num" style="color:#FFD080;" data-target="6">0</span>
+      <span class="lbl">complete startup teams possible</span>
+    </div>
+    <div class="hero-stat">
+      <span class="num" style="color:#7EC8FF;" data-target="4">0</span>
+      <span class="lbl">cities represented</span>
+    </div>
+  </div>
+  <div class="hero-cta">
+    <a href="#builder" class="btn-primary">Build your team</a>
+    <a href="#possibilities" class="btn-ghost">See what's possible</a>
+  </div>
+  <div class="scroll-hint">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M12 5v14M5 12l7 7 7-7"/>
+    </svg>
+    scroll to explore
+  </div>
+</div>
+
+<!-- SKILL UNIVERSE -->
+<section id="universe">
+  <div class="container">
+    <div class="section-label">Who's here</div>
+    <h2 class="section-title">The skill universe in this room</h2>
+    <p class="section-sub">
+      Based on what community members shared, here's the talent pool you're sitting inside.
+      Every bubble is a real skill someone in this group has.
+      <strong>The bigger the bubble, the more people have it.</strong>
+    </p>
+
+    <div class="skill-bubbles" id="bubbles"></div>
+
+    <div class="skill-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:var(--purple-light)"></div> AI/ML & GenAI</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--teal-light)"></div> Backend Dev</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#7EC8FF"></div> Data Analytics</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#FFD080"></div> Full Stack</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#FFAA90"></div> Cloud/DevOps</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--muted)"></div> Content/Creative</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#DDA0DD"></div> Hardware/IoT</div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; text-align:center;">
+      <div style="padding: 1.2rem; background: var(--surface2); border-radius: 12px; border: 1px solid var(--border);">
+        <div style="font-size: 2rem; font-weight:700; color:var(--purple-light);">9</div>
+        <div style="font-size: 12px; color: var(--muted); margin-top: 4px;">AI/ML builders</div>
+      </div>
+      <div style="padding: 1.2rem; background: var(--surface2); border-radius: 12px; border: 1px solid var(--border);">
+        <div style="font-size: 2rem; font-weight:700; color:var(--teal-light);">5</div>
+        <div style="font-size: 12px; color: var(--muted); margin-top: 4px;">backend engineers</div>
+      </div>
+      <div style="padding: 1.2rem; background: var(--surface2); border-radius: 12px; border: 1px solid var(--border);">
+        <div style="font-size: 2rem; font-weight:700; color:#7EC8FF;">5</div>
+        <div style="font-size: 12px; color: var(--muted); margin-top: 4px;">data analysts</div>
+      </div>
+      <div style="padding: 1.2rem; background: var(--surface2); border-radius: 12px; border: 1px solid var(--border);">
+        <div style="font-size: 2rem; font-weight:700; color:#FFD080;">4</div>
+        <div style="font-size: 12px; color: var(--muted); margin-top: 4px;">full-stack devs</div>
+      </div>
+      <div style="padding: 1.2rem; background: var(--surface2); border-radius: 12px; border: 1px solid var(--border);">
+        <div style="font-size: 2rem; font-weight:700; color:#DDA0DD;">3</div>
+        <div style="font-size: 12px; color: var(--muted); margin-top: 4px;">startup founders/builders</div>
+      </div>
+      <div style="padding: 1.2rem; background: var(--surface2); border-radius: 12px; border: 1px solid var(--border);">
+        <div style="font-size: 2rem; font-weight:700; color:var(--muted);">5</div>
+        <div style="font-size: 12px; color: var(--muted); margin-top: 4px;">content creators</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TEAM BUILDER -->
+<section id="builder">
+  <div class="container">
+    <div class="section-label">Interactive team builder</div>
+    <h2 class="section-title">Pick a project. See your team.</h2>
+    <p class="section-sub">
+      Choose what you want to build, and see exactly which skill slots the community can fill right now. No job board. No applications. Just humans with complementary skills.
+    </p>
+
+    <div class="builder-grid">
+      <div class="project-picker">
+        <h3>What do you want to build?</h3>
+        <div class="project-cards" id="projectCards"></div>
+      </div>
+
+      <div class="team-result">
+        <h3>Your potential team</h3>
+        <div class="project-headline" id="resultTitle">—</div>
+        <div class="project-desc" id="resultDesc">Select a project type on the left to see the team formation.</div>
+        <div class="team-slots" id="teamSlots"></div>
+        <div class="feasibility-bar">
+          <div class="feas-label">
+            <span>Team feasibility from this community</span>
+            <span id="feasPct">—</span>
+          </div>
+          <div class="feas-track">
+            <div class="feas-fill" id="feasFill" style="width:0%"></div>
+          </div>
+        </div>
+        <div class="launch-timeline" id="launchTimeline"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- POSSIBILITIES -->
+<section id="possibilities">
+  <div class="container">
+    <div class="section-label">The math of this community</div>
+    <h2 class="section-title">What the numbers say</h2>
+    <p class="section-sub">
+      Most career communities talk about networking. This one has the raw ingredients to actually ship products. Here's the proof.
+    </p>
+    <div class="poss-grid" id="possGrid"></div>
+  </div>
+</section>
+
+<!-- INTEREST MATCHER -->
+<section id="matcher">
+  <div class="container">
+    <div class="section-label">Collaboration chemistry</div>
+    <h2 class="section-title">Who needs who in this room</h2>
+    <p class="section-sub">
+      Explore the natural collaboration pairs hiding in plain sight.
+      Filter by what you do to see your ideal co-builders.
+    </p>
+
+    <div class="matcher-tabs" id="matcherTabs"></div>
+    <div id="matcherContent"></div>
+  </div>
+</section>
+
+<!-- INSIGHTS -->
+<section id="insights">
+  <div class="container">
+    <div class="section-label">Mentor's perspective</div>
+    <h2 class="section-title">What an entrepreneur would tell you right now</h2>
+    <p class="section-sub">
+      If a seasoned startup mentor walked into this group, here's what they'd say — loud.
+    </p>
+    <div class="insight-cards" id="insightCards"></div>
+  </div>
+</section>
+
+<!-- MANIFESTO -->
+<section id="manifesto">
+  <div class="container">
+    <div class="manifesto-box">
+      <blockquote>
+        "The next Bharat unicorn won't be built in a boardroom.
+        It'll be built by a group of students who met in a WhatsApp community
+        and decided to stop waiting for an opportunity —
+        and started making one."
+      </blockquote>
+      <cite>— A note to every builder in The Career Cafe</cite>
+      <div class="manifesto-actions">
+        <a href="#builder" class="btn-primary">Build your team now</a>
+        <a href="#matcher" class="btn-ghost">Find your co-builder</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  Built from community data · The Career Cafe · No personal data used · Made for builders
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+
+/* ─── DATA ─────────────────────────────────────────── */
+
+const skills = [
+  { label: 'LLMs & GenAI', cat: 'aiml', count: 7, size: 'xl' },
+  { label: 'Machine Learning', cat: 'aiml', count: 6, size: 'big' },
+  { label: 'Agentic AI', cat: 'aiml', count: 3, size: '' },
+  { label: 'RAG Systems', cat: 'aiml', count: 2, size: '' },
+  { label: 'AI Automation', cat: 'aiml', count: 4, size: '' },
+  { label: 'Java / Spring Boot', cat: 'backend', count: 5, size: 'big' },
+  { label: 'Node.js', cat: 'backend', count: 3, size: '' },
+  { label: 'Microservices', cat: 'backend', count: 3, size: '' },
+  { label: 'DSA', cat: 'backend', count: 4, size: '' },
+  { label: 'System Design', cat: 'backend', count: 2, size: '' },
+  { label: 'Python', cat: 'data', count: 5, size: 'big' },
+  { label: 'SQL', cat: 'data', count: 5, size: 'big' },
+  { label: 'Power BI', cat: 'data', count: 3, size: '' },
+  { label: 'Data Visualization', cat: 'data', count: 3, size: '' },
+  { label: 'AWS / Azure', cat: 'data', count: 2, size: '' },
+  { label: 'React', cat: 'fullstack', count: 3, size: '' },
+  { label: 'Full Stack Dev', cat: 'fullstack', count: 4, size: '' },
+  { label: 'Web Apps', cat: 'fullstack', count: 3, size: '' },
+  { label: 'Blockchain', cat: 'fullstack', count: 1, size: '' },
+  { label: 'AWS', cat: 'cloud', count: 2, size: '' },
+  { label: 'Terraform', cat: 'cloud', count: 1, size: '' },
+  { label: 'DevOps', cat: 'cloud', count: 1, size: '' },
+  { label: 'Linux', cat: 'cloud', count: 2, size: '' },
+  { label: 'Content Writing', cat: 'content', count: 3, size: '' },
+  { label: 'Personal Branding', cat: 'content', count: 2, size: '' },
+  { label: 'Marketing & Comms', cat: 'content', count: 1, size: '' },
+  { label: 'Community Building', cat: 'content', count: 2, size: '' },
+  { label: 'Video Editing', cat: 'content', count: 1, size: '' },
+  { label: 'PLC / Automation', cat: 'hardware', count: 1, size: '' },
+  { label: 'IoT', cat: 'hardware', count: 1, size: '' },
+  { label: 'VLSI / Semiconductor', cat: 'hardware', count: 1, size: '' },
+  { label: 'Robotics', cat: 'hardware', count: 1, size: '' },
+];
+
+const catClass = {
+  aiml: 'bubble-aiml',
+  backend: 'bubble-backend',
+  data: 'bubble-data',
+  fullstack: 'bubble-fullstack',
+  cloud: 'bubble-cloud',
+  content: 'bubble-content',
+  hardware: 'bubble-hardware',
+};
+
+const projects = [
+  {
+    id: 'aiplatform',
+    icon: '🤖',
+    name: 'AI-powered SaaS Tool',
+    type: 'Product',
+    headline: 'Build an AI SaaS product',
+    desc: 'A subscription AI tool for Indian SMBs or students — think AI resume builder, AI-powered tutoring, or an intelligent workflow automation tool. Every piece exists in this community.',
+    team: [
+      { role: 'AI/ML Engineer', skills: 'LLMs, RAG, Agentic AI', available: true, count: '9 people' },
+      { role: 'Backend Engineer', skills: 'Node.js, APIs, Microservices', available: true, count: '5 people' },
+      { role: 'Frontend / Full Stack', skills: 'React, Web Apps', available: true, count: '4 people' },
+      { role: 'Cloud / DevOps', skills: 'AWS, Linux, Terraform', available: true, count: '2 people' },
+      { role: 'Marketing / GTM', skills: 'Content, Personal Branding', available: true, count: '5 people' },
+    ],
+    feasibility: 100,
+    timeline: [
+      { week: 'Week 1–2', action: 'Define problem + MVP scope' },
+      { week: 'Week 3–6', action: 'Build MVP together' },
+      { week: 'Week 7–8', action: 'Launch & gather users' },
+    ],
+  },
+  {
+    id: 'dataproduct',
+    icon: '📊',
+    name: 'Data Analytics Product',
+    type: 'Product',
+    headline: 'Turn data into a business',
+    desc: 'Build a dashboard tool, analytics platform, or BI product targeting Indian businesses or colleges. The data + backend + cloud talent is all here. What story do you want to tell with data?',
+    team: [
+      { role: 'Data Analyst / Engineer', skills: 'Python, SQL, BI tools', available: true, count: '5 people' },
+      { role: 'Backend Developer', skills: 'Java, Node.js, APIs', available: true, count: '5 people' },
+      { role: 'Frontend Developer', skills: 'React, Data Visualization', available: true, count: '4 people' },
+      { role: 'Cloud Engineer', skills: 'AWS/Azure, DevOps', available: true, count: '2 people' },
+      { role: 'Product / GTM', skills: 'Content, Community', available: true, count: '5 people' },
+    ],
+    feasibility: 100,
+    timeline: [
+      { week: 'Week 1', action: 'Pick a niche dataset' },
+      { week: 'Week 2–5', action: 'Build dashboard MVP' },
+      { week: 'Week 6+', action: 'Sell to 10 customers' },
+    ],
+  },
+  {
+    id: 'edtech',
+    icon: '🎓',
+    name: 'EdTech Platform',
+    type: 'Startup',
+    headline: 'Fix learning for Bharat',
+    desc: 'A peer-learning platform, internship marketplace, or skill-building community app — aimed at tier-2/3 city students like yourselves. You understand the problem. Now solve it.',
+    team: [
+      { role: 'Full Stack Developer', skills: 'React, Backend, DB', available: true, count: '4 people' },
+      { role: 'AI Personalization', skills: 'ML, LLMs, recommendation', available: true, count: '9 people' },
+      { role: 'Backend / APIs', skills: 'Java, Node.js, SQL', available: true, count: '5 people' },
+      { role: 'Content Strategist', skills: 'Writing, community, GTM', available: true, count: '5 people' },
+      { role: 'Founder / Product', skills: 'Startup experience, vision', available: true, count: '3 people' },
+    ],
+    feasibility: 100,
+    timeline: [
+      { week: 'Week 1–2', action: 'Interview 20 students' },
+      { week: 'Week 3–6', action: 'Build & test with users' },
+      { week: 'Week 7+', action: 'Onboard first cohort' },
+    ],
+  },
+  {
+    id: 'iotproduct',
+    icon: '🔧',
+    name: 'IoT / Smart Hardware',
+    type: 'DeepTech',
+    headline: 'Bridge hardware + AI',
+    desc: 'An IoT product combining embedded systems, sensors, and cloud AI. Think smart agriculture, industrial monitoring, or campus automation. This community has rare hardware + AI overlap.',
+    team: [
+      { role: 'Hardware / IoT Engineer', skills: 'PLC, microcontrollers, sensors', available: true, count: '2 people' },
+      { role: 'AI / ML Engineer', skills: 'Edge AI, automation', available: true, count: '9 people' },
+      { role: 'Backend Developer', skills: 'APIs, data pipelines', available: true, count: '5 people' },
+      { role: 'Cloud Infrastructure', skills: 'AWS IoT, Linux', available: true, count: '2 people' },
+      { role: 'Product Marketing', skills: 'GTM for hardware', available: false, count: 'Need to find' },
+    ],
+    feasibility: 85,
+    timeline: [
+      { week: 'Week 1–3', action: 'Pick problem + prototype' },
+      { week: 'Week 4–8', action: 'Hardware + cloud MVP' },
+      { week: 'Week 9+', action: 'Pilot with a business' },
+    ],
+  },
+  {
+    id: 'contentplatform',
+    icon: '✍️',
+    name: 'Creator / Content Tool',
+    type: 'Product',
+    headline: 'Empower India\'s creators',
+    desc: 'An AI-powered content platform, ghostwriting tool, or personal branding engine built for Indian students and professionals. Content skills + AI + dev = untapped market.',
+    team: [
+      { role: 'Content / Brand Strategist', skills: 'Writing, branding, GTM', available: true, count: '5 people' },
+      { role: 'AI Engineer', skills: 'LLMs, text generation', available: true, count: '9 people' },
+      { role: 'Full Stack Developer', skills: 'Web app, editor, UX', available: true, count: '4 people' },
+      { role: 'Backend / APIs', skills: 'Node.js, Java, DB', available: true, count: '5 people' },
+      { role: 'Growth / Community', skills: 'Virality, community mgmt', available: true, count: '3 people' },
+    ],
+    feasibility: 100,
+    timeline: [
+      { week: 'Week 1', action: 'Define target creator' },
+      { week: 'Week 2–4', action: 'Build AI writing MVP' },
+      { week: 'Week 5+', action: 'Launch to 100 users' },
+    ],
+  },
+  {
+    id: 'opensource',
+    icon: '🌐',
+    name: 'Open Source Project',
+    type: 'Community',
+    headline: 'Build your GitHub reputation together',
+    desc: 'Create a meaningful open source project as a community. Build your GitHub profiles, get contributions, and create something the world uses. The best portfolios are built in public.',
+    team: [
+      { role: 'Technical Lead / Architect', skills: 'System design, DSA', available: true, count: '3 people' },
+      { role: 'Backend Engineers', skills: 'Java, Python, Node.js', available: true, count: '5 people' },
+      { role: 'Frontend / Full Stack', skills: 'React, Web', available: true, count: '4 people' },
+      { role: 'AI / ML Contributors', skills: 'ML features, models', available: true, count: '9 people' },
+      { role: 'Docs / Community', skills: 'Writing, community mgmt', available: true, count: '5 people' },
+    ],
+    feasibility: 100,
+    timeline: [
+      { week: 'Week 1', action: 'Vote on the idea' },
+      { week: 'Week 2–4', action: 'Ship v0.1 together' },
+      { week: 'Week 5+', action: 'Get 100 GitHub stars' },
+    ],
+  },
+];
+
+const possibilities = [
+  {
+    num: '6', color: 'purple',
+    title: 'Complete startup teams you could form right now',
+    body: 'AI SaaS, Data product, EdTech, IoT, Content tool, Open Source — all skill-complete from the members who\'ve already introduced themselves. You don\'t need to go looking. They\'re here.'
+  },
+  {
+    num: '91%', color: 'teal',
+    title: 'Want to build their professional network',
+    body: 'Nearly everyone in this community wants to connect. The bottleneck isn\'t intention — it\'s activation. The first person who says "let\'s build something" will find willing co-builders immediately.'
+  },
+  {
+    num: '4', color: 'blue',
+    title: 'Cities — remote-first by default',
+    body: 'Hyderabad, Bangalore, Ranchi, Tirupati and more. This team can operate remote-first from day one — which means lower costs, wider hiring, and the ability to serve markets across Bharat.'
+  },
+  {
+    num: '60%', color: 'amber',
+    title: 'Students — maximum time + zero corporate baggage',
+    body: 'Students have the one thing working professionals don\'t: unstructured time and no fear of failure. The highest-leverage moment to start a company is right now, not after your first job.'
+  },
+  {
+    num: '3', color: 'coral',
+    title: 'People who\'ve already built or are building startups',
+    body: 'Three community members are already founders or have deep startup experience. That\'s rare in a 9-day-old community. They can mentor the others and anchor a serious founding team.'
+  },
+  {
+    num: '∞', color: 'pink',
+    title: 'Collaboration combinations possible',
+    body: 'AI + Backend + Content alone opens up 45+ project combinations. Add Data + Cloud + Hardware and the permutations become truly limitless. This room is a startup studio waiting to happen.'
+  },
+];
+
+const collaborations = {
+  'AI/ML': [
+    {
+      you: 'AI/ML Builder', needs: 'Backend Engineer', plus: null,
+      outcome: 'Deploy AI to production', why: 'APIs, databases, scale — the bridge between model and users',
+      countYou: 'tag-purple', countNeeds: 'tag-teal', inCommunity: '5 backend devs here'
+    },
+    {
+      you: 'AI/ML Builder', needs: 'Full Stack Dev', plus: null,
+      outcome: 'Ship an AI product', why: 'Build the interface that makes your AI actually usable',
+      countYou: 'tag-purple', countNeeds: 'tag-amber', inCommunity: '4 full stack devs here'
+    },
+    {
+      you: 'AI/ML Builder', needs: 'Content Strategist', plus: null,
+      outcome: 'Go to market', why: 'The best AI tool fails without distribution and messaging',
+      countYou: 'tag-purple', countNeeds: 'tag-coral', inCommunity: '5 content creators here'
+    },
+  ],
+  'Backend Dev': [
+    {
+      you: 'Backend Engineer', needs: 'AI/ML Engineer', plus: null,
+      outcome: 'AI-powered APIs', why: 'Build intelligent backend services the world actually wants',
+      countYou: 'tag-teal', countNeeds: 'tag-purple', inCommunity: '9 AI/ML people here'
+    },
+    {
+      you: 'Backend Engineer', needs: 'Data Analyst', plus: null,
+      outcome: 'Data product', why: 'Turn raw data pipelines into insight tools businesses pay for',
+      countYou: 'tag-teal', countNeeds: 'tag-blue', inCommunity: '5 data analysts here'
+    },
+    {
+      you: 'Backend Engineer', needs: 'Cloud/DevOps', plus: null,
+      outcome: 'Production-ready product', why: 'Code that doesn\'t deploy is a hobby. Cloud makes it real.',
+      countYou: 'tag-teal', countNeeds: 'tag-coral', inCommunity: '2 cloud engineers here'
+    },
+  ],
+  'Data Analytics': [
+    {
+      you: 'Data Analyst', needs: 'Backend Engineer', plus: null,
+      outcome: 'Live analytics platform', why: 'Your insights need real-time data pipelines to be truly powerful',
+      countYou: 'tag-blue', countNeeds: 'tag-teal', inCommunity: '5 backend devs here'
+    },
+    {
+      you: 'Data Analyst', needs: 'AI/ML Engineer', plus: null,
+      outcome: 'Predictive analytics', why: 'Move from descriptive to predictive — that\'s where the money is',
+      countYou: 'tag-blue', countNeeds: 'tag-purple', inCommunity: '9 AI/ML people here'
+    },
+    {
+      you: 'Data Analyst', needs: 'Content Strategist', plus: null,
+      outcome: 'Data-driven content brand', why: 'Data storytelling is the most powerful content format in 2025',
+      countYou: 'tag-blue', countNeeds: 'tag-coral', inCommunity: '5 content creators here'
+    },
+  ],
+  'Full Stack': [
+    {
+      you: 'Full Stack Dev', needs: 'AI/ML Engineer', plus: null,
+      outcome: 'AI-native web product', why: 'Every product needs AI now. You have the UI. They have the brain.',
+      countYou: 'tag-amber', countNeeds: 'tag-purple', inCommunity: '9 AI/ML people here'
+    },
+    {
+      you: 'Full Stack Dev', needs: 'Founder/Product', plus: null,
+      outcome: 'Startup launch', why: 'The person with vision + the person who ships = a company',
+      countYou: 'tag-amber', countNeeds: 'tag-coral', inCommunity: '3 founders here'
+    },
+    {
+      you: 'Full Stack Dev', needs: 'Data Analyst', plus: null,
+      outcome: 'Dashboard/BI product', why: 'Beautiful dashboards built on real data = products people pay for',
+      countYou: 'tag-amber', countNeeds: 'tag-blue', inCommunity: '5 data analysts here'
+    },
+  ],
+  'Content/Creative': [
+    {
+      you: 'Content Creator', needs: 'AI/ML Engineer', plus: null,
+      outcome: 'AI content tool', why: 'Build the tool you wish you had — then sell it to every creator in India',
+      countYou: 'tag-coral', countNeeds: 'tag-purple', inCommunity: '9 AI/ML people here'
+    },
+    {
+      you: 'Content Creator', needs: 'Full Stack Dev', plus: null,
+      outcome: 'Creator platform', why: 'Your brand + their code = a product you own, not just content you post',
+      countYou: 'tag-coral', countNeeds: 'tag-amber', inCommunity: '4 full stack devs here'
+    },
+    {
+      you: 'Content Creator', needs: 'Data Analyst', plus: null,
+      outcome: 'Data storytelling brand', why: 'The most viral content in tech is data-backed. Combine your strengths.',
+      countYou: 'tag-coral', countNeeds: 'tag-blue', inCommunity: '5 data analysts here'
+    },
+  ],
+  'Hardware/IoT': [
+    {
+      you: 'Hardware/IoT Engineer', needs: 'AI/ML Engineer', plus: null,
+      outcome: 'Smart IoT product', why: 'Edge AI + hardware is the most defensible category in deep tech',
+      countYou: 'tag-purple', countNeeds: 'tag-purple', inCommunity: '9 AI/ML people here'
+    },
+    {
+      you: 'Hardware/IoT Engineer', needs: 'Cloud/DevOps', plus: null,
+      outcome: 'Connected device platform', why: 'Hardware without cloud connectivity is just a gadget. Add the cloud.',
+      countYou: 'tag-purple', countNeeds: 'tag-coral', inCommunity: '2 cloud engineers here'
+    },
+    {
+      you: 'Hardware/IoT Engineer', needs: 'Backend Engineer', plus: null,
+      outcome: 'IoT data platform', why: 'Sensors generate data. Backend engineers make it useful at scale.',
+      countYou: 'tag-purple', countNeeds: 'tag-teal', inCommunity: '5 backend devs here'
+    },
+  ],
+};
+
+const insights = [
+  {
+    q: 'Why does this community already have everything it needs?',
+    a: 'Think about it: AI + Backend + Full Stack + Data + Cloud + Content. Those are the 6 pillars of any modern tech startup. This community has people in every single one. Most founding teams spend 6 months finding co-founders. You\'re in a room with yours.',
+    tag: 'Team Formation'
+  },
+  {
+    q: 'What\'s the #1 mistake every person in this group is about to make?',
+    a: 'Waiting. Waiting for a job offer. Waiting for an internship. Waiting to feel "ready." The people who will look back on this community as a turning point are the ones who send the first "hey, want to build something together?" message this week.',
+    tag: 'Mindset'
+  },
+  {
+    q: 'If you had 10 weeks and 4 people from this community, what would you build?',
+    a: 'An AI-powered internship matching platform, specifically for tier-2/3 city students. Why? Because every single person in this room felt underserved by existing platforms. You are the user. That\'s the rarest advantage a founder can have.',
+    tag: 'Product Idea'
+  },
+  {
+    q: 'What does the working professional (0–5 years) in this community uniquely offer?',
+    a: 'They have something students can\'t buy: real-world context. They know what it\'s like inside a Morgan Stanley, a MathWorks, a startup. They can be the product advisor, the domain expert, the one who says "here\'s what industry actually needs." Treat them as co-founders, not mentors.',
+    tag: 'Hidden Asset'
+  },
+  {
+    q: 'Why does the geographic spread of this community matter?',
+    a: 'Hyderabad, Bangalore, Ranchi, Tirupati, Andhra Pradesh. These aren\'t random locations — they represent India\'s emerging builder class, not just metro elites. A product built by people from these cities, for people from these cities, will hit differently. That\'s a distribution moat.',
+    tag: 'Market Insight'
+  },
+  {
+    q: 'What should the community host before the June 28th meetup?',
+    a: 'A "startup matchmaking" session. Everyone declares: what they build, what they\'re missing, and what they want to create. Then you have 15 minutes of open networking. I\'ll bet at least 2 founding teams form on the spot. That\'s worth more than any panel discussion.',
+    tag: 'Action Idea'
+  },
+];
+
+/* ─── RENDER FUNCTIONS ────────────────────────────── */
+
+function renderBubbles() {
+  const container = document.getElementById('bubbles');
+  skills.forEach((s, i) => {
+    const el = document.createElement('div');
+    el.className = ['skill-bubble', catClass[s.cat], s.size].filter(Boolean).join(' ');
+    el.textContent = s.label;
+    el.style.animationDelay = (i * 0.04) + 's';
+    container.appendChild(el);
+  });
+}
+
+function renderProjectCards() {
+  const container = document.getElementById('projectCards');
+  projects.forEach((p, i) => {
+    const card = document.createElement('div');
+    card.className = 'project-card' + (i === 0 ? ' active' : '');
+    card.dataset.id = p.id;
+    card.innerHTML = `
+      <div class="picon" style="background:var(--surface3)">${p.icon}</div>
+      <div>
+        <div class="pname">${p.name}</div>
+        <div class="ptype">${p.type}</div>
+      </div>
+    `;
+    card.addEventListener('click', () => {
+      document.querySelectorAll('.project-card').forEach(c => c.classList.remove('active'));
+      card.classList.add('active');
+      renderTeam(p);
+    });
+    container.appendChild(card);
+  });
+  renderTeam(projects[0]);
+}
+
+const avatarColors = [
+  { bg: 'rgba(124,111,247,0.25)', border: 'rgba(124,111,247,0.5)', text: '#A89BFF' },
+  { bg: 'rgba(29,184,123,0.2)', border: 'rgba(29,184,123,0.5)', text: '#4DD9A0' },
+  { bg: 'rgba(59,158,245,0.2)', border: 'rgba(59,158,245,0.5)', text: '#7EC8FF' },
+  { bg: 'rgba(245,166,35,0.2)', border: 'rgba(245,166,35,0.5)', text: '#FFD080' },
+  { bg: 'rgba(242,107,78,0.2)', border: 'rgba(242,107,78,0.5)', text: '#FFAA90' },
+];
+
+function renderTeam(project) {
+  document.getElementById('resultTitle').textContent = project.headline;
+  document.getElementById('resultDesc').textContent = project.desc;
+
+  const slots = document.getElementById('teamSlots');
+  slots.innerHTML = '';
+  project.team.forEach((member, i) => {
+    const c = avatarColors[i % avatarColors.length];
+    const initials = member.role.split('/')[0].trim().split(' ').map(w => w[0]).slice(0,2).join('');
+    const slot = document.createElement('div');
+    slot.className = 'team-slot';
+    slot.innerHTML = `
+      <div class="slot-avatar" style="background:${c.bg};border-color:${c.border};color:${c.text}">
+        ${initials}
+      </div>
+      <div class="slot-info">
+        <div class="slot-role">${member.role}</div>
+        <div class="slot-skills">${member.skills}</div>
+      </div>
+      <div class="${member.available ? 'slot-available' : 'slot-needed'}">
+        ${member.available ? member.count : member.count}
+      </div>
+    `;
+    slots.appendChild(slot);
+  });
+
+  const pct = project.feasibility;
+  document.getElementById('feasPct').textContent = pct + '% complete';
+  setTimeout(() => {
+    document.getElementById('feasFill').style.width = pct + '%';
+  }, 100);
+
+  const tl = document.getElementById('launchTimeline');
+  tl.innerHTML = '';
+  project.timeline.forEach(step => {
+    const el = document.createElement('div');
+    el.className = 'timeline-step';
+    el.innerHTML = `<div class="t-week">${step.week}</div><div class="t-action">${step.action}</div>`;
+    tl.appendChild(el);
+  });
+}
+
+function renderPossibilities() {
+  const grid = document.getElementById('possGrid');
+  possibilities.forEach(p => {
+    const card = document.createElement('div');
+    card.className = `poss-card ${p.color}`;
+    card.innerHTML = `
+      <div class="poss-num ${p.color}">${p.num}</div>
+      <div class="poss-title">${p.title}</div>
+      <div class="poss-body">${p.body}</div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function renderMatcher() {
+  const tabs = document.getElementById('matcherTabs');
+  const content = document.getElementById('matcherContent');
+  const categories = Object.keys(collaborations);
+
+  categories.forEach((cat, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'tab-btn' + (i === 0 ? ' active' : '');
+    btn.textContent = cat;
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.match-content').forEach(c => c.classList.remove('visible'));
+      document.getElementById('match-' + i).classList.add('visible');
+    });
+    tabs.appendChild(btn);
+
+    const div = document.createElement('div');
+    div.className = 'match-content' + (i === 0 ? ' visible' : '');
+    div.id = 'match-' + i;
+
+    collaborations[cat].forEach(collab => {
+      const row = document.createElement('div');
+      row.className = 'collab-row';
+      row.innerHTML = `
+        <div class="collab-skill-a">
+          <span class="tag ${collab.countYou}">${collab.you}</span>
+        </div>
+        <div class="collab-arrow">+</div>
+        <div class="collab-skill-b">
+          <span class="tag ${collab.countNeeds}">${collab.needs}</span>
+        </div>
+        <div class="collab-arrow">→</div>
+        <div class="collab-outcome">
+          <div class="what">${collab.outcome}</div>
+          <div class="why">${collab.why}</div>
+        </div>
+        <div class="member-count tag tag-teal">${collab.inCommunity}</div>
+      `;
+      div.appendChild(row);
+    });
+
+    content.appendChild(div);
+  });
+}
+
+function renderInsights() {
+  const grid = document.getElementById('insightCards');
+  insights.forEach(ins => {
+    const card = document.createElement('div');
+    card.className = 'insight-card';
+    card.innerHTML = `
+      <div class="insight-q">"${ins.q}"</div>
+      <div class="insight-a">${ins.a}</div>
+      <span class="insight-tag">${ins.tag}</span>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function animateCounters() {
+  const els = document.querySelectorAll('[data-target]');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        const target = parseInt(el.dataset.target);
+        let count = 0;
+        const step = Math.max(1, Math.floor(target / 40));
+        const timer = setInterval(() => {
+          count = Math.min(count + step, target);
+          el.textContent = count + (target > 10 ? '+' : '');
+          if (count >= target) clearInterval(timer);
+        }, 30);
+        observer.unobserve(el);
+      }
+    });
+  }, { threshold: 0.5 });
+  els.forEach(el => observer.observe(el));
+}
+
+/* ─── INIT ──────────────────────────────────────────── */
+renderBubbles();
+renderProjectCards();
+renderPossibilities();
+renderMatcher();
+renderInsights();
+animateCounters();
+</script>
+</body>
+</html>

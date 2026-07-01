@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FreeYou — Invoice</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ── SCREEN VIEW ─────────────────────────────────────────── */
+    :root {
+      --navy:    #0A1628;
+      --saffron: #F5A623;
+      --teal:    #00C9A7;
+      --dark:    #1a1a2e;
+      --text:    #1C1C1E;
+      --muted:   #6B7280;
+      --border:  #E5E7EB;
+      --bg:      #F9FAFB;
+      --white:   #ffffff;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 14px; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f0f2f5;
+      color: var(--text);
+      padding: 32px 16px;
+    }
+
+    /* ── TOOLBAR (screen only) ─────────────────────── */
+    .toolbar {
+      max-width: 860px;
+      margin: 0 auto 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .toolbar-title {
+      font-family: 'Sora', sans-serif;
+      font-weight: 700; font-size: 16px;
+      color: #333;
+    }
+    .toolbar-actions { display: flex; gap: 10px; }
+    .btn {
+      padding: 9px 20px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+      font-family: 'Inter', sans-serif;
+    }
+    .btn-primary { background: var(--saffron); color: var(--navy); }
+    .btn-primary:hover { background: #e8960e; }
+    .btn-outline { background: white; border: 1px solid var(--border); color: #333; }
+    .btn-outline:hover { background: var(--bg); }
+
+    /* ── INVOICE CARD ──────────────────────────────── */
+    .invoice-wrap {
+      max-width: 860px;
+      margin: 0 auto;
+      background: var(--white);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 32px rgba(0,0,0,0.10);
+    }
+
+    /* Header band */
+    .inv-header {
+      background: var(--navy);
+      padding: 32px 40px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .inv-logo { display: flex; align-items: center; gap: 12px; }
+    .logo-mark {
+      width: 44px; height: 44px;
+      background: linear-gradient(135deg, #F5A623, #ff8c00);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Sora', sans-serif;
+      font-weight: 800; font-size: 20px;
+      color: var(--navy);
+      flex-shrink: 0;
+    }
+    .logo-text { color: white; }
+    .logo-name { font-family: 'Sora', sans-serif; font-weight: 700; font-size: 18px; }
+    .logo-legal { font-size: 11px; color: rgba(255,255,255,0.45); margin-top: 2px; }
+
+    .inv-title-block { text-align: right; color: white; }
+    .inv-title { font-family: 'Sora', sans-serif; font-size: 28px; font-weight: 800; letter-spacing: 1px; color: var(--saffron); }
+    .inv-num { font-size: 13px; color: rgba(255,255,255,0.6); margin-top: 4px; }
+    .inv-num span { color: white; font-weight: 600; }
+
+    /* Status bar */
+    .inv-status-bar {
+      background: linear-gradient(90deg, var(--saffron), #ff8c00);
+      height: 3px;
+    }
+
+    /* Body */
+    .inv-body { padding: 36px 40px; }
+
+    /* Meta row: from / to / dates */
+    .inv-meta {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 36px;
+      padding-bottom: 28px;
+      border-bottom: 1px solid var(--border);
+    }
+    @media (max-width: 600px) { .inv-meta { grid-template-columns: 1fr 1fr; } }
+
+    .meta-block {}
+    .meta-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .meta-value {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.5;
+    }
+    .meta-sub { font-size: 12px; color: var(--muted); margin-top: 2px; line-height: 1.5; }
+    .meta-gstin { font-size: 11px; color: var(--muted); font-family: 'JetBrains Mono', monospace; margin-top: 4px; }
+
+    .status-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    .badge-due { background: rgba(245,166,35,0.12); color: #b87a00; border: 1px solid rgba(245,166,35,0.3); }
+    .badge-paid { background: rgba(0,201,107,0.1); color: #0a8a4a; border: 1px solid rgba(0,201,107,0.25); }
+    .badge-overdue { background: rgba(255,59,48,0.1); color: #d32f2f; border: 1px solid rgba(255,59,48,0.25); }
+
+    /* Line items */
+    .inv-items-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .items-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 0;
+    }
+    .items-table thead tr {
+      background: var(--bg);
+      border-radius: 8px;
+    }
+    .items-table th {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 10px 12px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    .items-table th:last-child, .items-table td:last-child { text-align: right; }
+    .items-table td {
+      padding: 14px 12px;
+      font-size: 13px;
+      color: var(--text);
+      border-bottom: 1px solid #f3f4f6;
+      vertical-align: top;
+    }
+    .item-name { font-weight: 600; margin-bottom: 3px; }
+    .item-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+    .item-sac { font-size: 11px; color: var(--muted); margin-top: 3px; }
+
+    /* Totals */
+    .totals-row {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 16px;
+    }
+    .totals-block {
+      min-width: 280px;
+    }
+    .total-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 7px 0;
+      font-size: 13px;
+      border-bottom: 1px solid #f3f4f6;
+    }
+    .total-line .tl-label { color: var(--muted); }
+    .total-line .tl-val { font-weight: 600; color: var(--text); }
+    .total-line.gst .tl-label { color: var(--text); }
+    .total-grand {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 16px;
+      background: var(--navy);
+      border-radius: 10px;
+      margin-top: 10px;
+    }
+    .total-grand .tg-label { font-family: 'Sora', sans-serif; font-weight: 700; font-size: 14px; color: rgba(255,255,255,0.7); }
+    .total-grand .tg-val { font-family: 'Sora', sans-serif; font-weight: 800; font-size: 20px; color: var(--saffron); }
+
+    /* Amount in words */
+    .amount-words {
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--muted);
+      text-align: right;
+      font-style: italic;
+    }
+
+    /* Bank details */
+    .inv-bank {
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    @media (max-width: 600px) { .inv-bank { grid-template-columns: 1fr; } }
+
+    .bank-block {}
+    .bank-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+    .bank-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 6px;
+      font-size: 12px;
+    }
+    .bank-key { color: var(--muted); min-width: 80px; }
+    .bank-val { font-weight: 600; color: var(--text); }
+
+    /* Notes */
+    .inv-notes {
+      margin-top: 24px;
+      padding: 16px 18px;
+      background: var(--bg);
+      border-radius: 10px;
+      border: 1px solid var(--border);
+    }
+    .notes-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .notes-text { font-size: 12px; color: var(--muted); line-height: 1.65; }
+
+    /* Signature */
+    .inv-sign {
+      margin-top: 32px;
+      display: flex;
+      justify-content: flex-end;
+    }
+    .sign-block { text-align: center; }
+    .sign-area {
+      width: 160px;
+      height: 60px;
+      border-bottom: 2px solid var(--border);
+      margin-bottom: 6px;
+    }
+    .sign-name { font-size: 13px; font-weight: 600; color: var(--text); }
+    .sign-title { font-size: 11px; color: var(--muted); }
+
+    /* Footer band */
+    .inv-footer {
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+      padding: 16px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .footer-left { font-size: 11px; color: var(--muted); }
+    .footer-right { font-size: 11px; color: var(--muted); }
+    .footer-right a { color: var(--saffron); text-decoration: none; }
+
+    /* ── PRINT STYLES ──────────────────────────────── */
+    @media print {
+      body { background: white; padding: 0; }
+      .toolbar { display: none; }
+      .invoice-wrap { box-shadow: none; border-radius: 0; max-width: 100%; }
+      @page { margin: 0; size: A4; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- SCREEN TOOLBAR -->
+<div class="toolbar">
+  <div class="toolbar-title">FreeYou · Invoice Template</div>
+  <div class="toolbar-actions">
+    <button class="btn btn-outline" onclick="window.print()">🖨 Print / Save PDF</button>
+    <button class="btn btn-primary" onclick="duplicateInvoice()">✦ New Invoice</button>
+  </div>
+</div>
+
+<!-- INVOICE DOCUMENT -->
+<div class="invoice-wrap" id="invoice">
+
+  <!-- HEADER -->
+  <div class="inv-header">
+    <div class="inv-logo">
+      <div class="logo-mark">F</div>
+      <div class="logo-text">
+        <div class="logo-name">FreeYou</div>
+        <div class="logo-legal">FY Freelancing Solutions (OPC) Pvt. Ltd.</div>
+      </div>
+    </div>
+    <div class="inv-title-block">
+      <div class="inv-title">TAX INVOICE</div>
+      <div class="inv-num">Invoice No: <span contenteditable="true">FY-2026-0001</span></div>
+    </div>
+  </div>
+  <div class="inv-status-bar"></div>
+
+  <!-- BODY -->
+  <div class="inv-body">
+
+    <!-- META ROW -->
+    <div class="inv-meta">
+      <div class="meta-block">
+        <div class="meta-label">Billed From</div>
+        <div class="meta-value">FY Freelancing Solutions (OPC) Pvt. Ltd.</div>
+        <div class="meta-sub" contenteditable="true">
+          #42, 3rd Cross, Indiranagar<br/>
+          Bangalore – 560038<br/>
+          Karnataka, India
+        </div>
+        <div class="meta-gstin" contenteditable="true">GSTIN: 29AAACF1234Z1Z5</div>
+        <div class="meta-gstin" contenteditable="true">PAN: AAACF1234Z</div>
+      </div>
+
+      <div class="meta-block">
+        <div class="meta-label">Billed To</div>
+        <div class="meta-value" contenteditable="true">Client Company Name</div>
+        <div class="meta-sub" contenteditable="true">
+          Contact Person Name<br/>
+          Address Line 1<br/>
+          City – PIN Code<br/>
+          State, India
+        </div>
+        <div class="meta-gstin" contenteditable="true">GSTIN: [Client GSTIN if applicable]</div>
+      </div>
+
+      <div class="meta-block">
+        <div class="meta-label">Invoice Details</div>
+        <div style="display:flex; flex-direction:column; gap:10px; margin-top:4px;">
+          <div>
+            <div class="meta-label" style="margin-bottom:3px;">Invoice Date</div>
+            <div class="meta-value" contenteditable="true">23 June 2026</div>
+          </div>
+          <div>
+            <div class="meta-label" style="margin-bottom:3px;">Due Date</div>
+            <div class="meta-value" contenteditable="true">07 July 2026</div>
+          </div>
+          <div>
+            <div class="meta-label" style="margin-bottom:3px;">Status</div>
+            <span class="status-badge badge-due" id="status-badge" onclick="cycleStatus(this)">Due</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LINE ITEMS -->
+    <div class="inv-items-label">Services Rendered</div>
+    <table class="items-table">
+      <thead>
+        <tr>
+          <th style="width:40%;">Description</th>
+          <th style="width:12%;">SAC Code</th>
+          <th style="width:10%;">Qty</th>
+          <th style="width:13%;">Rate (₹)</th>
+          <th style="width:12%;">Taxable (₹)</th>
+          <th style="width:13%;">Amount (₹)</th>
+        </tr>
+      </thead>
+      <tbody id="items-body">
+        <tr>
+          <td>
+            <div class="item-name" contenteditable="true">Platform Subscription — Professional Plan</div>
+            <div class="item-desc" contenteditable="true">Monthly subscription to FreeYou Professional. Includes verified profile, AI tools access, unlimited project matching.</div>
+          </td>
+          <td contenteditable="true" class="sac-cell">998314</td>
+          <td contenteditable="true" class="qty-cell">1</td>
+          <td contenteditable="true" class="rate-cell">2999.00</td>
+          <td class="taxable-cell">2,999.00</td>
+          <td class="amount-cell">2,999.00</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="item-name" contenteditable="true">KYC Verification Fee</div>
+            <div class="item-desc" contenteditable="true">One-time identity verification via Didit. Includes Aadhaar/PAN verification and liveness check.</div>
+          </td>
+          <td contenteditable="true" class="sac-cell">998399</td>
+          <td contenteditable="true" class="qty-cell">1</td>
+          <td contenteditable="true" class="rate-cell">299.00</td>
+          <td class="taxable-cell">299.00</td>
+          <td class="amount-cell">299.00</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="item-name" contenteditable="true">Project Matching Fee</div>
+            <div class="item-desc" contenteditable="true">Platform fee for successful client-freelancer match and introduction. 5% of project value.</div>
+          </td>
+          <td contenteditable="true" class="sac-cell">998314</td>
+          <td contenteditable="true" class="qty-cell">1</td>
+          <td contenteditable="true" class="rate-cell">1500.00</td>
+          <td class="taxable-cell">1,500.00</td>
+          <td class="amount-cell">1,500.00</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- ADD ROW BUTTON (screen only) -->
+    <button onclick="addRow()" class="btn btn-outline" style="margin-top:10px;font-size:12px;padding:7px 16px;" id="add-row-btn">+ Add Line Item</button>
+
+    <!-- TOTALS -->
+    <div class="totals-row">
+      <div class="totals-block">
+        <div class="total-line">
+          <span class="tl-label">Subtotal</span>
+          <span class="tl-val" id="subtotal">₹4,798.00</span>
+        </div>
+        <!-- GST type selector -->
+        <div class="total-line gst" id="cgst-line">
+          <span class="tl-label">CGST @ 9%</span>
+          <span class="tl-val" id="cgst-val">₹431.82</span>
+        </div>
+        <div class="total-line gst" id="sgst-line">
+          <span class="tl-label">SGST @ 9%</span>
+          <span class="tl-val" id="sgst-val">₹431.82</span>
+        </div>
+        <div class="total-line gst" id="igst-line" style="display:none;">
+          <span class="tl-label">IGST @ 18%</span>
+          <span class="tl-val" id="igst-val">₹863.64</span>
+        </div>
+        <div class="total-grand">
+          <span class="tg-label">TOTAL DUE</span>
+          <span class="tg-val" id="grand-total">₹5,661.64</span>
+        </div>
+        <div class="amount-words" id="amount-words">Rupees Five Thousand Six Hundred Sixty-One and 64 Paise only</div>
+      </div>
+    </div>
+
+    <!-- GST TYPE TOGGLE (screen only) -->
+    <div style="text-align:right;margin-top:8px;" id="gst-toggle">
+      <span style="font-size:11px;color:#999;margin-right:8px;">GST Type:</span>
+      <button onclick="setGSTType('intra')" id="btn-intra" class="btn btn-primary" style="font-size:11px;padding:4px 12px;">CGST+SGST (Same state)</button>
+      <button onclick="setGSTType('inter')" id="btn-inter" class="btn btn-outline" style="font-size:11px;padding:4px 12px;">IGST (Different state)</button>
+    </div>
+
+    <!-- BANK DETAILS -->
+    <div class="inv-bank">
+      <div class="bank-block">
+        <div class="bank-title">Bank Details</div>
+        <div class="bank-row"><span class="bank-key">Bank</span><span class="bank-val" contenteditable="true">HDFC Bank / ICICI Bank</span></div>
+        <div class="bank-row"><span class="bank-key">Account</span><span class="bank-val" contenteditable="true">XXXX XXXX XXXX</span></div>
+        <div class="bank-row"><span class="bank-key">IFSC</span><span class="bank-val" contenteditable="true">HDFC0001234</span></div>
+        <div class="bank-row"><span class="bank-key">Account Name</span><span class="bank-val">FY Freelancing Solutions (OPC) Pvt. Ltd.</span></div>
+        <div class="bank-row"><span class="bank-key">UPI</span><span class="bank-val" contenteditable="true">freeyou@hdfcbank</span></div>
+      </div>
+
+      <div class="bank-block">
+        <div class="bank-title">Payment Terms</div>
+        <div class="notes-text" contenteditable="true">
+          Payment due within 14 days of invoice date.<br/><br/>
+          Late payments attract 1.5% interest per month after the due date.<br/><br/>
+          For queries: accounts@freeyou.co.in · +91 98765 43210
+        </div>
+      </div>
+    </div>
+
+    <!-- NOTES -->
+    <div class="inv-notes">
+      <div class="notes-label">Notes / Terms</div>
+      <div class="notes-text" contenteditable="true">
+        This is a computer-generated invoice and does not require a physical signature. Services rendered are subject to FreeYou's Terms of Service at freeyou.co.in/terms. All amounts are in Indian Rupees (INR). GST is charged as applicable under the CGST Act 2017. In case of any discrepancy, please contact us within 7 days of receiving this invoice.
+      </div>
+    </div>
+
+    <!-- SIGNATURE -->
+    <div class="inv-sign">
+      <div class="sign-block">
+        <div class="sign-area"></div>
+        <div class="sign-name">Authorised Signatory</div>
+        <div class="sign-title">FY Freelancing Solutions (OPC) Pvt. Ltd.</div>
+      </div>
+    </div>
+
+  </div><!-- end inv-body -->
+
+  <!-- FOOTER BAND -->
+  <div class="inv-footer">
+    <div class="footer-left">
+      CIN: [Your CIN] · GSTIN: 29AAACF1234Z1Z5 · PAN: AAACF1234Z
+    </div>
+    <div class="footer-right">
+      <a href="https://freeyou.co.in">freeyou.co.in</a> · hello@freeyou.co.in
+    </div>
+  </div>
+
+</div><!-- end invoice-wrap -->
+
+<!-- SCRIPTS -->
+<script>
+  // Auto-calc totals from line items
+  function recalc() {
+    let subtotal = 0;
+    document.querySelectorAll('#items-body tr').forEach(row => {
+      const qty = parseFloat(row.querySelector('.qty-cell')?.innerText) || 0;
+      const rate = parseFloat(row.querySelector('.rate-cell')?.innerText?.replace(/,/g,'')) || 0;
+      const taxable = qty * rate;
+      subtotal += taxable;
+      if (row.querySelector('.taxable-cell')) row.querySelector('.taxable-cell').innerText = taxable.toLocaleString('en-IN', {minimumFractionDigits:2});
+      if (row.querySelector('.amount-cell')) row.querySelector('.amount-cell').innerText = taxable.toLocaleString('en-IN', {minimumFractionDigits:2});
+    });
+
+    document.getElementById('subtotal').innerText = '₹' + subtotal.toLocaleString('en-IN', {minimumFractionDigits:2});
+
+    const gstType = document.getElementById('igst-line').style.display === 'none' ? 'intra' : 'inter';
+    let gst = subtotal * 0.18;
+    let grand = subtotal + gst;
+
+    if (gstType === 'intra') {
+      document.getElementById('cgst-val').innerText = '₹' + (gst/2).toLocaleString('en-IN', {minimumFractionDigits:2});
+      document.getElementById('sgst-val').innerText = '₹' + (gst/2).toLocaleString('en-IN', {minimumFractionDigits:2});
+    } else {
+      document.getElementById('igst-val').innerText = '₹' + gst.toLocaleString('en-IN', {minimumFractionDigits:2});
+    }
+
+    document.getElementById('grand-total').innerText = '₹' + grand.toLocaleString('en-IN', {minimumFractionDigits:2});
+    document.getElementById('amount-words').innerText = numberToWords(Math.round(grand)) + ' only';
+  }
+
+  function setGSTType(type) {
+    if (type === 'intra') {
+      document.getElementById('cgst-line').style.display = '';
+      document.getElementById('sgst-line').style.display = '';
+      document.getElementById('igst-line').style.display = 'none';
+      document.getElementById('btn-intra').className = 'btn btn-primary';
+      document.getElementById('btn-inter').className = 'btn btn-outline';
+    } else {
+      document.getElementById('cgst-line').style.display = 'none';
+      document.getElementById('sgst-line').style.display = 'none';
+      document.getElementById('igst-line').style.display = '';
+      document.getElementById('btn-intra').className = 'btn btn-outline';
+      document.getElementById('btn-inter').className = 'btn btn-primary';
+    }
+    recalc();
+  }
+
+  function cycleStatus(el) {
+    const statuses = [
+      {label:'Due', cls:'badge-due'},
+      {label:'Paid', cls:'badge-paid'},
+      {label:'Overdue', cls:'badge-overdue'}
+    ];
+    const cur = statuses.findIndex(s => el.classList.contains(s.cls));
+    const next = statuses[(cur + 1) % statuses.length];
+    el.className = 'status-badge ' + next.cls;
+    el.innerText = next.label;
+  }
+
+  function addRow() {
+    const tbody = document.getElementById('items-body');
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><div class="item-name" contenteditable="true">New Service Item</div><div class="item-desc" contenteditable="true">Description of service</div></td>
+      <td contenteditable="true" class="sac-cell">998314</td>
+      <td contenteditable="true" class="qty-cell">1</td>
+      <td contenteditable="true" class="rate-cell">0.00</td>
+      <td class="taxable-cell">0.00</td>
+      <td class="amount-cell">0.00</td>
+    `;
+    tbody.appendChild(tr);
+    attachListeners();
+  }
+
+  function attachListeners() {
+    document.querySelectorAll('.qty-cell, .rate-cell').forEach(cell => {
+      cell.removeEventListener('blur', recalc);
+      cell.addEventListener('blur', recalc);
+    });
+  }
+
+  // Number to words (Indian system)
+  function numberToWords(num) {
+    const ones = ['','One','Two','Three','Four','Five','Six','Seven','Eight','Nine','Ten','Eleven','Twelve','Thirteen','Fourteen','Fifteen','Sixteen','Seventeen','Eighteen','Nineteen'];
+    const tens = ['','','Twenty','Thirty','Forty','Fifty','Sixty','Seventy','Eighty','Ninety'];
+    if (num === 0) return 'Zero Rupees';
+    function convert(n) {
+      if (n < 20) return ones[n];
+      if (n < 100) return tens[Math.floor(n/10)] + (n%10 ? ' ' + ones[n%10] : '');
+      if (n < 1000) return ones[Math.floor(n/100)] + ' Hundred' + (n%100 ? ' ' + convert(n%100) : '');
+      if (n < 100000) return convert(Math.floor(n/1000)) + ' Thousand' + (n%1000 ? ' ' + convert(n%1000) : '');
+      if (n < 10000000) return convert(Math.floor(n/100000)) + ' Lakh' + (n%100000 ? ' ' + convert(n%100000) : '');
+      return convert(Math.floor(n/10000000)) + ' Crore' + (n%10000000 ? ' ' + convert(n%10000000) : '');
+    }
+    return 'Rupees ' + convert(num);
+  }
+
+  function duplicateInvoice() {
+    const cur = document.getElementById('invoice').querySelector('[contenteditable]');
+    const invNumEl = document.querySelector('.inv-num span');
+    const match = invNumEl.innerText.match(/(\d+)$/);
+    if (match) {
+      invNumEl.innerText = invNumEl.innerText.replace(/\d+$/, String(parseInt(match[1]) + 1).padStart(4, '0'));
+    }
+  }
+
+  // Init
+  attachListeners();
+  recalc();
+</script>
+
+</body>
+</html>

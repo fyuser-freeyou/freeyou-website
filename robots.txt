@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+
+# Block test/admin pages from indexing
+Disallow: /portal-test.html
+Disallow: /admin-test.html
+Disallow: /advisor-hub.html
+Disallow: /landing-v2.html
+Disallow: /landing-v3.html
+Disallow: /landing-page.html
+Disallow: /api/
+
+Sitemap: https://freeyou.co.in/sitemap.xml

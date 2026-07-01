@@ -12,8 +12,8 @@
   <!-- Replace YOUR_POSTHOG_KEY below with your Project API Key from posthog.com -->
   <script>
     !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]);t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
-    posthog.init('YOUR_POSTHOG_KEY', {
-      api_host: 'https://app.posthog.com',
+    posthog.init('phc_Chj2S9pvBJEaQfhRHuDoxyx3GvJGMPSy3r6AUSTueH2z', {
+      api_host: 'https://us.i.posthog.com',
       capture_pageview: true,
       capture_pageleave: true,
       session_recording: { maskAllInputs: true }
@@ -948,14 +948,36 @@
 
   document.getElementById('leadForm').addEventListener('submit', function(e) {
     e.preventDefault();
-    var skill = this.querySelector('select').value;
-    var exp   = this.querySelectorAll('select')[1] ? this.querySelectorAll('select')[1].value : '';
-    if (window.posthog) posthog.capture('form_submit', {
-      form_id: 'hero_form',
-      skill_type: skill,
-      experience: exp
-    });
-    this.style.display = 'none';
+    var form     = this;
+    var texts    = form.querySelectorAll('input[type="text"]');
+    var firstName= texts[0] ? texts[0].value.trim() : '';
+    var lastName = texts[1] ? texts[1].value.trim() : '';
+    var email    = (form.querySelector('input[type="email"]') || {}).value || '';
+    var phone    = (form.querySelector('input[type="tel"]')   || {}).value || '';
+    var selects  = form.querySelectorAll('select');
+    var skill    = selects[0] ? selects[0].value : '';
+    var exp      = selects[1] ? selects[1].value : '';
+
+    if (window.posthog) posthog.capture('form_submit', { form_id: 'hero_form', skill_type: skill, experience: exp });
+
+    // Send directly to Zoho CRM WebToLead (no-cors = fire-and-forget, lead still gets created)
+    var fd1 = new FormData();
+    fd1.append('xnQsjsdp', '6c74ca919f5078842bc0841aa0f62a5cd7f1b920bb5aabe520b91e58de435e12');
+    fd1.append('zc_gad', '');
+    fd1.append('xmIwtLD', '9c38798e6417f2177757eff1a37f5d8728d25cd1c0cddf1518fafcec6d30e7e36246bfc22afd070763dfa2778471a10e');
+    fd1.append('actionType', 'TGVhZHM=');
+    fd1.append('returnURL', 'null');
+    fd1.append('aG9uZXlwb3Q', '');
+    if (firstName) fd1.append('First Name', firstName);
+    if (lastName)  fd1.append('Last Name',  lastName);
+    if (email)     fd1.append('Email',       email);
+    if (phone)     fd1.append('Phone',       phone);
+    fd1.append('Description', 'Skill: ' + skill + (exp ? ' | Exp: ' + exp : ''));
+    fd1.append('Lead Source', 'Web Site');
+    fetch('https://crm.zoho.in/crm/WebToLeadForm', { method: 'POST', mode: 'no-cors', body: fd1 })
+      .catch(function(err) { console.warn('[FreeYou] Zoho submit error:', err); });
+
+    form.style.display = 'none';
     document.getElementById('successMsg').style.display = 'block';
   });
 
@@ -972,14 +994,42 @@
 
   document.getElementById('applyForm').addEventListener('submit', function(e) {
     e.preventDefault();
-    var skill = this.querySelector('select[required]').value;
-    var city  = this.querySelectorAll('select[required]')[1] ? this.querySelectorAll('select[required]')[1].value : '';
-    if (window.posthog) posthog.capture('form_submit', {
-      form_id: 'apply_form',
-      skill_type: skill,
-      city: city
-    });
-    this.style.display = 'none';
+    var form      = this;
+    var texts     = form.querySelectorAll('input[type="text"]');
+    var firstName = texts[0] ? texts[0].value.trim() : '';
+    var lastName  = texts[1] ? texts[1].value.trim() : '';
+    var email     = (form.querySelector('input[type="email"]') || {}).value || '';
+    var phone     = (form.querySelector('input[type="tel"]')   || {}).value || '';
+    var linkedin  = (form.querySelector('input[type="url"]')   || {}).value || '';
+    var message   = texts[2] ? texts[2].value.trim() : ''; // "What draws you" field
+    var selects   = form.querySelectorAll('select[required]');
+    var skill     = selects[0] ? selects[0].value : '';
+    var city      = selects[1] ? selects[1].value : '';
+
+    var desc = [skill && 'Skill: '+skill, city && 'City: '+city, linkedin && 'LinkedIn: '+linkedin, message && 'Note: '+message].filter(Boolean).join(' | ');
+
+    if (window.posthog) posthog.capture('form_submit', { form_id: 'apply_form', skill_type: skill, city: city });
+
+    // Send directly to Zoho CRM WebToLead (no-cors = fire-and-forget, lead still gets created)
+    var fd2 = new FormData();
+    fd2.append('xnQsjsdp', '6c74ca919f5078842bc0841aa0f62a5cd7f1b920bb5aabe520b91e58de435e12');
+    fd2.append('zc_gad', '');
+    fd2.append('xmIwtLD', '9c38798e6417f2177757eff1a37f5d8728d25cd1c0cddf1518fafcec6d30e7e36246bfc22afd070763dfa2778471a10e');
+    fd2.append('actionType', 'TGVhZHM=');
+    fd2.append('returnURL', 'null');
+    fd2.append('aG9uZXlwb3Q', '');
+    if (firstName) fd2.append('First Name', firstName);
+    if (lastName)  fd2.append('Last Name',  lastName);
+    if (email)     fd2.append('Email',       email);
+    if (phone)     fd2.append('Phone',       phone);
+    if (city)      fd2.append('Address - City', city);
+    if (linkedin)  fd2.append('Website',     linkedin);
+    if (desc)      fd2.append('Description', desc);
+    fd2.append('Lead Source', 'Web Site');
+    fetch('https://crm.zoho.in/crm/WebToLeadForm', { method: 'POST', mode: 'no-cors', body: fd2 })
+      .catch(function(err) { console.warn('[FreeYou] Zoho submit error:', err); });
+
+    form.style.display = 'none';
     document.getElementById('applySuccessMsg').style.display = 'block';
     document.getElementById('applySuccessMsg').scrollIntoView({ behavior: 'smooth', block: 'center' });
   });

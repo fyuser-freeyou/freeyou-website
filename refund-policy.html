@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Refund &amp; Cancellation Policy — FreeYou (FY Freelancing Solutions OPC Pvt. Ltd.)</title>
+  <meta name="description" content="FreeYou Refund and Cancellation Policy — clear timelines and conditions for refunds on subscriptions and platform services." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://freeyou.co.in/refund-policy.html" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --navy: #0A1628; --saffron: #F5A623; --teal: #00C9A7;
+      --text: #1C1C2E; --muted: #6B7280; --border: #E5E7EB;
+      --bg: #FAFAFA; --white: #fff;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; font-size: 15px; }
+    a { color: #1a6dcc; text-decoration: underline; }
+    a:hover { color: #0a4fa0; }
+
+    nav { background: var(--navy); padding: 0 24px; position: sticky; top: 0; z-index: 100; }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 58px; max-width: 900px; margin: 0 auto; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-mark { width: 32px; height: 32px; background: linear-gradient(135deg,#F5A623,#ff8c00); border-radius: 9px; display: flex; align-items: center; justify-content: center; font-family: 'Sora',sans-serif; font-weight: 800; font-size: 14px; color: var(--navy); }
+    .logo-text { font-family: 'Sora',sans-serif; font-weight: 700; font-size: 16px; color: #fff; }
+    .nav-links { display: flex; gap: 20px; }
+    .nav-links a { font-size: 13px; color: rgba(255,255,255,0.55); text-decoration: none; }
+    .nav-links a:hover, .nav-links a.active { color: #fff; }
+
+    .legal-hero { background: var(--navy); padding: 40px 24px 36px; border-bottom: 3px solid #7c3aed; }
+    .legal-hero-inner { max-width: 900px; margin: 0 auto; }
+    .legal-tag { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #c4b5fd; background: rgba(124,58,237,0.12); border: 1px solid rgba(124,58,237,0.25); border-radius: 20px; padding: 4px 12px; margin-bottom: 14px; }
+    .legal-hero h1 { font-family: 'Sora',sans-serif; font-size: 30px; font-weight: 800; color: #fff; margin-bottom: 10px; }
+    .legal-hero p { font-size: 14px; color: rgba(255,255,255,0.55); }
+    .legal-hero p span { color: rgba(255,255,255,0.8); }
+
+    .legal-layout { max-width: 900px; margin: 0 auto; padding: 48px 24px 80px; display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: start; }
+    @media (max-width: 700px) { .legal-layout { grid-template-columns: 1fr; } .toc { display: none; } }
+
+    .toc { position: sticky; top: 78px; background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+    .toc-title { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; }
+    .toc a { display: block; font-size: 12px; color: var(--muted); text-decoration: none; padding: 5px 0; border-left: 2px solid transparent; padding-left: 10px; transition: all 0.15s; line-height: 1.4; }
+    .toc a:hover, .toc a.active { color: var(--text); border-left-color: #7c3aed; }
+
+    .legal-section { margin-bottom: 44px; scroll-margin-top: 90px; }
+    .legal-section h2 { font-family: 'Sora',sans-serif; font-size: 18px; font-weight: 700; color: var(--navy); margin-bottom: 14px; padding-bottom: 10px; border-bottom: 2px solid #7c3aed; display: inline-block; }
+    .legal-section h3 { font-family: 'Sora',sans-serif; font-size: 15px; font-weight: 700; color: var(--text); margin: 20px 0 8px; }
+    .legal-section p { font-size: 14px; color: #374151; margin-bottom: 12px; line-height: 1.75; }
+    .legal-section ul, .legal-section ol { margin: 10px 0 16px 20px; }
+    .legal-section li { font-size: 14px; color: #374151; margin-bottom: 7px; line-height: 1.65; }
+    .legal-section strong { color: var(--text); font-weight: 600; }
+
+    /* Summary cards */
+    .policy-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); gap: 16px; margin: 20px 0; }
+    .policy-card { border-radius: 12px; padding: 20px; border: 1px solid var(--border); background: var(--white); }
+    .policy-card .label { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+    .policy-card .title { font-family: 'Sora',sans-serif; font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
+    .policy-card .detail { font-size: 13px; color: var(--muted); line-height: 1.5; }
+    .card-refundable { border-top: 3px solid #10b981; }
+    .card-refundable .label { color: #10b981; }
+    .card-partial { border-top: 3px solid var(--saffron); }
+    .card-partial .label { color: #b07800; }
+    .card-nonrefund { border-top: 3px solid #ef4444; }
+    .card-nonrefund .label { color: #dc2626; }
+
+    .timeline { position: relative; margin: 16px 0 20px; }
+    .timeline-item { display: flex; gap: 16px; margin-bottom: 16px; align-items: flex-start; }
+    .timeline-dot { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; margin-top: 2px; }
+    .dot-green { background: rgba(16,185,129,0.12); color: #10b981; }
+    .dot-amber { background: rgba(245,166,35,0.12); color: #b07800; }
+    .dot-red { background: rgba(239,68,68,0.1); color: #dc2626; }
+    .timeline-content .head { font-size: 14px; font-weight: 600; color: var(--text); }
+    .timeline-content .body { font-size: 13px; color: var(--muted); margin-top: 2px; line-height: 1.55; }
+
+    .highlight-box { background: rgba(0,201,167,0.06); border: 1px solid rgba(0,201,167,0.2); border-radius: 8px; padding: 14px 18px; margin: 14px 0; font-size: 13px; color: #1a5a50; line-height: 1.65; }
+    .highlight-box strong { color: #0d3d35; }
+    .warning-box { background: rgba(239,68,68,0.05); border: 1px solid rgba(239,68,68,0.2); border-radius: 8px; padding: 14px 18px; margin: 14px 0; font-size: 13px; color: #7f1d1d; line-height: 1.65; }
+    .info-box { background: rgba(245,166,35,0.06); border: 1px solid rgba(245,166,35,0.25); border-radius: 8px; padding: 14px 18px; margin: 14px 0; font-size: 13px; color: #7a5c00; line-height: 1.65; }
+
+    .process-steps { counter-reset: step; margin: 16px 0; }
+    .process-step { display: flex; gap: 14px; margin-bottom: 14px; align-items: flex-start; }
+    .step-num { counter-increment: step; width: 28px; height: 28px; border-radius: 50%; background: var(--navy); color: #fff; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+    .step-num::before { content: counter(step); }
+    .step-body .head { font-size: 14px; font-weight: 600; color: var(--text); }
+    .step-body .body { font-size: 13px; color: var(--muted); margin-top: 2px; line-height: 1.55; }
+
+    footer { background: var(--navy); padding: 28px 24px; }
+    .footer-inner { max-width: 900px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+    .footer-text { font-size: 12px; color: rgba(255,255,255,0.4); }
+    .footer-links { display: flex; gap: 20px; flex-wrap: wrap; }
+    .footer-links a { font-size: 12px; color: rgba(255,255,255,0.5); text-decoration: none; }
+    .footer-links a:hover { color: var(--saffron); }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="logo"><div class="logo-mark">F</div><span class="logo-text">FreeYou</span></a>
+    <div class="nav-links">
+      <a href="/terms.html">Terms</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="/refund-policy.html" class="active">Refund Policy</a>
+      <a href="mailto:freeyouforever@outlook.com">freeyouforever@outlook.com</a>
+    </div>
+  </div>
+</nav>
+
+<div class="legal-hero">
+  <div class="legal-hero-inner">
+    <span class="legal-tag">Legal Document</span>
+    <h1>Refund &amp; Cancellation Policy</h1>
+    <p>Effective Date: <span>25 June 2026</span> &nbsp;·&nbsp; Last Updated: <span>25 June 2026</span> &nbsp;·&nbsp; Version: 1.0</p>
+    <p style="margin-top:6px;">This Policy applies to all purchases made on <span>freeyou.co.in</span> and is required by <span>Razorpay</span> and the Consumer Protection (E-Commerce) Rules, 2020.</p>
+  </div>
+</div>
+
+<div class="legal-layout">
+  <aside class="toc">
+    <div class="toc-title">Contents</div>
+    <a href="#s1">1. Overview</a>
+    <a href="#s2">2. Subscriptions</a>
+    <a href="#s3">3. KYC Verification Fee</a>
+    <a href="#s4">4. Ad Hoc / Partner Fees</a>
+    <a href="#s5">5. Quick Reference</a>
+    <a href="#s6">6. How to Request</a>
+    <a href="#s7">7. Processing Timelines</a>
+    <a href="#s8">8. Non-Refundable Items</a>
+    <a href="#s9">9. Failed Transactions</a>
+    <a href="#s10">10. Dispute Escalation</a>
+    <a href="#s11">11. Contact</a>
+  </aside>
+
+  <main>
+
+    <div class="legal-section" id="s1">
+      <h2>1. Overview</h2>
+      <p>FreeYou — operated by <strong>FY Freelancing Solutions (OPC) Private Limited</strong> — offers digital services including freelancer profile subscriptions, KYC identity verification, and custom partner services. This Policy outlines our refund and cancellation terms for each service category.</p>
+      <div class="highlight-box">
+        <strong>Key principle:</strong> We aim to be fair and transparent. If you experience a technical issue preventing service delivery, we will make it right. Please read this Policy before making a purchase — by completing payment on freeyou.co.in, you agree to these terms.
+      </div>
+      <p>All payments are processed through <strong>Razorpay</strong> (Razorpay Software Private Limited, a licensed Payment Aggregator regulated by the Reserve Bank of India). Refunds, where approved, are processed back through Razorpay to your original payment method.</p>
+    </div>
+
+    <div class="legal-section" id="s2">
+      <h2>2. Subscription Plans</h2>
+      <h3>2.1 What is a Subscription?</h3>
+      <p>FreeYou subscription plans ("Professional", "Premium", or similar tiers) are billed monthly or annually and provide access to premium platform features. Subscriptions activate immediately upon successful payment confirmation.</p>
+
+      <h3>2.2 Cancellation</h3>
+      <p>You may cancel your subscription at any time through your account settings or by emailing <a href="mailto:freeyouforever@outlook.com">freeyouforever@outlook.com</a>. Cancellation takes effect at the <strong>end of the current billing period</strong>. You will retain access to premium features until the period ends.</p>
+      <div class="info-box">
+        <strong>No partial-period charges:</strong> If you cancel mid-period, you will not be charged for the next renewal. Your access continues until the billing period expires.
+      </div>
+
+      <h3>2.3 Refund on Subscription</h3>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-dot dot-green">✓</div>
+          <div class="timeline-content">
+            <div class="head">Within 7 days of first purchase — Full Refund Eligible</div>
+            <div class="body">If you have not materially used the premium features and request a refund within 7 days of your <strong>initial</strong> subscription purchase, we will issue a full refund. "Material use" means KYC verification completed, project matches received, or premium profile features actively used.</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot dot-amber">~</div>
+          <div class="timeline-content">
+            <div class="head">After 7 days but within 30 days — Case-by-Case</div>
+            <div class="body">Refund requests after 7 days but before 30 days will be reviewed individually. Refunds may be issued if FreeYou was unable to deliver the subscribed services due to a technical failure on our part.</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot dot-red">✕</div>
+          <div class="timeline-content">
+            <div class="head">After 30 days — No Refund</div>
+            <div class="body">Subscription fees are non-refundable after 30 days from the date of purchase. Renewal charges for subsequent billing cycles are not refundable after the billing date.</div>
+          </div>
+        </div>
+      </div>
+
+      <h3>2.4 Auto-Renewal</h3>
+      <p>Subscriptions auto-renew at the end of each billing cycle. You will receive a <strong>reminder email 7 days before renewal</strong>. To prevent renewal, cancel before the renewal date. FreeYou will not issue refunds for renewal charges if a cancellation request was not submitted before the renewal date.</p>
+
+      <h3>2.5 Annual Plans — Early Cancellation</h3>
+      <p>For annual subscription plans cancelled after 30 days, no refund is provided for the unused portion. We recommend monthly billing if you are uncertain about long-term usage.</p>
+    </div>
+
+    <div class="legal-section" id="s3">
+      <h2>3. KYC Identity Verification Fee</h2>
+      <p>Where a fee is charged for KYC identity verification (conducted through our third-party provider, Didit):</p>
+      <div class="warning-box">
+        <strong>Non-Refundable:</strong> KYC verification fees are <strong>non-refundable once the verification session has been initiated</strong>. This is because the fee is passed to Didit to cover the cost of the identity check, which is consumed at the point of session creation — regardless of the verification outcome (Approved, Declined, or In Review).
+      </div>
+      <p>If your KYC session failed due to a <strong>technical error attributable to FreeYou</strong> (not document quality or network issues on your end), contact us at <a href="mailto:freeyouforever@outlook.com">freeyouforever@outlook.com</a> within 48 hours and we will arrange a complimentary re-verification session.</p>
+    </div>
+
+    <div class="legal-section" id="s4">
+      <h2>4. Ad Hoc and Custom Partner Service Fees</h2>
+      <p>Ad hoc fees charged to Partners and Users for custom services (talent sourcing, featured placements, bespoke engagements) are governed by the <strong>specific written agreement</strong> entered into for that engagement.</p>
+      <ul>
+        <li>The applicable refund terms will be stated in the individual service agreement or proposal;</li>
+        <li>In the absence of a written agreement, the following default applies:
+          <ul>
+            <li>If service has <strong>not commenced</strong>: full refund within 7 business days of written cancellation request;</li>
+            <li>If service has <strong>partially commenced</strong>: refund of the proportionate unused portion, at FreeYou's discretion;</li>
+            <li>If service is <strong>fully rendered</strong>: no refund.</li>
+          </ul>
+        </li>
+        <li>All cancellation requests for ad hoc services must be submitted in writing to <a href="mailto:freeyouforever@outlook.com">freeyouforever@outlook.com</a>.</li>
+      </ul>
+    </div>
+
+    <div class="legal-section" id="s5">
+      <h2>5. Quick Reference Summary</h2>
+      <div class="policy-grid">
+        <div class="policy-card card-refundable">
+          <div class="label">✓ Refundable</div>
+          <div class="title">Subscription — Within 7 Days</div>
+          <div class="detail">First purchase, not materially used. Full refund to original payment method.</div>
+        </div>
+        <div class="policy-card card-partial">
+          <div class="label">~ Case-by-Case</div>
+          <div class="title">Subscription — 8 to 30 Days</div>
+          <div class="detail">Reviewed individually. Refund only if FreeYou failed to deliver the service.</div>
+        </div>
+        <div class="policy-card card-nonrefund">
+          <div class="label">✕ Non-Refundable</div>
+          <div class="title">Subscription — After 30 Days</div>
+          <div class="detail">No refunds on subscriptions past 30 days from purchase or on auto-renewals.</div>
+        </div>
+        <div class="policy-card card-nonrefund">
+          <div class="label">✕ Non-Refundable</div>
+          <div class="title">KYC Verification Fee</div>
+          <div class="detail">Non-refundable once the verification session is initiated. Re-verification arranged if technical fault is FreeYou's.</div>
+        </div>
+        <div class="policy-card card-partial">
+          <div class="label">~ Per Agreement</div>
+          <div class="title">Ad Hoc Service Fee</div>
+          <div class="detail">Governed by individual service agreement. Default: full refund if not started; proportional if partial.</div>
+        </div>
+        <div class="policy-card card-refundable">
+          <div class="label">✓ Auto-Resolved</div>
+          <div class="title">Failed / Duplicate Payment</div>
+          <div class="detail">Auto-reversed by Razorpay within 5–7 business days to source account.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="legal-section" id="s6">
+      <h2>6. How to Request a Refund</h2>
+      <div class="process-steps">
+        <div class="process-step">
+          <div class="step-num"></div>
+          <div class="step-body">
+            <div class="head">Email us at freeyouforever@outlook.com</div>
+            <div class="body">Use subject line: "Refund Request — [Your Name] — [Order/Transaction ID]"</div>
+          </div>
+        </div>
+        <div class="process-step">
+          <div class="step-num"></div>
+          <div class="step-body">
+            <div class="head">Include the following details</div>
+            <div class="body">Registered email address, Razorpay payment ID (from your payment confirmation email), the specific service purchased, date of purchase, and reason for the refund request.</div>
+          </div>
+        </div>
+        <div class="process-step">
+          <div class="step-num"></div>
+          <div class="step-body">
+            <div class="head">We acknowledge within 48 hours</div>
+            <div class="body">We will confirm receipt of your request and let you know if any additional information is needed.</div>
+          </div>
+        </div>
+        <div class="process-step">
+          <div class="step-num"></div>
+          <div class="step-body">
+            <div class="head">Decision within 5 business days</div>
+            <div class="body">We will communicate our decision (approved / partial / declined) with reasons within 5 business days.</div>
+          </div>
+        </div>
+        <div class="process-step">
+          <div class="step-num"></div>
+          <div class="step-body">
+            <div class="head">Refund processed via Razorpay</div>
+            <div class="body">Approved refunds are initiated within 2 business days of approval. Credit reflects in 3–5 additional business days depending on your bank or card issuer.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="legal-section" id="s7">
+      <h2>7. Refund Processing Timelines</h2>
+      <p>Once a refund is approved and initiated by FreeYou via Razorpay, the time for the amount to reflect in your account depends on your payment method:</p>
+      <table style="width:100%;border-collapse:collapse;font-size:13px;margin:14px 0 20px;">
+        <thead><tr style="background:var(--navy);color:#fff;"><th style="padding:10px 14px;text-align:left;font-weight:600;">Payment Method</th><th style="padding:10px 14px;text-align:left;font-weight:600;">Estimated Credit Time</th></tr></thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--border);"><td style="padding:10px 14px;">UPI</td><td style="padding:10px 14px;">1–3 business days</td></tr>
+          <tr style="border-bottom:1px solid var(--border);background:#f8f9fa;"><td style="padding:10px 14px;">Debit Card</td><td style="padding:10px 14px;">3–5 business days</td></tr>
+          <tr style="border-bottom:1px solid var(--border);"><td style="padding:10px 14px;">Credit Card</td><td style="padding:10px 14px;">5–7 business days (may reflect in next billing cycle)</td></tr>
+          <tr style="border-bottom:1px solid var(--border);background:#f8f9fa;"><td style="padding:10px 14px;">Net Banking</td><td style="padding:10px 14px;">3–5 business days</td></tr>
+          <tr><td style="padding:10px 14px;">Wallets (Paytm, PhonePe, etc.)</td><td style="padding:10px 14px;">1–3 business days</td></tr>
+        </tbody>
+      </table>
+      <div class="info-box">
+        <strong>Note:</strong> Timelines are estimates. FreeYou is not responsible for delays at the bank, card network, or wallet provider's end after the refund has been initiated from our side. If you do not receive the refund within the estimated window, please contact your bank before escalating to us.
+      </div>
+    </div>
+
+    <div class="legal-section" id="s8">
+      <h2>8. Non-Refundable Items — Summary</h2>
+      <p>The following are <strong>not eligible for refunds</strong> under any circumstances:</p>
+      <ul>
+        <li>Subscription fees after 30 days from date of purchase;</li>
+        <li>Auto-renewal charges if cancellation was not completed before the renewal date;</li>
+        <li>KYC verification fees once a session has been initiated;</li>
+        <li>Fees for services that have been fully rendered;</li>
+        <li>Any charges resulting from violation of FreeYou's Terms of Service;</li>
+        <li>GST charged on any transaction (GST once collected and remitted to the government cannot be refunded — a GST credit note will be issued where applicable under GST law).</li>
+      </ul>
+    </div>
+
+    <div class="legal-section" id="s9">
+      <h2>9. Failed and Duplicate Transactions</h2>
+      <h3>9.1 Failed Payments</h3>
+      <p>If your payment fails but money was debited from your account, the amount will be <strong>automatically reversed by Razorpay</strong> to your source account within <strong>5–7 business days</strong>. You do not need to contact FreeYou for this — it is handled automatically. If the reversal does not occur within 7 business days, email us your Razorpay payment reference and bank statement.</p>
+      <h3>9.2 Duplicate Payments</h3>
+      <p>If you are charged twice for the same transaction, contact us immediately at <a href="mailto:freeyouforever@outlook.com">freeyouforever@outlook.com</a> with both transaction IDs. We will verify and initiate a refund for the duplicate charge within 2 business days of confirmation.</p>
+      <h3>9.3 Chargebacks</h3>
+      <p>If you initiate a chargeback through your bank or card issuer without first contacting FreeYou, we reserve the right to suspend your account pending investigation. We encourage you to contact us directly first — most issues are resolved quickly and amicably.</p>
+    </div>
+
+    <div class="legal-section" id="s10">
+      <h2>10. Dispute Escalation</h2>
+      <p>If you are dissatisfied with our refund decision, you may escalate the matter as follows:</p>
+      <ol>
+        <li><strong>Internal escalation:</strong> Email our Grievance Officer at <a href="mailto:freeyouforever@outlook.com">freeyouforever@outlook.com</a> — all grievances are responded to within 15 days as mandated by the IT Rules, 2021;</li>
+        <li><strong>Consumer Forum:</strong> You may file a complaint with the District Consumer Disputes Redressal Commission under the Consumer Protection Act, 2019;</li>
+        <li><strong>National Consumer Helpline:</strong> You may contact the National Consumer Helpline at 1800-11-4000 (toll-free) or visit consumerhelpline.gov.in;</li>
+        <li><strong>Razorpay dispute resolution:</strong> For payment processing disputes, Razorpay's grievance contact is <a href="https://razorpay.com/grievances/" target="_blank">razorpay.com/grievances</a>.</li>
+      </ol>
+    </div>
+
+    <div class="legal-section" id="s11">
+      <h2>11. Contact for Refund Requests</h2>
+      <ul>
+        <li><strong>Email:</strong> <a href="mailto:freeyouforever@outlook.com">freeyouforever@outlook.com</a></li>
+        <li><strong>Subject line format:</strong> "Refund Request — [Your Name] — [Razorpay Payment ID]"</li>
+        <li><strong>Grievance Officer:</strong> <a href="mailto:freeyouforever@outlook.com">freeyouforever@outlook.com</a></li>
+        <li><strong>Response time:</strong> 48 hours (acknowledgement) · 5 business days (decision)</li>
+        <li><strong>Processing:</strong> Refunds processed via Razorpay within 2 business days of approval</li>
+        <li><strong>Operating hours:</strong> Monday to Friday, 10:00 AM – 6:00 PM IST (excluding public holidays)</li>
+      </ul>
+      <p style="margin-top:20px; font-size:13px; color:var(--muted);">This Refund Policy was last updated on 25 June 2026. © 2026 FY Freelancing Solutions (OPC) Private Limited. All rights reserved.</p>
+    </div>
+
+  </main>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="logo" style="text-decoration:none;"><div class="logo-mark">F</div><div><div class="logo-text">FreeYou</div><div style="font-size:10px;color:rgba(255,255,255,0.3);">FY Freelancing Solutions (OPC) Pvt. Ltd.</div></div></div>
+    <div class="footer-text">© 2026 FY Freelancing Solutions (OPC) Pvt. Ltd.</div>
+    <div class="footer-links">
+      <a href="/terms.html">Terms of Service</a>
+      <a href="/privacy.html">Privacy Policy</a>
+      <a href="/refund-policy.html">Refund Policy</a>
+      <a href="/">Back to Home</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+const sections = document.querySelectorAll('.legal-section');
+const tocLinks = document.querySelectorAll('.toc a');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      tocLinks.forEach(l => l.classList.remove('active'));
+      const link = document.querySelector(`.toc a[href="#${e.target.id}"]`);
+      if (link) link.classList.add('active');
+    }
+  });
+}, { rootMargin: '-20% 0px -70% 0px' });
+sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>

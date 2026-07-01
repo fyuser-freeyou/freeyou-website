@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My FreeYou Portal — Test</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --navy: #0A1628; --saffron: #F5A623; --teal: #00C9A7; --purple: #7c3aed;
+      --text: #1C1C2E; --muted: #6B7280; --border: #E5E7EB;
+      --bg: #F3F4F8; --white: #fff; --red: #ef4444; --green: #10b981;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); display: flex; min-height: 100vh; font-size: 14px; }
+
+    /* ── SIDEBAR ── */
+    .sidebar { width: 220px; background: var(--navy); min-height: 100vh; display: flex; flex-direction: column; flex-shrink: 0; position: fixed; top: 0; left: 0; bottom: 0; z-index: 100; }
+    .sidebar-logo { padding: 22px 20px 18px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .logo-mark { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; }
+    .logo-icon { width: 30px; height: 30px; background: linear-gradient(135deg,#F5A623,#ff8c00); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Sora',sans-serif; font-weight: 800; font-size: 13px; color: var(--navy); }
+    .logo-text { font-family: 'Sora',sans-serif; font-weight: 700; font-size: 15px; color: #fff; }
+
+    .user-card { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .user-avatar { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg,var(--teal),#0095a0); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; color: #fff; margin-bottom: 8px; }
+    .user-name { font-size: 13px; font-weight: 600; color: #fff; }
+    .user-tier { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; margin-top: 4px; padding: 2px 8px; border-radius: 20px; }
+    .tier-free { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.6); }
+    .tier-paid { background: rgba(124,58,237,0.3); color: #c4b5fd; }
+
+    .nav { flex: 1; padding: 12px 0; }
+    .nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 20px; font-size: 13px; color: rgba(255,255,255,0.55); cursor: pointer; transition: all 0.15s; text-decoration: none; border-left: 3px solid transparent; }
+    .nav-item:hover { color: #fff; background: rgba(255,255,255,0.05); }
+    .nav-item.active { color: #fff; border-left-color: var(--saffron); background: rgba(255,255,255,0.07); }
+    .nav-item .nav-icon { font-size: 15px; width: 18px; text-align: center; }
+    .nav-lock { margin-left: auto; font-size: 11px; opacity: 0.4; }
+
+    .sidebar-footer { padding: 16px 20px; border-top: 1px solid rgba(255,255,255,0.08); font-size: 11px; color: rgba(255,255,255,0.3); }
+
+    /* ── MAIN ── */
+    .main { margin-left: 220px; flex: 1; display: flex; flex-direction: column; min-height: 100vh; }
+    .topbar { background: var(--white); border-bottom: 1px solid var(--border); padding: 0 28px; height: 56px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50; }
+    .topbar-title { font-family: 'Sora', sans-serif; font-size: 16px; font-weight: 700; color: var(--navy); }
+    .topbar-actions { display: flex; align-items: center; gap: 12px; }
+    .btn { padding: 7px 16px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; border: none; transition: all 0.15s; }
+    .btn-primary { background: var(--purple); color: #fff; }
+    .btn-primary:hover { background: #6d28d9; }
+    .btn-outline { background: transparent; border: 1.5px solid var(--border); color: var(--muted); }
+    .btn-saffron { background: var(--saffron); color: var(--navy); }
+
+    .content { padding: 28px; flex: 1; }
+
+    /* ── SECTIONS ── */
+    .section { display: none; }
+    .section.active { display: block; }
+
+    /* ── CARDS ── */
+    .cards-row { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
+    .card { background: var(--white); border-radius: 12px; padding: 18px 20px; border: 1px solid var(--border); }
+    .card-label { font-size: 11px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+    .card-val { font-family: 'Sora', sans-serif; font-size: 22px; font-weight: 800; color: var(--navy); }
+    .card-sub { font-size: 11px; color: var(--muted); margin-top: 3px; }
+    .card-icon { font-size: 22px; margin-bottom: 8px; }
+
+    /* ── MEMBERSHIP BANNER ── */
+    .membership-banner { border-radius: 14px; padding: 22px 24px; margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+    .mb-free { background: linear-gradient(135deg, #1a2744, #0A1628); }
+    .mb-paid { background: linear-gradient(135deg, #4c1d95, #2e1065); }
+    .mb-title { font-family: 'Sora', sans-serif; font-size: 18px; font-weight: 800; color: #fff; margin-bottom: 4px; }
+    .mb-sub { font-size: 13px; color: rgba(255,255,255,0.6); }
+    .mb-badge { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 3px 10px; border-radius: 20px; margin-bottom: 8px; display: inline-block; }
+    .mb-badge-free { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.7); }
+    .mb-badge-paid { background: rgba(196,181,253,0.2); color: #c4b5fd; }
+
+    /* ── PROGRESS ── */
+    .progress-wrap { margin-bottom: 24px; }
+    .progress-label { display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+    .progress-bar { height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
+    .progress-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--teal), #0095a0); transition: width 0.6s ease; }
+
+    /* ── LOCKED SECTION ── */
+    .locked-overlay { background: var(--white); border-radius: 14px; padding: 40px; text-align: center; border: 2px dashed var(--border); }
+    .locked-icon { font-size: 40px; margin-bottom: 12px; }
+    .locked-title { font-family: 'Sora', sans-serif; font-size: 18px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+    .locked-sub { font-size: 13px; color: var(--muted); margin-bottom: 20px; line-height: 1.6; }
+
+    /* ── BENEFITS GRID ── */
+    .benefits-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
+    .benefit-card { background: var(--white); border-radius: 12px; padding: 18px; border: 1px solid var(--border); opacity: 0.4; }
+    .benefit-card.unlocked { opacity: 1; border-color: rgba(0,201,167,0.3); }
+    .benefit-icon { font-size: 24px; margin-bottom: 8px; }
+    .benefit-title { font-size: 13px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+    .benefit-desc { font-size: 11px; color: var(--muted); line-height: 1.5; }
+
+    /* ── AI INTERVIEW ── */
+    .interview-wrap { background: var(--white); border-radius: 14px; border: 1px solid var(--border); overflow: hidden; }
+    .interview-header { background: var(--navy); padding: 18px 22px; }
+    .interview-header h3 { font-family: 'Sora', sans-serif; font-size: 15px; font-weight: 700; color: #fff; }
+    .interview-header p { font-size: 12px; color: rgba(255,255,255,0.55); margin-top: 3px; }
+    .chat-window { height: 380px; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+    .chat-bubble { max-width: 75%; padding: 11px 14px; border-radius: 12px; font-size: 13px; line-height: 1.55; }
+    .bubble-ai { background: #f3f4f8; color: var(--text); border-radius: 4px 12px 12px 12px; align-self: flex-start; }
+    .bubble-user { background: var(--navy); color: #fff; border-radius: 12px 4px 12px 12px; align-self: flex-end; }
+    .bubble-typing { background: #f3f4f8; border-radius: 4px 12px 12px 12px; align-self: flex-start; padding: 12px 16px; }
+    .typing-dots { display: flex; gap: 4px; }
+    .typing-dots span { width: 6px; height: 6px; background: var(--muted); border-radius: 50%; animation: bounce 1.2s infinite; }
+    .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes bounce { 0%,60%,100% { transform: translateY(0); } 30% { transform: translateY(-5px); } }
+
+    .chip-row { display: flex; flex-wrap: wrap; gap: 8px; padding: 0 20px 16px; }
+    .chip { padding: 7px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; border: 1.5px solid var(--border); background: var(--white); color: var(--text); cursor: pointer; transition: all 0.15s; }
+    .chip:hover { border-color: var(--navy); background: var(--navy); color: #fff; }
+
+    .chat-input-row { display: flex; gap: 10px; padding: 14px 20px; border-top: 1px solid var(--border); }
+    .chat-input { flex: 1; padding: 9px 14px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 13px; font-family: inherit; outline: none; }
+    .chat-input:focus { border-color: var(--navy); }
+    .chat-send { padding: 9px 18px; background: var(--navy); color: #fff; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; }
+    .chat-send:hover { background: #1a2744; }
+
+    /* Complete state */
+    .interview-complete { padding: 24px; text-align: center; display: none; }
+    .interview-complete h3 { font-family: 'Sora', sans-serif; font-size: 17px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+    .profile-summary { background: #f8f9fb; border-radius: 10px; padding: 16px; text-align: left; margin: 16px 0; }
+    .profile-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
+    .profile-row:last-child { border-bottom: none; }
+    .profile-row .key { color: var(--muted); font-weight: 500; }
+    .profile-row .val { color: var(--text); font-weight: 600; text-align: right; max-width: 60%; }
+
+    /* ── PROFILE EDIT ── */
+    .profile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+    .form-group { display: flex; flex-direction: column; gap: 5px; }
+    .form-group label { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+    .form-group input, .form-group select, .form-group textarea { padding: 9px 12px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 13px; font-family: inherit; outline: none; background: var(--white); }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--navy); }
+    .skills-wrap { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+    .skill-tag { padding: 4px 12px; background: rgba(0,201,167,0.1); border: 1px solid rgba(0,201,167,0.3); border-radius: 20px; font-size: 12px; color: #065f46; font-weight: 500; }
+
+    /* ── SECTION TITLE ── */
+    .section-title { font-family: 'Sora', sans-serif; font-size: 18px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+    .section-sub { font-size: 13px; color: var(--muted); margin-bottom: 20px; }
+    .divider { height: 1px; background: var(--border); margin: 20px 0; }
+
+    .alert-info { background: rgba(0,201,167,0.08); border: 1px solid rgba(0,201,167,0.25); border-radius: 8px; padding: 12px 16px; font-size: 13px; color: #065f46; margin-bottom: 16px; }
+
+    @media (max-width: 768px) {
+      .sidebar { width: 60px; }
+      .logo-text, .user-name, .user-tier, .nav-item span { display: none; }
+      .main { margin-left: 60px; }
+      .profile-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <a href="/" class="logo-mark">
+      <div class="logo-icon">F</div>
+      <span class="logo-text">FreeYou</span>
+    </a>
+  </div>
+
+  <div class="user-card">
+    <div class="user-avatar" id="sb-avatar">R</div>
+    <div class="user-name" id="sb-name">Freelancer</div>
+    <div class="user-tier tier-free" id="sb-tier">Free Member</div>
+  </div>
+
+  <nav class="nav">
+    <a class="nav-item active" onclick="showSection('dashboard')">
+      <span class="nav-icon">🏠</span><span>Dashboard</span>
+    </a>
+    <a class="nav-item" onclick="showSection('profile')">
+      <span class="nav-icon">👤</span><span>My Profile</span>
+    </a>
+    <a class="nav-item" onclick="showSection('interview')">
+      <span class="nav-icon">🤖</span><span>AI Interview</span>
+    </a>
+    <a class="nav-item" onclick="showSection('contracts')" id="nav-contracts">
+      <span class="nav-icon">📄</span><span>Contracts</span>
+      <span class="nav-lock" id="lock-contracts">🔒</span>
+    </a>
+    <a class="nav-item" onclick="showSection('benefits')" id="nav-benefits">
+      <span class="nav-icon">🎁</span><span>Benefits</span>
+      <span class="nav-lock" id="lock-benefits">🔒</span>
+    </a>
+    <a class="nav-item" onclick="showSection('projects')" id="nav-projects">
+      <span class="nav-icon">💼</span><span>Projects</span>
+      <span class="nav-lock" id="lock-projects">🔒</span>
+    </a>
+  </nav>
+
+  <div class="sidebar-footer">FreeYou · Test v0.1</div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="topbar">
+    <div class="topbar-title" id="topbar-title">Dashboard</div>
+    <div class="topbar-actions">
+      <span style="font-size:12px;color:var(--muted);" id="topbar-tier-badge">Free Member</span>
+      <button class="btn btn-saffron" id="btn-upgrade" onclick="simulateUpgrade()" style="display:none;">⚡ Upgrade — ₹1,499/mo</button>
+      <button class="btn btn-outline" onclick="resetPortal()" style="font-size:11px;">Reset Demo</button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- ── DASHBOARD ── -->
+    <section class="section active" id="section-dashboard">
+      <div class="membership-banner mb-free" id="membership-banner">
+        <div>
+          <div class="mb-badge mb-badge-free" id="mb-badge">✓ Verified Member</div>
+          <div class="mb-title" id="mb-title">Welcome to FreeYou</div>
+          <div class="mb-sub" id="mb-sub">You're verified. Upgrade to Companion to unlock contracts, health cover & projects.</div>
+        </div>
+        <button class="btn btn-saffron" id="banner-upgrade-btn" onclick="simulateUpgrade()">Upgrade ₹1,499/mo →</button>
+      </div>
+
+      <div class="progress-wrap">
+        <div class="progress-label"><span>Profile Completeness</span><span id="progress-pct">30%</span></div>
+        <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:30%"></div></div>
+      </div>
+
+      <div class="cards-row">
+        <div class="card">
+          <div class="card-icon">✅</div>
+          <div class="card-label">KYC Status</div>
+          <div class="card-val" id="kyc-status-card">Verified</div>
+          <div class="card-sub">Identity confirmed via Didit</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">💳</div>
+          <div class="card-label">Membership</div>
+          <div class="card-val" id="membership-card">Free</div>
+          <div class="card-sub" id="membership-expiry-card">No subscription active</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">📄</div>
+          <div class="card-label">Active Contracts</div>
+          <div class="card-val">0</div>
+          <div class="card-sub">Upgrade to access</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">💼</div>
+          <div class="card-label">Projects Available</div>
+          <div class="card-val">12</div>
+          <div class="card-sub">Upgrade to apply</div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="section-title" style="font-size:15px;margin-bottom:12px;">Quick Actions</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <button class="btn btn-primary" onclick="showSection('interview')">🤖 Complete AI Interview</button>
+        <button class="btn btn-outline" onclick="showSection('profile')">👤 Update Profile</button>
+        <button class="btn btn-saffron" onclick="simulateUpgrade()" id="qa-upgrade">⚡ Activate Companion Plan</button>
+      </div>
+    </section>
+
+    <!-- ── PROFILE ── -->
+    <section class="section" id="section-profile">
+      <div class="section-title">My Profile</div>
+      <div class="section-sub">Your public freelancer profile visible to clients on FreeYou</div>
+
+      <div class="alert-info" id="interview-prompt-alert">
+        💡 Complete the AI Interview to auto-fill your profile with your skills, experience, and goals.
+        <button onclick="showSection('interview')" style="background:none;border:none;color:#0d6b5c;font-weight:700;cursor:pointer;margin-left:8px;">Start Interview →</button>
+      </div>
+
+      <div class="profile-grid">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" id="p-name" placeholder="Your name" />
+        </div>
+        <div class="form-group">
+          <label>Phone</label>
+          <input type="text" id="p-phone" placeholder="+91 XXXXX XXXXX" />
+        </div>
+        <div class="form-group">
+          <label>City</label>
+          <input type="text" id="p-city" placeholder="Mumbai, Delhi, Bangalore..." />
+        </div>
+        <div class="form-group">
+          <label>Primary Skill</label>
+          <select id="p-skill">
+            <option value="">Select skill area</option>
+            <option>Software Development</option>
+            <option>UI/UX Design</option>
+            <option>Digital Marketing</option>
+            <option>Content Writing</option>
+            <option>Data Analysis</option>
+            <option>Finance & Accounting</option>
+            <option>Legal & Compliance</option>
+            <option>Sales & Business Dev</option>
+            <option>Video & Photography</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Years of Experience</label>
+          <select id="p-exp">
+            <option>Less than 1 year</option>
+            <option>1–3 years</option>
+            <option>3–5 years</option>
+            <option>5–10 years</option>
+            <option>10+ years</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Expected Monthly Rate (₹)</label>
+          <input type="text" id="p-rate" placeholder="e.g. 50,000" />
+        </div>
+      </div>
+
+      <div class="form-group" style="margin-bottom:16px;">
+        <label>Bio / About</label>
+        <textarea id="p-bio" rows="3" placeholder="Brief description of your work and what you bring to clients..."></textarea>
+      </div>
+
+      <div class="form-group" style="margin-bottom:20px;">
+        <label>Skills</label>
+        <div class="skills-wrap" id="skills-display">
+          <span class="skill-tag">Add skills via AI interview →</span>
+        </div>
+      </div>
+
+      <button class="btn btn-primary" onclick="saveProfile()">Save Profile</button>
+    </section>
+
+    <!-- ── AI INTERVIEW ── -->
+    <section class="section" id="section-interview">
+      <div class="section-title">AI Onboarding Interview</div>
+      <div class="section-sub">A quick 8-question chat to build your profile and help us match you with the right opportunities</div>
+
+      <div class="interview-wrap" id="interview-wrap">
+        <div class="interview-header">
+          <h3>🤖 FreeYou AI · Profile Builder</h3>
+          <p>Takes about 3 minutes · Your answers auto-fill your profile</p>
+        </div>
+        <div class="chat-window" id="chat-window"></div>
+        <div class="chip-row" id="chip-row"></div>
+        <div class="chat-input-row">
+          <input type="text" class="chat-input" id="chat-input" placeholder="Type your answer or pick an option above..." onkeydown="handleChatKey(event)" />
+          <button class="chat-send" onclick="sendChatMessage()">Send →</button>
+        </div>
+      </div>
+
+      <div class="interview-complete" id="interview-complete">
+        <div style="font-size:40px;margin-bottom:12px;">🎉</div>
+        <h3>Profile Complete!</h3>
+        <p style="color:var(--muted);font-size:13px;margin-bottom:16px;">Here's what we captured. You can edit anything in My Profile.</p>
+        <div class="profile-summary" id="profile-summary-display"></div>
+        <div style="display:flex;gap:10px;justify-content:center;margin-top:16px;flex-wrap:wrap;">
+          <button class="btn btn-primary" onclick="showSection('profile')">View Full Profile →</button>
+          <button class="btn btn-saffron" onclick="simulateUpgrade()">⚡ Upgrade to Companion</button>
+          <button class="btn btn-outline" onclick="restartInterview()">Redo Interview</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── CONTRACTS ── -->
+    <section class="section" id="section-contracts">
+      <div class="section-title">Contracts</div>
+      <div class="section-sub">Projects executed through FY Freelancing Solutions OPC Pvt. Ltd.</div>
+      <div class="locked-overlay" id="contracts-locked">
+        <div class="locked-icon">📄</div>
+        <div class="locked-title">Contracts are a Companion benefit</div>
+        <div class="locked-sub">Upgrade to use FY OPC as your contracting entity. We sign with clients on your behalf, issue GST invoices, handle TDS, and pay you clean.</div>
+        <button class="btn btn-saffron" onclick="simulateUpgrade()">⚡ Upgrade — ₹1,499/month</button>
+      </div>
+      <div id="contracts-content" style="display:none;">
+        <div class="alert-info">✅ Your Freelancer Service Agreement with FY OPC is active. You can now receive projects via FreeYou.</div>
+        <div class="card" style="margin-bottom:12px;">
+          <div class="card-label">No active contracts yet</div>
+          <div style="font-size:13px;color:var(--muted);margin-top:6px;">Once a client engages you through FreeYou, your contract will appear here.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── BENEFITS ── -->
+    <section class="section" id="section-benefits">
+      <div class="section-title">Member Benefits</div>
+      <div class="section-sub">What your FreeYou membership includes</div>
+      <div class="benefits-grid">
+        <div class="benefit-card unlocked">
+          <div class="benefit-icon">✅</div>
+          <div class="benefit-title">KYC-Verified Badge</div>
+          <div class="benefit-desc">Your identity is verified. Clients trust you more. Free for all members.</div>
+        </div>
+        <div class="benefit-card" id="benefit-health">
+          <div class="benefit-icon">🏥</div>
+          <div class="benefit-title">Health Insurance</div>
+          <div class="benefit-desc">Group health cover up to ₹2 lakh. Companion plan only.</div>
+        </div>
+        <div class="benefit-card" id="benefit-contract">
+          <div class="benefit-icon">📄</div>
+          <div class="benefit-title">Contract via FY Entity</div>
+          <div class="benefit-desc">Use FY OPC as your entity. Sign contracts, issue GST invoices. Companion only.</div>
+        </div>
+        <div class="benefit-card" id="benefit-financial">
+          <div class="benefit-icon">💰</div>
+          <div class="benefit-title">Financial Planning</div>
+          <div class="benefit-desc">Tax filing, TDS certificates, income planning tools. Companion only.</div>
+        </div>
+        <div class="benefit-card" id="benefit-projects">
+          <div class="benefit-icon">💼</div>
+          <div class="benefit-title">Project Access</div>
+          <div class="benefit-desc">Apply to curated client projects. Priority matching. Companion only.</div>
+        </div>
+        <div class="benefit-card" id="benefit-community">
+          <div class="benefit-icon">👥</div>
+          <div class="benefit-title">Community + Discord</div>
+          <div class="benefit-desc">Access the FreeYou community of verified freelancers. Companion only.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── PROJECTS ── -->
+    <section class="section" id="section-projects">
+      <div class="section-title">Available Projects</div>
+      <div class="section-sub">Curated projects from verified clients</div>
+      <div class="locked-overlay" id="projects-locked">
+        <div class="locked-icon">💼</div>
+        <div class="locked-title">Projects are a Companion benefit</div>
+        <div class="locked-sub">Upgrade to Companion to see and apply for projects from verified clients. FreeYou handles the contract and payment — you just do the work.</div>
+        <button class="btn btn-saffron" onclick="simulateUpgrade()">⚡ Upgrade — ₹1,499/month</button>
+      </div>
+      <div id="projects-content" style="display:none;">
+        <div class="alert-info">✅ You can now apply to projects. FreeYou handles the contract with the client.</div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div class="card">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;">
+              <div>
+                <div style="font-size:13px;font-weight:700;color:var(--navy);margin-bottom:4px;">React Developer — SaaS Dashboard</div>
+                <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">Bangalore startup · 3-month project · Remote</div>
+                <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                  <span class="skill-tag">React</span><span class="skill-tag">TypeScript</span><span class="skill-tag">Figma</span>
+                </div>
+              </div>
+              <div style="text-align:right;flex-shrink:0;">
+                <div style="font-size:15px;font-weight:800;color:var(--navy);">₹80,000</div>
+                <div style="font-size:11px;color:var(--muted);">per month</div>
+                <button class="btn btn-primary" style="margin-top:8px;font-size:11px;padding:5px 12px;">Apply</button>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;">
+              <div>
+                <div style="font-size:13px;font-weight:700;color:var(--navy);margin-bottom:4px;">Content Writer — Finance & Fintech</div>
+                <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">Mumbai media co. · Ongoing · 8 articles/month</div>
+                <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                  <span class="skill-tag">Writing</span><span class="skill-tag">Finance</span><span class="skill-tag">SEO</span>
+                </div>
+              </div>
+              <div style="text-align:right;flex-shrink:0;">
+                <div style="font-size:15px;font-weight:800;color:var(--navy);">₹30,000</div>
+                <div style="font-size:11px;color:var(--muted);">per month</div>
+                <button class="btn btn-primary" style="margin-top:8px;font-size:11px;padding:5px 12px;">Apply</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div><!-- /content -->
+</main>
+
+<script>
+// ── STATE ──
+let STATE = JSON.parse(localStorage.getItem('fy_portal_state') || '{}');
+STATE = Object.assign({ tier: 'free', name: 'Freelancer', phone: '', kyc: true, profile: {}, interview_done: false, interview_answers: {} }, STATE);
+
+// ── INTERVIEW SCRIPT ──
+const QUESTIONS = [
+  { id: 'skill', text: "Hi there! 👋 I'm here to help build your FreeYou profile. What's your main skill area as a freelancer?", chips: ['Software Dev', 'Design', 'Marketing', 'Writing', 'Data', 'Finance', 'Legal', 'Sales', 'Other'] },
+  { id: 'exp', text: "Great! How many years have you been freelancing or working in that field?", chips: ['Less than 1 yr', '1–3 years', '3–5 years', '5–10 years', '10+ years'] },
+  { id: 'project_type', text: "What type of work do you prefer — short gigs, medium projects, or long-term retainers?", chips: ['Short gigs (< 1 month)', 'Medium projects (1–3 months)', 'Long-term retainer (3+ months)', 'All types'] },
+  { id: 'rate', text: "What's your expected monthly earning from freelancing? (Approximate is fine)", chips: ['Under ₹25,000', '₹25,000–50,000', '₹50,000–1 lakh', '₹1–2 lakh', 'Above ₹2 lakh'] },
+  { id: 'challenge', text: "What's your biggest frustration as a freelancer right now?", chips: ['Finding good clients', 'Getting paid on time', 'No legal contract protection', 'Tax / GST confusion', 'No benefits / insurance', 'Inconsistent income'] },
+  { id: 'entity', text: "Do you have your own registered business entity (GST number / company / LLP)?", chips: ['Yes, I have GST registration', 'Yes, I have a company/LLP', 'No, I work as an individual', 'Planning to register soon'] },
+  { id: 'expectation', text: "What do you most want from FreeYou? Pick the one that matters most.", chips: ['Use FY as my contracting entity', 'Health insurance cover', 'Better client discovery', 'Legal / TDS support', 'Financial planning tools', 'All of the above'] },
+  { id: 'city', text: "Almost done! Which city are you based in?", chips: ['Bangalore', 'Mumbai', 'Delhi/NCR', 'Hyderabad', 'Chennai', 'Pune', 'Other'] },
+];
+
+let chatStep = 0;
+let chatAnswers = {};
+let chatDone = false;
+
+function initInterview() {
+  const win = document.getElementById('chat-window');
+  win.innerHTML = '';
+  document.getElementById('chip-row').innerHTML = '';
+  chatStep = 0;
+  chatAnswers = {};
+  chatDone = false;
+  document.getElementById('interview-wrap').style.display = 'block';
+  document.getElementById('interview-complete').style.display = 'none';
+  setTimeout(() => askQuestion(0), 400);
+}
+
+function askQuestion(idx) {
+  if (idx >= QUESTIONS.length) { finishInterview(); return; }
+  const q = QUESTIONS[idx];
+  showTyping();
+  setTimeout(() => {
+    removeTyping();
+    addBubble(q.text, 'ai');
+    showChips(q.chips);
+    document.getElementById('chat-input').placeholder = 'Type or pick an option above...';
+    document.getElementById('chat-input').focus();
+  }, 900);
+}
+
+function showTyping() {
+  const win = document.getElementById('chat-window');
+  const el = document.createElement('div');
+  el.className = 'bubble-typing'; el.id = 'typing-indicator';
+  el.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
+  win.appendChild(el);
+  win.scrollTop = win.scrollHeight;
+}
+function removeTyping() { const t = document.getElementById('typing-indicator'); if(t) t.remove(); }
+
+function addBubble(text, who) {
+  const win = document.getElementById('chat-window');
+  const el = document.createElement('div');
+  el.className = 'chat-bubble bubble-' + who;
+  el.textContent = text;
+  win.appendChild(el);
+  win.scrollTop = win.scrollHeight;
+}
+
+function showChips(chips) {
+  const row = document.getElementById('chip-row');
+  row.innerHTML = '';
+  chips.forEach(c => {
+    const btn = document.createElement('button');
+    btn.className = 'chip';
+    btn.textContent = c;
+    btn.onclick = () => handleAnswer(c);
+    row.appendChild(btn);
+  });
+}
+
+function handleAnswer(answer) {
+  document.getElementById('chip-row').innerHTML = '';
+  addBubble(answer, 'user');
+  chatAnswers[QUESTIONS[chatStep].id] = answer;
+  chatStep++;
+  setTimeout(() => askQuestion(chatStep), 600);
+}
+
+function sendChatMessage() {
+  const input = document.getElementById('chat-input');
+  const val = input.value.trim();
+  if (!val || chatDone) return;
+  input.value = '';
+  handleAnswer(val);
+}
+
+function handleChatKey(e) { if (e.key === 'Enter') sendChatMessage(); }
+
+function finishInterview() {
+  chatDone = true;
+  document.getElementById('chip-row').innerHTML = '';
+  document.getElementById('chat-input').disabled = true;
+  document.querySelector('.chat-send').disabled = true;
+  addBubble("That's everything! 🎉 Building your profile now...", 'ai');
+
+  setTimeout(() => {
+    STATE.interview_done = true;
+    STATE.interview_answers = chatAnswers;
+    STATE.profile = {
+      skill: chatAnswers.skill || '',
+      exp: chatAnswers.exp || '',
+      rate: chatAnswers.rate || '',
+      city: chatAnswers.city || '',
+      challenge: chatAnswers.challenge || '',
+      expectation: chatAnswers.expectation || '',
+      entity: chatAnswers.entity || '',
+    };
+    saveState();
+
+    // Populate profile form
+    if (chatAnswers.city) document.getElementById('p-city').value = chatAnswers.city;
+    if (chatAnswers.skill) {
+      const sel = document.getElementById('p-skill');
+      for (let o of sel.options) { if (o.text.toLowerCase().includes(chatAnswers.skill.toLowerCase().split(' ')[0])) { sel.value = o.value; break; } }
+    }
+
+    // Show skills
+    const skillsWrap = document.getElementById('skills-display');
+    skillsWrap.innerHTML = '';
+    if (chatAnswers.skill) { const s = document.createElement('span'); s.className='skill-tag'; s.textContent=chatAnswers.skill; skillsWrap.appendChild(s); }
+
+    // Show summary
+    const summary = document.getElementById('profile-summary-display');
+    const rows = [
+      ['Skill Area', chatAnswers.skill],
+      ['Experience', chatAnswers.exp],
+      ['Project Type', chatAnswers.project_type],
+      ['Expected Rate', chatAnswers.rate],
+      ['Main Challenge', chatAnswers.challenge],
+      ['Business Entity', chatAnswers.entity],
+      ['Wants from FreeYou', chatAnswers.expectation],
+      ['City', chatAnswers.city],
+    ];
+    summary.innerHTML = rows.filter(r=>r[1]).map(r=>`<div class="profile-row"><span class="key">${r[0]}</span><span class="val">${r[1]}</span></div>`).join('');
+
+    document.getElementById('interview-wrap').style.display = 'none';
+    document.getElementById('interview-complete').style.display = 'block';
+    updateProgress(70);
+    document.getElementById('interview-prompt-alert').style.display = 'none';
+  }, 1200);
+}
+
+function restartInterview() {
+  document.getElementById('interview-wrap').style.display = 'block';
+  document.getElementById('interview-complete').style.display = 'none';
+  initInterview();
+}
+
+// ── NAVIGATION ──
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById('section-' + id).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.querySelector(`[onclick="showSection('${id}')"]`).classList.add('active');
+  const titles = { dashboard:'Dashboard', profile:'My Profile', interview:'AI Interview', contracts:'Contracts', benefits:'Benefits', projects:'Projects' };
+  document.getElementById('topbar-title').textContent = titles[id] || id;
+  if (id === 'interview' && !chatDone) initInterview();
+}
+
+// ── UPGRADE SIMULATION ──
+function simulateUpgrade() {
+  STATE.tier = 'paid';
+  STATE.subscription = { plan: 'Companion', start: new Date().toISOString(), expiry: new Date(Date.now() + 30*24*60*60*1000).toISOString() };
+  saveState();
+  applyTierUI();
+  alert('✅ Companion plan activated! (Demo simulation — real payment via Razorpay in production)');
+}
+
+function applyTierUI() {
+  const isPaid = STATE.tier === 'paid';
+  // Sidebar
+  const tierEl = document.getElementById('sb-tier');
+  tierEl.textContent = isPaid ? 'Companion' : 'Free Member';
+  tierEl.className = 'user-tier ' + (isPaid ? 'tier-paid' : 'tier-free');
+  // Locks
+  ['contracts','benefits','projects'].forEach(k => {
+    const lock = document.getElementById('lock-' + k);
+    if (lock) lock.style.display = isPaid ? 'none' : '';
+  });
+  // Banner
+  if (isPaid) {
+    document.getElementById('membership-banner').className = 'membership-banner mb-paid';
+    document.getElementById('mb-badge').className = 'mb-badge mb-badge-paid';
+    document.getElementById('mb-badge').textContent = '⚡ Companion Member';
+    document.getElementById('mb-title').textContent = 'Companion Plan Active';
+    const expiry = STATE.subscription?.expiry ? new Date(STATE.subscription.expiry).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}) : '';
+    document.getElementById('mb-sub').textContent = `Next renewal: ${expiry}. Health cover, contracts & projects unlocked.`;
+    document.getElementById('banner-upgrade-btn').style.display = 'none';
+  }
+  // Topbar
+  document.getElementById('topbar-tier-badge').textContent = isPaid ? '⚡ Companion Member' : 'Free Member';
+  document.getElementById('btn-upgrade').style.display = isPaid ? 'none' : 'block';
+  document.getElementById('qa-upgrade').style.display = isPaid ? 'none' : '';
+  // Cards
+  document.getElementById('membership-card').textContent = isPaid ? 'Companion' : 'Free';
+  if (isPaid && STATE.subscription?.expiry) {
+    const exp = new Date(STATE.subscription.expiry).toLocaleDateString('en-IN',{day:'numeric',month:'short'});
+    document.getElementById('membership-expiry-card').textContent = 'Renews ' + exp;
+  }
+  // Content unlocks
+  if (isPaid) {
+    document.getElementById('contracts-locked').style.display = 'none';
+    document.getElementById('contracts-content').style.display = 'block';
+    document.getElementById('projects-locked').style.display = 'none';
+    document.getElementById('projects-content').style.display = 'block';
+    ['health','contract','financial','projects','community'].forEach(b => {
+      const el = document.getElementById('benefit-' + b);
+      if (el) el.classList.add('unlocked');
+    });
+  }
+}
+
+// ── PROFILE ──
+function saveProfile() {
+  STATE.profile = STATE.profile || {};
+  STATE.profile.name = document.getElementById('p-name').value;
+  STATE.profile.phone = document.getElementById('p-phone').value;
+  STATE.profile.city = document.getElementById('p-city').value;
+  STATE.profile.skill = document.getElementById('p-skill').value;
+  STATE.profile.exp = document.getElementById('p-exp').value;
+  STATE.profile.rate = document.getElementById('p-rate').value;
+  STATE.profile.bio = document.getElementById('p-bio').value;
+  saveState();
+  updateProgress(STATE.interview_done ? 90 : 60);
+  alert('Profile saved!');
+}
+
+function loadProfile() {
+  const p = STATE.profile || {};
+  if (p.name) document.getElementById('p-name').value = p.name;
+  if (p.phone) document.getElementById('p-phone').value = p.phone;
+  if (p.city) document.getElementById('p-city').value = p.city;
+  if (p.rate) document.getElementById('p-rate').value = p.rate;
+  if (p.bio) document.getElementById('p-bio').value = p.bio;
+  if (STATE.name) document.getElementById('p-name').value = STATE.name;
+}
+
+// ── PROGRESS ──
+function updateProgress(pct) {
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-pct').textContent = pct + '%';
+}
+
+// ── STATE ──
+function saveState() { localStorage.setItem('fy_portal_state', JSON.stringify(STATE)); }
+function resetPortal() { if(confirm('Reset all demo data?')) { localStorage.removeItem('fy_portal_state'); location.reload(); } }
+
+// ── INIT ──
+document.addEventListener('DOMContentLoaded', () => {
+  if (STATE.name) { document.getElementById('sb-name').textContent = STATE.name; const a = document.getElementById('sb-avatar'); a.textContent = STATE.name.charAt(0).toUpperCase(); }
+  applyTierUI();
+  loadProfile();
+  updateProgress(STATE.interview_done ? 70 : 30);
+  if (STATE.interview_done) document.getElementById('interview-prompt-alert').style.display = 'none';
+});
+</script>
+</body>
+</html>

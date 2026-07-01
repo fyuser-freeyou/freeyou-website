@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FreeYou — Logo Concepts & Brand Kit</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root { --navy:#0A1628;--saffron:#F5A623;--teal:#00C9A7;--white:#fff; }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Inter',sans-serif;background:#0d1117;color:var(--white);padding:40px 24px;}
+    h1{font-family:'Sora',sans-serif;font-size:28px;font-weight:800;margin-bottom:6px;}
+    .sub{font-size:15px;color:rgba(255,255,255,0.55);margin-bottom:48px;}
+    h2{font-family:'Sora',sans-serif;font-size:16px;font-weight:700;color:rgba(255,255,255,0.5);letter-spacing:1.5px;text-transform:uppercase;margin:48px 0 20px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,0.08);}
+    .grid{display:flex;gap:24px;flex-wrap:wrap;margin-bottom:32px;}
+    .card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:32px;display:flex;flex-direction:column;align-items:center;gap:16px;min-width:180px;}
+    .card-dark{background:var(--navy);}
+    .card-light{background:#f5f5f5;}
+    .card-white{background:#fff;}
+    .card-label{font-size:11px;color:rgba(255,255,255,0.35);text-align:center;letter-spacing:1px;text-transform:uppercase;}
+    .card-light .card-label,.card-white .card-label{color:rgba(0,0,0,0.4);}
+    .download-btn{display:inline-block;padding:7px 16px;border:1px solid rgba(255,255,255,0.15);border-radius:6px;font-size:12px;color:rgba(255,255,255,0.6);cursor:pointer;transition:all 0.2s;background:none;font-family:inherit;}
+    .download-btn:hover{border-color:var(--saffron);color:var(--saffron);}
+    /* Colour swatches */
+    .swatches{display:flex;gap:12px;flex-wrap:wrap;}
+    .swatch{border-radius:12px;overflow:hidden;width:140px;}
+    .swatch-color{height:64px;}
+    .swatch-info{padding:10px 12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-top:none;border-radius:0 0 12px 12px;}
+    .swatch-name{font-size:13px;font-weight:600;margin-bottom:3px;}
+    .swatch-hex{font-size:11px;color:rgba(255,255,255,0.45);font-family:monospace;}
+    /* Typography */
+    .type-row{display:flex;align-items:baseline;gap:16px;padding:16px 0;border-bottom:1px solid rgba(255,255,255,0.06);}
+    .type-label{font-size:11px;color:rgba(255,255,255,0.35);min-width:120px;letter-spacing:0.5px;}
+    /* Usage rules */
+    .rule{padding:14px 18px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:10px;margin-bottom:8px;}
+    .rule-icon{display:inline-block;width:20px;}
+    .rule p{font-size:13px;color:rgba(255,255,255,0.65);line-height:1.55;}
+    /* Prompt box */
+    .prompt-box{background:rgba(0,201,167,0.06);border:1px solid rgba(0,201,167,0.2);border-radius:14px;padding:24px;}
+    .prompt-box h3{font-family:'Sora',sans-serif;font-size:15px;font-weight:700;color:var(--teal);margin-bottom:12px;}
+    .prompt-text{font-size:13px;color:rgba(255,255,255,0.72);line-height:1.75;white-space:pre-wrap;font-family:monospace;background:rgba(0,0,0,0.25);border-radius:8px;padding:16px;margin-bottom:12px;}
+    .copy-btn{padding:8px 18px;background:var(--teal);color:var(--navy);font-weight:700;font-size:12px;border:none;border-radius:7px;cursor:pointer;font-family:inherit;}
+  </style>
+</head>
+<body>
+
+<h1>FreeYou — Brand Kit & Logo Concepts</h1>
+<p class="sub">Vector logo options, brand colours, typography, and design AI prompts. All logos below are SVG — right-click to copy/download.</p>
+
+<!-- ── LOGO CONCEPTS ──────────────────────────────────── -->
+<h2>Logo Concepts — 3 Directions</h2>
+
+<div class="grid">
+
+  <!-- Concept A: FY Monogram -->
+  <div class="card card-dark">
+    <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="56" height="56" rx="14" fill="#F5A623"/>
+      <text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle"
+        font-family="'Sora', sans-serif" font-weight="800" font-size="22" fill="#0A1628">FY</text>
+    </svg>
+    <div class="card-label">Concept A<br/>FY Monogram Mark</div>
+    <button class="download-btn" onclick="downloadSVG('concept-a')">↓ SVG</button>
+  </div>
+
+  <!-- Concept B: Open F with accent dot -->
+  <div class="card card-dark">
+    <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg" id="concept-b-svg">
+      <rect width="56" height="56" rx="14" fill="#0A1628"/>
+      <!-- F shape -->
+      <rect x="16" y="13" width="5" height="30" rx="2" fill="#F5A623"/>
+      <rect x="16" y="13" width="22" height="5" rx="2" fill="#F5A623"/>
+      <rect x="16" y="25" width="16" height="4.5" rx="2" fill="#F5A623"/>
+      <!-- Accent dot = "you" -->
+      <circle cx="43" cy="39" r="5" fill="#00C9A7"/>
+    </svg>
+    <div class="card-label">Concept B<br/>Open-F with teal dot</div>
+    <button class="download-btn" onclick="downloadSVG('concept-b-svg')">↓ SVG</button>
+  </div>
+
+  <!-- Concept C: Abstract person / upward arrow -->
+  <div class="card card-dark">
+    <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg" id="concept-c-svg">
+      <rect width="56" height="56" rx="14" fill="#0A1628"/>
+      <!-- Person: circle head -->
+      <circle cx="28" cy="15" r="6" fill="#F5A623"/>
+      <!-- Body + arms open (freedom) -->
+      <rect x="25" y="22" width="6" height="14" rx="3" fill="#F5A623"/>
+      <!-- Left arm -->
+      <rect x="13" y="22" width="12" height="4.5" rx="2.5" fill="#F5A623"/>
+      <!-- Right arm -->
+      <rect x="31" y="22" width="12" height="4.5" rx="2.5" fill="#F5A623"/>
+      <!-- Legs with upward tilt -->
+      <rect x="21" y="36" width="5" height="10" rx="2.5" transform="rotate(-8 21 36)" fill="#00C9A7"/>
+      <rect x="30" y="36" width="5" height="10" rx="2.5" transform="rotate(8 30 36)" fill="#00C9A7"/>
+    </svg>
+    <div class="card-label">Concept C<br/>Open-arms person</div>
+    <button class="download-btn" onclick="downloadSVG('concept-c-svg')">↓ SVG</button>
+  </div>
+
+</div>
+
+<!-- WORDMARK LOCKUPS -->
+<h2>Horizontal Wordmarks</h2>
+<div class="grid">
+
+  <div class="card card-dark" style="min-width:280px;">
+    <svg width="220" height="44" viewBox="0 0 220 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Mark -->
+      <rect width="44" height="44" rx="11" fill="#F5A623"/>
+      <text x="22" y="29" dominant-baseline="middle" text-anchor="middle"
+        font-family="Sora,sans-serif" font-weight="800" font-size="17" fill="#0A1628">FY</text>
+      <!-- Wordmark -->
+      <text x="58" y="16" font-family="Sora,sans-serif" font-weight="800" font-size="18" fill="#ffffff">FreeYou</text>
+      <text x="58" y="34" font-family="Inter,sans-serif" font-weight="400" font-size="10" fill="rgba(255,255,255,0.45)" letter-spacing="0.5">FREELANCE PLATFORM</text>
+    </svg>
+    <div class="card-label">Dark background</div>
+  </div>
+
+  <div class="card card-white" style="min-width:280px;">
+    <svg width="220" height="44" viewBox="0 0 220 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="44" height="44" rx="11" fill="#F5A623"/>
+      <text x="22" y="29" dominant-baseline="middle" text-anchor="middle"
+        font-family="Sora,sans-serif" font-weight="800" font-size="17" fill="#0A1628">FY</text>
+      <text x="58" y="16" font-family="Sora,sans-serif" font-weight="800" font-size="18" fill="#0A1628">FreeYou</text>
+      <text x="58" y="34" font-family="Inter,sans-serif" font-weight="400" font-size="10" fill="rgba(10,22,40,0.45)" letter-spacing="0.5">FREELANCE PLATFORM</text>
+    </svg>
+    <div class="card-label" style="color:rgba(0,0,0,0.4);">Light background</div>
+  </div>
+
+  <div class="card card-dark" style="min-width:280px;">
+    <svg width="200" height="44" viewBox="0 0 200 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="44" height="44" rx="11" fill="white" fill-opacity="0.1"/>
+      <text x="22" y="29" dominant-baseline="middle" text-anchor="middle"
+        font-family="Sora,sans-serif" font-weight="800" font-size="17" fill="white">FY</text>
+      <text x="58" y="29" dominant-baseline="middle" font-family="Sora,sans-serif" font-weight="800" font-size="20" fill="white">FreeYou</text>
+    </svg>
+    <div class="card-label">Minimal / Monochrome</div>
+  </div>
+
+</div>
+
+<!-- FAVICON / SMALL SIZES -->
+<h2>Favicon & Small Sizes</h2>
+<div class="grid" style="align-items:center;">
+  <div class="card card-dark" style="padding:16px;">
+    <svg width="64" height="64" viewBox="0 0 64 64" fill="none"><rect width="64" height="64" rx="16" fill="#F5A623"/><text x="32" y="42" text-anchor="middle" font-family="Sora,sans-serif" font-weight="800" font-size="26" fill="#0A1628">FY</text></svg>
+    <div class="card-label">64px</div>
+  </div>
+  <div class="card card-dark" style="padding:16px;">
+    <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="8" fill="#F5A623"/><text x="16" y="22" text-anchor="middle" font-family="Sora,sans-serif" font-weight="800" font-size="13" fill="#0A1628">FY</text></svg>
+    <div class="card-label">32px</div>
+  </div>
+  <div class="card card-dark" style="padding:16px;">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect width="16" height="16" rx="4" fill="#F5A623"/><text x="8" y="12" text-anchor="middle" font-family="Sora,sans-serif" font-weight="800" font-size="7" fill="#0A1628">FY</text></svg>
+    <div class="card-label">16px (favicon)</div>
+  </div>
+</div>
+
+<!-- ── BRAND COLOURS ──────────────────────────────────── -->
+<h2>Brand Colours</h2>
+<div class="swatches">
+  <div class="swatch">
+    <div class="swatch-color" style="background:#F5A623;"></div>
+    <div class="swatch-info">
+      <div class="swatch-name">FreeYou Saffron</div>
+      <div class="swatch-hex">#F5A623</div>
+      <div class="swatch-hex">RGB 245, 166, 35</div>
+      <div class="swatch-hex">Primary CTA</div>
+    </div>
+  </div>
+  <div class="swatch">
+    <div class="swatch-color" style="background:#0A1628;"></div>
+    <div class="swatch-info">
+      <div class="swatch-name">FreeYou Navy</div>
+      <div class="swatch-hex">#0A1628</div>
+      <div class="swatch-hex">RGB 10, 22, 40</div>
+      <div class="swatch-hex">Primary bg / text on light</div>
+    </div>
+  </div>
+  <div class="swatch">
+    <div class="swatch-color" style="background:#00C9A7;"></div>
+    <div class="swatch-info">
+      <div class="swatch-name">FreeYou Teal</div>
+      <div class="swatch-hex">#00C9A7</div>
+      <div class="swatch-hex">RGB 0, 201, 167</div>
+      <div class="swatch-hex">Accent / KYC verified</div>
+    </div>
+  </div>
+  <div class="swatch">
+    <div class="swatch-color" style="background:#FF8C00;"></div>
+    <div class="swatch-info">
+      <div class="swatch-name">Saffron Dark</div>
+      <div class="swatch-hex">#FF8C00</div>
+      <div class="swatch-hex">RGB 255, 140, 0</div>
+      <div class="swatch-hex">Gradient end / hover</div>
+    </div>
+  </div>
+  <div class="swatch">
+    <div class="swatch-color" style="background:#F9FAFB;border:1px solid #eee;"></div>
+    <div class="swatch-info">
+      <div class="swatch-name" style="color:#333;">Off White</div>
+      <div class="swatch-hex" style="color:#666;">#F9FAFB</div>
+      <div class="swatch-hex" style="color:#666;">Light mode bg</div>
+    </div>
+  </div>
+  <div class="swatch">
+    <div class="swatch-color" style="background:#6C63FF;"></div>
+    <div class="swatch-info">
+      <div class="swatch-name">Indigo</div>
+      <div class="swatch-hex">#6C63FF</div>
+      <div class="swatch-hex">Tertiary accent</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── TYPOGRAPHY ──────────────────────────────────────── -->
+<h2>Typography</h2>
+<div style="max-width:600px;">
+  <div class="type-row">
+    <span class="type-label">Display / H1</span>
+    <span style="font-family:'Sora',sans-serif;font-weight:800;font-size:32px;">Sora 800</span>
+  </div>
+  <div class="type-row">
+    <span class="type-label">Heading H2</span>
+    <span style="font-family:'Sora',sans-serif;font-weight:700;font-size:24px;">Sora 700</span>
+  </div>
+  <div class="type-row">
+    <span class="type-label">Heading H3</span>
+    <span style="font-family:'Sora',sans-serif;font-weight:600;font-size:18px;">Sora 600</span>
+  </div>
+  <div class="type-row">
+    <span class="type-label">Body text</span>
+    <span style="font-family:'Inter',sans-serif;font-weight:400;font-size:15px;">Inter 400 — Used for all body copy, descriptions, labels</span>
+  </div>
+  <div class="type-row">
+    <span class="type-label">UI Labels</span>
+    <span style="font-family:'Inter',sans-serif;font-weight:600;font-size:13px;">Inter 600 — Buttons, tags, navigation</span>
+  </div>
+  <div class="type-row">
+    <span class="type-label">Captions</span>
+    <span style="font-family:'Inter',sans-serif;font-weight:400;font-size:12px;color:rgba(255,255,255,0.5);">Inter 400 · Muted — Meta text, footnotes, captions</span>
+  </div>
+</div>
+<p style="font-size:12px;color:rgba(255,255,255,0.4);margin-top:12px;">Google Fonts: <a href="https://fonts.google.com/specimen/Sora" target="_blank" style="color:#F5A623;">Sora</a> · <a href="https://fonts.google.com/specimen/Inter" target="_blank" style="color:#F5A623;">Inter</a></p>
+
+<!-- ── USAGE RULES ──────────────────────────────────────── -->
+<h2>Logo Usage Rules</h2>
+<div style="max-width:600px;">
+  <div class="rule"><p><span class="rule-icon">✅</span> Use the saffron mark on navy/dark backgrounds — highest visibility</p></div>
+  <div class="rule"><p><span class="rule-icon">✅</span> Use the dark mark version on white/light backgrounds</p></div>
+  <div class="rule"><p><span class="rule-icon">✅</span> Minimum size: 24px height for the mark, 80px for the horizontal lockup</p></div>
+  <div class="rule"><p><span class="rule-icon">✅</span> Keep clear space equal to the height of the "F" on all sides</p></div>
+  <div class="rule"><p><span class="rule-icon">❌</span> Do not stretch, skew, or rotate the logo</p></div>
+  <div class="rule"><p><span class="rule-icon">❌</span> Do not use on busy photographic backgrounds without an overlay</p></div>
+  <div class="rule"><p><span class="rule-icon">❌</span> Do not recreate the logo in different fonts — always use the SVG file</p></div>
+  <div class="rule"><p><span class="rule-icon">❌</span> Do not apply drop shadows, outlines, or effects to the mark</p></div>
+</div>
+
+<!-- ── DESIGN AI PROMPTS ──────────────────────────────── -->
+<h2>Design AI Prompts — Copy & Use</h2>
+
+<div class="prompt-box" style="margin-bottom:16px;">
+  <h3>🎨 Prompt for Ideogram.ai / Midjourney (Logo Generation)</h3>
+  <div class="prompt-text" id="prompt1">Professional SaaS company logo for "FreeYou", a freelance platform for independent professionals in India. Design a clean vector logomark in Zoho / Freshworks / Razorpay style — geometric, minimal, fully scalable. The mark should be an interlocked "FY" monogram in a rounded square container, OR an abstract geometric person with arms open wide suggesting freedom. Primary color: deep saffron #F5A623 on navy #0A1628. Secondary accent: teal #00C9A7. Wordmark in geometric sans-serif (Sora or Nunito Bold style). The logo must work perfectly at 16x16 favicon size AND full size 400px. Style: flat vector, zero gradients in the primary mark, professional B2B SaaS, South Asian startup aesthetic. Provide horizontal lockup (mark + wordmark) on dark background, on white background, and the isolated mark alone. Clean white background version also. No 3D, no shadows, no complex illustration.</div>
+  <button class="copy-btn" onclick="copyText('prompt1')">📋 Copy Prompt</button>
+</div>
+
+<div class="prompt-box" style="margin-bottom:16px;">
+  <h3>✏️ Prompt for Adobe Firefly / DALL-E 3 (Variations)</h3>
+  <div class="prompt-text" id="prompt2">Vector logo icon for a freelancing platform called FreeYou. Style: Zoho-inspired clean geometric SaaS logo. Create 4 variations:
+1. Bold "FY" letterform in a rounded square, saffron orange (#F5A623) on deep navy (#0A1628)
+2. Abstract human figure with arms spread wide (freedom), geometric style, saffron
+3. Stylized "F" with a teal accent circle representing "you" — the person
+4. Two interlocking triangles forming an "F" + upward arrow, suggesting growth
+
+Each logo: flat vector, scalable, professional, no gradients, no drop shadows. Colors: #F5A623 saffron, #0A1628 navy, #00C9A7 teal accent only. Indian B2B startup aesthetic.</div>
+  <button class="copy-btn" onclick="copyText('prompt2')">📋 Copy Prompt</button>
+</div>
+
+<div class="prompt-box">
+  <h3>🖼️ Prompt for Brand Identity (Full Brand Sheet)</h3>
+  <div class="prompt-text" id="prompt3">Full brand identity sheet for FreeYou — an Indian freelancing platform. Include on one sheet:
+- Primary logo (mark + wordmark horizontal)
+- Logo mark alone in 3 sizes
+- Color palette: Saffron #F5A623, Navy #0A1628, Teal #00C9A7
+- Typography specimen: Sora (headings) + Inter (body)
+- Logo on dark background
+- Logo on white background
+- Monochrome (all black) version
+- Incorrect usage examples (crossed out)
+- Brand tagline: "Bharat's Independent Professionals"
+
+Style: Clean tech startup brand sheet, professional, minimal, similar to Zoho / Freshworks brand guidelines. A4 landscape format. White and navy backgrounds.</div>
+  <button class="copy-btn" onclick="copyText('prompt3')">📋 Copy Prompt</button>
+</div>
+
+<script>
+function copyText(id) {
+  const text = document.getElementById(id).innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.querySelector(`#${id} + button`) || event.target;
+    event.target.innerText = '✓ Copied!';
+    setTimeout(() => { event.target.innerText = '📋 Copy Prompt'; }, 2000);
+  });
+}
+
+function downloadSVG(id) {
+  const svg = document.getElementById(id);
+  if (!svg) return;
+  const data = new XMLSerializer().serializeToString(svg);
+  const blob = new Blob([data], {type:'image/svg+xml'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = `freeyou-logo-${id}.svg`; a.click();
+  URL.revokeObjectURL(url);
+}
+</script>
+</body>
+</html>

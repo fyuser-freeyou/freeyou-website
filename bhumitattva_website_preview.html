@@ -1,0 +1,538 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans)}
+.preview-shell{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;background:var(--color-background-primary)}
+.browser-bar{background:var(--color-background-secondary);border-bottom:0.5px solid var(--color-border-tertiary);padding:8px 12px;display:flex;align-items:center;gap:8px}
+.browser-dots{display:flex;gap:5px}
+.dot{width:10px;height:10px;border-radius:50%}
+.dot-r{background:#ff5f57}.dot-y{background:#febc2e}.dot-g{background:#28c840}
+.url-bar{flex:1;background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:6px;padding:4px 10px;font-size:12px;color:var(--color-text-secondary);margin:0 8px}
+.nav-tabs{display:flex;gap:2px;padding:0 16px;background:var(--color-background-secondary);border-bottom:0.5px solid var(--color-border-tertiary)}
+.nav-tab{padding:10px 18px;font-size:12px;font-weight:500;cursor:pointer;border-bottom:2px solid transparent;color:var(--color-text-secondary);transition:all .2s}
+.nav-tab.active{color:#2D6A2D;border-bottom-color:#2D6A2D}
+.nav-tab:hover:not(.active){color:var(--color-text-primary)}
+.page{display:none}.page.active{display:block}
+
+/* Site nav */
+.site-nav{background:#1B4A1B;padding:12px 24px;display:flex;align-items:center;justify-content:space-between}
+.logo-row{display:flex;align-items:center;gap:8px;color:#fff}
+.logo-leaf{font-size:1.4rem}
+.logo-txt{font-size:14px;font-weight:500}
+.site-links{display:flex;gap:4px;align-items:center}
+.slink{color:rgba(255,255,255,.8);padding:5px 10px;border-radius:6px;font-size:11.5px;cursor:pointer}
+.slink:hover,.slink.active{background:rgba(255,255,255,.12);color:#fff}
+.btn-donate{background:#E8A838;color:#1a1a1a;padding:6px 14px;border-radius:20px;font-size:11.5px;font-weight:500;cursor:pointer}
+
+/* Hero */
+.hero{background:linear-gradient(135deg,#1B4A1B 0%,#2D6A2D 60%,#4a8a2a 100%);padding:36px 24px 28px;color:#fff}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.15);border:0.5px solid rgba(255,255,255,.25);color:#fff;padding:4px 12px;border-radius:20px;font-size:11px;margin-bottom:12px}
+.hero h1{font-size:24px;font-weight:500;margin-bottom:8px;line-height:1.3}
+.hero h1 span{color:#F5C96A}
+.hero-sub{font-size:12.5px;color:rgba(255,255,255,.8);margin-bottom:18px;max-width:420px;line-height:1.6}
+.hero-btns{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px}
+.btn-w{background:#fff;color:#1B4A1B;padding:8px 18px;border-radius:20px;font-size:12px;font-weight:500;cursor:pointer}
+.btn-o{background:transparent;border:1px solid rgba(255,255,255,.5);color:#fff;padding:8px 18px;border-radius:20px;font-size:12px;cursor:pointer}
+.hero-stats{display:flex;gap:24px}
+.stat-n{font-size:20px;font-weight:500;color:#F5C96A}
+.stat-l{font-size:10px;color:rgba(255,255,255,.65);text-transform:uppercase;letter-spacing:.05em}
+
+/* Sections */
+.sec{padding:24px}
+.sec-lbl{display:inline-block;background:#EDE7D9;color:#7C5230;font-size:10px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;padding:3px 10px;border-radius:20px;margin-bottom:8px}
+.sec h2{font-size:18px;font-weight:500;margin-bottom:6px}
+.sec p.sub{font-size:12.5px;color:var(--color-text-secondary);margin-bottom:20px}
+.sec.alt{background:#F9F5ED}
+
+/* Pillars */
+.pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.pillar{background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:16px;border:0.5px solid var(--color-border-tertiary)}
+.pillar-icon{font-size:24px;margin-bottom:8px}
+.pillar h3{font-size:13px;font-weight:500;margin-bottom:4px}
+.pillar p{font-size:11.5px;color:var(--color-text-secondary);line-height:1.5}
+
+/* Event cards */
+.ev-card{display:flex;gap:14px;background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:14px;border:0.5px solid var(--color-border-tertiary);margin-bottom:10px}
+.ev-date{background:#2D6A2D;color:#fff;border-radius:8px;padding:8px 12px;text-align:center;min-width:52px;flex-shrink:0}
+.ev-day{font-size:18px;font-weight:500;line-height:1}
+.ev-mon{font-size:9px;text-transform:uppercase;opacity:.85;margin-top:2px}
+.ev-info h3{font-size:13px;font-weight:500;margin-bottom:4px}
+.ev-info p{font-size:11.5px;color:var(--color-text-secondary);margin-bottom:6px;line-height:1.5}
+.ev-tags{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px}
+.tag{background:#EDE7D9;color:#7C5230;font-size:10px;font-weight:500;padding:2px 8px;border-radius:20px}
+.tag.open{background:#d4f0d4;color:#1B4A1B}
+.tag.free{background:#fff3cd;color:#7a5500}
+.btn-reg{background:#2D6A2D;color:#fff;padding:5px 12px;border-radius:20px;font-size:11px;cursor:pointer;display:inline-block}
+
+/* Gallery grid */
+.gal-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.gal-item{border-radius:8px;overflow:hidden;aspect-ratio:1;position:relative;cursor:pointer}
+.gal-item img{width:100%;height:100%;object-fit:cover;display:block}
+.gal-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.5) 0%,transparent 60%);opacity:0;display:flex;align-items:flex-end;padding:8px;transition:.2s}
+.gal-item:hover .gal-overlay{opacity:1}
+.gal-overlay span{color:#fff;font-size:10.5px;font-weight:500}
+
+/* Volunteer */
+.ann-card{background:var(--color-background-primary);border-radius:var(--border-radius-md);border-left:3px solid #2D6A2D;padding:12px 14px;margin-bottom:8px}
+.ann-date{font-size:10px;color:var(--color-text-secondary);margin-bottom:4px}
+.ann-card h4{font-size:12.5px;font-weight:500;margin-bottom:4px}
+.ann-card p{font-size:11.5px;color:var(--color-text-secondary);line-height:1.5}
+.vol-highlight{background:linear-gradient(135deg,#2D6A2D,#1B4A1B);color:#fff;border-radius:var(--border-radius-md);padding:20px;text-align:center}
+.vol-highlight h3{color:#fff;font-size:14px;font-weight:500;margin-bottom:6px}
+.vol-highlight p{color:rgba(255,255,255,.8);font-size:12px;margin-bottom:14px;line-height:1.5}
+.btn-vol{background:#fff;color:#1B4A1B;padding:7px 18px;border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;display:inline-block}
+
+/* Donate */
+.donate-hero{background:linear-gradient(135deg,#5a3a20,#7C5230);color:#fff;border-radius:var(--border-radius-md);padding:28px;text-align:center;margin-bottom:20px}
+.donate-hero h2{color:#fff;font-size:18px;font-weight:500;margin-bottom:8px}
+.donate-hero p{color:rgba(255,255,255,.8);font-size:12px;margin-bottom:16px;line-height:1.6}
+.btn-pay{background:#E8A838;color:#1a1a1a;padding:10px 24px;border-radius:20px;font-size:13px;font-weight:500;cursor:pointer;display:inline-block}
+.impact-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px}
+.impact-card{background:#F9F5ED;border-radius:var(--border-radius-md);padding:16px;text-align:center}
+.impact-icon{font-size:22px;margin-bottom:6px}
+.impact-card h4{font-size:12px;font-weight:500;color:#1B4A1B;margin-bottom:4px}
+.impact-card p{font-size:11px;color:var(--color-text-secondary);line-height:1.5}
+
+/* Admin */
+.admin-wrap{display:flex;min-height:440px}
+.admin-sidebar{width:170px;background:#1B4A1B;flex-shrink:0}
+.admin-logo{padding:14px 16px;border-bottom:0.5px solid rgba(255,255,255,.1)}
+.admin-logo-txt{color:#fff;font-size:12px;font-weight:500}
+.admin-logo-sub{color:rgba(255,255,255,.5);font-size:10px}
+.admin-nav-item{display:flex;align-items:center;gap:8px;padding:10px 16px;color:rgba(255,255,255,.7);font-size:11.5px;cursor:pointer;transition:.15s}
+.admin-nav-item:hover,.admin-nav-item.active{background:rgba(255,255,255,.1);color:#fff}
+.admin-nav-item i{font-size:14px}
+.admin-main{flex:1;background:#f4f5f7}
+.admin-topbar{background:#fff;border-bottom:0.5px solid var(--color-border-tertiary);padding:10px 16px;display:flex;justify-content:space-between;align-items:center}
+.admin-topbar h3{font-size:14px;font-weight:500}
+.admin-content{padding:16px}
+.admin-stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.astat{background:#fff;border-radius:var(--border-radius-md);padding:12px;border:0.5px solid var(--color-border-tertiary)}
+.astat-n{font-size:22px;font-weight:500;color:#2D6A2D}
+.astat-l{font-size:10px;color:var(--color-text-secondary)}
+.admin-card{background:#fff;border-radius:var(--border-radius-md);padding:14px;border:0.5px solid var(--color-border-tertiary);margin-bottom:12px}
+.admin-card h4{font-size:12px;font-weight:500;margin-bottom:10px;padding-bottom:8px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.quick-actions{display:flex;flex-direction:column;gap:6px}
+.qa-btn{background:#f4f5f7;border:0.5px solid var(--color-border-tertiary);border-radius:6px;padding:8px 12px;font-size:11.5px;cursor:pointer;color:var(--color-text-primary);text-align:left}
+.qa-btn:hover{background:#EDE7D9}
+.ev-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.ev-row:last-child{border-bottom:none}
+.ev-row-title{font-size:11.5px;font-weight:500}
+.ev-row-sub{font-size:10.5px;color:var(--color-text-secondary)}
+.btn-edit{background:#EDE7D9;color:#7C5230;padding:3px 10px;border-radius:4px;font-size:10px;cursor:pointer}
+
+/* Admin panels */
+.admin-panel{display:none}.admin-panel.active{display:block}
+.form-row-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.form-lbl{font-size:11px;font-weight:500;color:var(--color-text-secondary);margin-bottom:4px}
+.form-inp{width:100%;padding:7px 10px;border:0.5px solid var(--color-border-tertiary);border-radius:6px;font-size:12px;font-family:var(--font-sans);background:var(--color-background-primary);color:var(--color-text-primary)}
+.form-inp:focus{outline:none;border-color:#2D6A2D}
+.form-group-a{margin-bottom:10px}
+.save-btn{background:#2D6A2D;color:#fff;padding:8px 18px;border-radius:20px;font-size:12px;cursor:pointer;border:none;font-family:var(--font-sans)}
+.table-wrap{overflow:hidden;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary)}
+.data-table{width:100%;border-collapse:collapse;font-size:11.5px}
+.data-table th{background:#F9F5ED;padding:8px 12px;text-align:left;font-size:10px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.05em}
+.data-table td{padding:10px 12px;border-bottom:0.5px solid var(--color-border-tertiary);color:var(--color-text-primary)}
+.data-table tr:last-child td{border-bottom:none}
+.badge{padding:2px 8px;border-radius:20px;font-size:10px;font-weight:500}
+.badge-open{background:#d4f0d4;color:#1B4A1B}
+.badge-past{background:#f3f4f6;color:#888}
+
+/* Alert */
+.alert-success{background:#d4f0d4;color:#1B4A1B;border:0.5px solid #a8d8a8;border-radius:6px;padding:8px 12px;font-size:12px;margin-bottom:12px}
+
+/* Upload zone */
+.upload-zone{border:2px dashed var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:24px;text-align:center;cursor:pointer;transition:.2s}
+.upload-zone:hover{border-color:#2D6A2D;background:#F9F5ED}
+.upload-icon{font-size:28px;margin-bottom:6px}
+.upload-zone p{font-size:12px;color:var(--color-text-secondary)}
+.photo-preview-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:10px}
+.photo-thumb{border-radius:6px;overflow:hidden;aspect-ratio:1}
+.photo-thumb img{width:100%;height:100%;object-fit:cover}
+</style>
+
+<h2 class="sr-only">Bhumi Tattva Foundation website preview — interactive demo showing all pages</h2>
+
+<div style="padding:1rem 0">
+<div class="preview-shell">
+  <div class="browser-bar">
+    <div class="browser-dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+    <div class="url-bar" id="urlBar">https://bhumitattva.org/</div>
+  </div>
+
+  <div class="nav-tabs">
+    <div class="nav-tab active" onclick="showPage('home',this,'/')">Home</div>
+    <div class="nav-tab" onclick="showPage('events',this,'/events')">Events</div>
+    <div class="nav-tab" onclick="showPage('gallery',this,'/gallery')">Gallery</div>
+    <div class="nav-tab" onclick="showPage('volunteer',this,'/volunteer')">Volunteer Hub</div>
+    <div class="nav-tab" onclick="showPage('donate',this,'/donate')">Support Us</div>
+    <div class="nav-tab" onclick="showPage('admin',this,'/admin/')">Admin Panel</div>
+  </div>
+
+  <!-- HOME -->
+  <div class="page active" id="page-home">
+    <div class="site-nav">
+      <div class="logo-row"><span class="logo-leaf">🌱</span><span class="logo-txt">Bhumi Tattva Foundation</span></div>
+      <div class="site-links">
+        <div class="slink active">Home</div><div class="slink" onclick="switchTo('events')">Events</div><div class="slink" onclick="switchTo('gallery')">Gallery</div><div class="slink" onclick="switchTo('volunteer')">Volunteer Hub</div>
+        <div class="btn-donate" onclick="switchTo('donate')">Support Us</div>
+      </div>
+    </div>
+    <div class="hero">
+      <div class="hero-badge">🌱 Bengaluru's Soil Revival Movement</div>
+      <h1>Healing the <span>Soil</span>,<br>Empowering Communities</h1>
+      <p class="hero-sub">We bring volunteers, farmers, and communities together to restore soil health and build a greener Bengaluru.</p>
+      <div class="hero-btns"><div class="btn-w" onclick="switchTo('volunteer')">Become a Volunteer</div><div class="btn-o" onclick="switchTo('events')">Upcoming Events</div></div>
+      <div class="hero-stats">
+        <div><div class="stat-n">200+</div><div class="stat-l">Volunteers</div></div>
+        <div><div class="stat-n">50+</div><div class="stat-l">Events</div></div>
+        <div><div class="stat-n">15+</div><div class="stat-l">Communities</div></div>
+        <div><div class="stat-n">3+</div><div class="stat-l">Years Active</div></div>
+      </div>
+    </div>
+    <div class="sec alt">
+      <div class="sec-lbl">Our Mission</div>
+      <h2>What We Stand For</h2>
+      <p class="sub">Revitalising soil health through community action, farmer outreach, and education.</p>
+      <div class="pillars">
+        <div class="pillar"><div class="pillar-icon">🌾</div><h3>Soil Awareness</h3><p>Workshops and campaigns to educate communities on soil vitality.</p></div>
+        <div class="pillar"><div class="pillar-icon">🤝</div><h3>Community Projects</h3><p>Local initiatives restoring land and supporting farmers.</p></div>
+        <div class="pillar"><div class="pillar-icon">🧑‍🌾</div><h3>Farmer Outreach</h3><p>Hands-on training for sustainable farming practices.</p></div>
+      </div>
+    </div>
+    <div class="sec">
+      <div class="sec-lbl">Events</div>
+      <h2>Upcoming Programmes</h2>
+      <p class="sub">Join us for field visits and workshops across Bengaluru.</p>
+      <div class="ev-card">
+        <div class="ev-date"><div class="ev-day">06</div><div class="ev-mon">Jul 2026</div></div>
+        <div class="ev-info">
+          <h3>Farm Visit — Hesaraghatta Organic Farm</h3>
+          <div class="ev-tags"><span class="tag open">✅ Open</span><span class="tag free">Free</span><span class="tag">📍 Hesaraghatta</span><span class="tag">🕐 7 AM – 12 PM</span></div>
+          <p>Join us for a morning at the Hesaraghatta organic farm! Weeding, composting, and soil health learning.</p>
+          <div class="btn-reg" onclick="switchTo('events')">Register Now →</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EVENTS -->
+  <div class="page" id="page-events">
+    <div class="site-nav"><div class="logo-row"><span class="logo-leaf">🌱</span><span class="logo-txt">Bhumi Tattva Foundation</span></div><div class="site-links"><div class="slink" onclick="switchTo('home')">Home</div><div class="slink active">Events</div><div class="slink" onclick="switchTo('gallery')">Gallery</div><div class="btn-donate" onclick="switchTo('donate')">Support Us</div></div></div>
+    <div style="background:linear-gradient(135deg,#1B4A1B,#2D6A2D);padding:28px 24px 20px;color:#fff;text-align:center">
+      <h1 style="color:#fff;font-size:22px;font-weight:500;margin-bottom:6px">Upcoming Events</h1>
+      <p style="color:rgba(255,255,255,.8);font-size:12.5px">Farm visits, soil workshops, community clean-ups — join us in Bengaluru.</p>
+    </div>
+    <div class="sec">
+      <div class="ev-card">
+        <div class="ev-date"><div class="ev-day">06</div><div class="ev-mon">Jul 2026</div></div>
+        <div class="ev-info">
+          <h3>Farm Visit — Hesaraghatta Organic Farm</h3>
+          <div class="ev-tags"><span class="tag open">✅ Registration Open</span><span class="tag free">🎟️ Free</span><span class="tag">📍 Hesaraghatta, Bengaluru</span><span class="tag">🕐 7:00 AM – 12:00 PM</span></div>
+          <p>Join us for a morning at the Hesaraghatta organic farm! We'll be doing weeding, composting, and learning about soil health directly from the farmers. All levels welcome — bring water and wear comfortable clothes.</p>
+          <p style="font-size:11.5px;color:#1B4A1B;font-weight:500">🪑 15 spots remaining</p>
+          <div style="display:flex;gap:8px;margin-top:8px">
+            <div class="btn-reg">📝 Register Now</div>
+            <div style="background:#25D366;color:#fff;padding:5px 12px;border-radius:20px;font-size:11px;cursor:pointer">💬 WhatsApp Group</div>
+          </div>
+        </div>
+      </div>
+      <div class="ev-card">
+        <div class="ev-date"><div class="ev-day">20</div><div class="ev-mon">Jul 2026</div></div>
+        <div class="ev-info">
+          <h3>Soil Awareness Workshop — Koramangala</h3>
+          <div class="ev-tags"><span class="tag open">✅ Registration Open</span><span class="tag free">🎟️ Free</span><span class="tag">📍 Koramangala, Bengaluru</span><span class="tag">🕐 10:00 AM – 1:00 PM</span></div>
+          <p>Hands-on workshop covering soil quality testing, composting techniques, and sustainable living. Open to families and students.</p>
+          <p style="font-size:11.5px;color:#1B4A1B;font-weight:500">🪑 30 spots remaining</p>
+          <div class="btn-reg" style="margin-top:8px">📝 Register Now</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GALLERY -->
+  <div class="page" id="page-gallery">
+    <div class="site-nav"><div class="logo-row"><span class="logo-leaf">🌱</span><span class="logo-txt">Bhumi Tattva Foundation</span></div><div class="site-links"><div class="slink" onclick="switchTo('home')">Home</div><div class="slink" onclick="switchTo('events')">Events</div><div class="slink active">Gallery</div><div class="btn-donate" onclick="switchTo('donate')">Support Us</div></div></div>
+    <div style="background:linear-gradient(135deg,#1B4A1B,#2D6A2D);padding:28px 24px 20px;color:#fff;text-align:center">
+      <h1 style="color:#fff;font-size:22px;font-weight:500;margin-bottom:6px">Photo Gallery</h1>
+      <p style="color:rgba(255,255,255,.8);font-size:12.5px">Moments from our soil revival journeys across Bengaluru communities.</p>
+    </div>
+    <div class="sec">
+      <div class="sec-lbl">Albums</div>
+      <h2>Programme Albums</h2>
+      <p class="sub">Admin uploads photos to albums after each event — they appear here automatically.</p>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px">
+        <div style="background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);overflow:hidden;cursor:pointer">
+          <div style="position:relative">
+            <img src="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=400&q=70" style="width:100%;height:140px;object-fit:cover;display:block">
+            <span style="position:absolute;top:8px;right:8px;background:rgba(0,0,0,.6);color:#fff;font-size:10px;font-weight:500;padding:2px 8px;border-radius:20px">12 photos</span>
+          </div>
+          <div style="padding:12px">
+            <div style="font-size:12.5px;font-weight:500;margin-bottom:2px">Farm Visit – Jun 2025</div>
+            <div style="font-size:11px;color:var(--color-text-secondary)">Hesaraghatta organic farm</div>
+          </div>
+        </div>
+        <div style="background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);overflow:hidden;cursor:pointer">
+          <div style="position:relative">
+            <img src="https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?w=400&q=70" style="width:100%;height:140px;object-fit:cover;display:block">
+            <span style="position:absolute;top:8px;right:8px;background:rgba(0,0,0,.6);color:#fff;font-size:10px;font-weight:500;padding:2px 8px;border-radius:20px">8 photos</span>
+          </div>
+          <div style="padding:12px">
+            <div style="font-size:12.5px;font-weight:500;margin-bottom:2px">Compost Workshop – Aug 2025</div>
+            <div style="font-size:11px;color:var(--color-text-secondary)">Koramangala community hall</div>
+          </div>
+        </div>
+        <div style="background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);overflow:hidden;cursor:pointer">
+          <div style="position:relative">
+            <img src="https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=400&q=70" style="width:100%;height:140px;object-fit:cover;display:block">
+            <span style="position:absolute;top:8px;right:8px;background:rgba(0,0,0,.6);color:#fff;font-size:10px;font-weight:500;padding:2px 8px;border-radius:20px">15 photos</span>
+          </div>
+          <div style="padding:12px">
+            <div style="font-size:12.5px;font-weight:500;margin-bottom:2px">Tree Planting Day – Oct 2025</div>
+            <div style="font-size:11px;color:var(--color-text-secondary)">Bannerghatta Road</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VOLUNTEER -->
+  <div class="page" id="page-volunteer">
+    <div class="site-nav"><div class="logo-row"><span class="logo-leaf">🌱</span><span class="logo-txt">Bhumi Tattva Foundation</span></div><div class="site-links"><div class="slink" onclick="switchTo('home')">Home</div><div class="slink" onclick="switchTo('events')">Events</div><div class="slink active">Volunteer Hub</div><div class="btn-donate" onclick="switchTo('donate')">Support Us</div></div></div>
+    <div style="background:linear-gradient(135deg,#1B4A1B,#2D6A2D);padding:28px 24px 20px;color:#fff;text-align:center">
+      <h1 style="color:#fff;font-size:22px;font-weight:500;margin-bottom:6px">Volunteer Hub 🌱</h1>
+      <p style="color:rgba(255,255,255,.8);font-size:12.5px">Your go-to space for updates, events, and staying connected with the community.</p>
+    </div>
+    <div class="sec">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+        <div>
+          <h3 style="font-size:14px;font-weight:500;margin-bottom:12px">Latest from the Community</h3>
+          <div class="ann-card"><div class="ann-date">📢 &nbsp;17 Jun 2026</div><h4>Welcome to the Bhumi Tattva Volunteer Hub!</h4><p>Stay connected — this is your space for event updates, highlights, and community news.</p></div>
+          <div class="ann-card" style="border-left-color:#E8A838;background:#fff3cd"><div class="ann-date">📅 &nbsp;28 May 2026</div><h4>Farm Visit recap — what a morning it was!</h4><p>Thank you to all 22 volunteers who joined us at Hesaraghatta. Photos now live in the Gallery!</p></div>
+          <div class="ann-card" style="border-left-color:#2196F3;background:#e8f4fd"><div class="ann-date">📸 &nbsp;15 May 2026</div><h4>Photos uploaded — May Compost Workshop</h4><p>35 new photos from the Koramangala workshop are now in the gallery. Tag yourself!</p></div>
+        </div>
+        <div>
+          <div class="vol-highlight">
+            <h3>Join Our Volunteer Community</h3>
+            <p>Sign up to get event invitations, activity updates, and connect with like-minded Bengalureans.</p>
+            <div class="btn-vol">Register as Volunteer</div>
+          </div>
+          <div style="background:#F9F5ED;border-radius:var(--border-radius-md);padding:16px;margin-top:12px;text-align:center">
+            <div style="font-size:13px;font-weight:500;margin-bottom:6px">💬 WhatsApp Community</div>
+            <p style="font-size:11.5px;color:var(--color-text-secondary);margin-bottom:12px">Get instant event reminders and connect with the community.</p>
+            <div style="background:#25D366;color:#fff;padding:7px 18px;border-radius:20px;font-size:12px;cursor:pointer;display:inline-block">Open WhatsApp Group</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DONATE -->
+  <div class="page" id="page-donate">
+    <div class="site-nav"><div class="logo-row"><span class="logo-leaf">🌱</span><span class="logo-txt">Bhumi Tattva Foundation</span></div><div class="site-links"><div class="slink" onclick="switchTo('home')">Home</div><div class="slink active">Support Us</div><div class="btn-donate">Donate Now</div></div></div>
+    <div style="background:linear-gradient(135deg,#5a3a20,#7C5230);padding:28px 24px 20px;color:#fff;text-align:center">
+      <h1 style="color:#fff;font-size:22px;font-weight:500;margin-bottom:6px">Support Our Mission</h1>
+      <p style="color:rgba(255,255,255,.8);font-size:12.5px">Every contribution helps us restore soil and empower farmers in Bengaluru.</p>
+    </div>
+    <div class="sec">
+      <div class="impact-grid">
+        <div class="impact-card"><div class="impact-icon">🌱</div><h4>₹500</h4><p>Funds soil testing at one farm visit</p></div>
+        <div class="impact-card"><div class="impact-icon">🧑‍🌾</div><h4>₹1,500</h4><p>Supports a half-day farming workshop for 15 farmers</p></div>
+        <div class="impact-card"><div class="impact-icon">🌳</div><h4>₹3,000</h4><p>Funds compost bin setup for a community of 50 families</p></div>
+        <div class="impact-card"><div class="impact-icon">🏫</div><h4>₹5,000</h4><p>Sponsors a soil awareness programme for 100 students</p></div>
+      </div>
+      <div class="donate-hero">
+        <h2>Make a Donation</h2>
+        <p>Secure payments via Razorpay. Receipts available for 80G tax exemption where applicable.</p>
+        <div class="btn-pay">Donate via Razorpay ❤️</div>
+        <p style="font-size:10px;color:rgba(255,255,255,.5);margin-top:12px">All donations go directly to field programmes.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADMIN -->
+  <div class="page" id="page-admin">
+    <div class="admin-wrap">
+      <div class="admin-sidebar">
+        <div class="admin-logo"><div class="admin-logo-txt">🌱 Bhumi Tattva</div><div class="admin-logo-sub">Admin Panel</div></div>
+        <div style="padding:8px 0">
+          <div class="admin-nav-item active" onclick="switchAdmin('dashboard',this)"><i class="ti ti-home"></i> Dashboard</div>
+          <div class="admin-nav-item" onclick="switchAdmin('events-admin',this)"><i class="ti ti-calendar"></i> Events</div>
+          <div class="admin-nav-item" onclick="switchAdmin('gallery-admin',this)"><i class="ti ti-photo"></i> Gallery</div>
+          <div class="admin-nav-item" onclick="switchAdmin('ann-admin',this)"><i class="ti ti-speakerphone"></i> Announcements</div>
+          <div style="border-top:0.5px solid rgba(255,255,255,.1);margin:8px 0"></div>
+          <div class="admin-nav-item" onclick="switchTo('home')"><i class="ti ti-external-link"></i> View Website</div>
+          <div class="admin-nav-item" style="color:rgba(255,100,100,.8)"><i class="ti ti-logout"></i> Log Out</div>
+        </div>
+      </div>
+      <div class="admin-main">
+        <div class="admin-topbar"><h3 id="adminTitle">Dashboard</h3><div style="display:flex;gap:8px"><div style="background:#f4f5f7;border:0.5px solid var(--color-border-tertiary);padding:5px 12px;border-radius:20px;font-size:11.5px;cursor:pointer" onclick="switchTo('home')">View Website ↗</div></div></div>
+        <div class="admin-content">
+
+          <!-- Dashboard -->
+          <div class="admin-panel active" id="ap-dashboard">
+            <div class="admin-stat-grid">
+              <div class="astat"><div class="astat-n">2</div><div class="astat-l">Upcoming Events</div></div>
+              <div class="astat"><div class="astat-n">3</div><div class="astat-l">Photo Albums</div></div>
+              <div class="astat"><div class="astat-n">35</div><div class="astat-l">Total Photos</div></div>
+              <div class="astat"><div class="astat-n">3</div><div class="astat-l">Announcements</div></div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+              <div class="admin-card">
+                <h4>Quick Actions</h4>
+                <div class="quick-actions">
+                  <div class="qa-btn" onclick="switchAdmin('events-admin',null);document.querySelectorAll('.admin-nav-item')[1].classList.add('active')">➕ Add New Event</div>
+                  <div class="qa-btn" onclick="switchAdmin('gallery-admin',null)">📸 Upload Photos / New Album</div>
+                  <div class="qa-btn" onclick="switchAdmin('ann-admin',null)">📢 Post Volunteer Update</div>
+                </div>
+              </div>
+              <div class="admin-card">
+                <h4>Upcoming Events</h4>
+                <div class="ev-row"><div><div class="ev-row-title">Farm Visit — Hesaraghatta</div><div class="ev-row-sub">06 Jul 2026 · Hesaraghatta</div></div><div class="btn-edit">Edit</div></div>
+                <div class="ev-row"><div><div class="ev-row-title">Soil Workshop — Koramangala</div><div class="ev-row-sub">20 Jul 2026 · Koramangala</div></div><div class="btn-edit">Edit</div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Events Admin -->
+          <div class="admin-panel" id="ap-events-admin">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+              <div style="font-size:13px;font-weight:500">All Events</div>
+              <div id="addEvtToggle" style="background:#2D6A2D;color:#fff;padding:6px 14px;border-radius:20px;font-size:11.5px;cursor:pointer" onclick="toggleAddEvent()">+ Add Event</div>
+            </div>
+            <div id="addEvtForm" style="display:none" class="admin-card" style="margin-bottom:12px">
+              <div id="savedAlert" class="alert-success" style="display:none">✅ Event saved successfully!</div>
+              <div class="form-row-grid">
+                <div class="form-group-a"><div class="form-lbl">Event title</div><input class="form-inp" type="text" placeholder="e.g. Farm Visit at Hesaraghatta" id="evtTitle"></div>
+                <div class="form-group-a"><div class="form-lbl">Date</div><input class="form-inp" type="date" id="evtDate"></div>
+              </div>
+              <div class="form-row-grid">
+                <div class="form-group-a"><div class="form-lbl">Location</div><input class="form-inp" type="text" placeholder="e.g. Hesaraghatta, Bengaluru"></div>
+                <div class="form-group-a"><div class="form-lbl">Spots available</div><input class="form-inp" type="number" placeholder="20"></div>
+              </div>
+              <div class="form-group-a"><div class="form-lbl">Registration link (Google Form)</div><input class="form-inp" type="url" placeholder="https://forms.google.com/..."></div>
+              <div style="margin-top:10px"><button class="save-btn" onclick="saveEvent()">💾 Save Event</button></div>
+            </div>
+            <div class="table-wrap">
+              <table class="data-table" id="eventsTable">
+                <thead><tr><th>Event</th><th>Date</th><th>Location</th><th>Status</th><th>Action</th></tr></thead>
+                <tbody id="eventsBody">
+                  <tr><td><strong>Farm Visit — Hesaraghatta</strong></td><td>06 Jul 2026</td><td>Hesaraghatta</td><td><span class="badge badge-open">Open</span></td><td><span class="btn-edit">Edit</span></td></tr>
+                  <tr><td><strong>Soil Workshop — Koramangala</strong></td><td>20 Jul 2026</td><td>Koramangala</td><td><span class="badge badge-open">Open</span></td><td><span class="btn-edit">Edit</span></td></tr>
+                  <tr><td><strong>Tree Planting Day</strong></td><td>12 Oct 2025</td><td>Bannerghatta Rd</td><td><span class="badge badge-past">Past</span></td><td><span class="btn-edit">Edit</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Gallery Admin -->
+          <div class="admin-panel" id="ap-gallery-admin">
+            <div style="font-size:13px;font-weight:500;margin-bottom:12px">Photo Albums</div>
+            <div class="admin-card">
+              <h4>Upload Photos to Album</h4>
+              <div class="form-group-a"><div class="form-lbl">Select album</div>
+                <select class="form-inp"><option>Farm Visit – Jun 2025 (12 photos)</option><option>Compost Workshop – Aug 2025 (8 photos)</option><option>Tree Planting Day – Oct 2025 (15 photos)</option></select>
+              </div>
+              <div class="upload-zone" onclick="simulateUpload()">
+                <div class="upload-icon">📸</div>
+                <p>Click to select photos<br><span style="font-size:10px;color:var(--color-text-secondary)">JPG/PNG · Select multiple at once</span></p>
+              </div>
+              <div id="uploadPreview" class="photo-preview-grid" style="display:none">
+                <div class="photo-thumb"><img src="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=100&q=60"></div>
+                <div class="photo-thumb"><img src="https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?w=100&q=60"></div>
+                <div class="photo-thumb"><img src="https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=100&q=60"></div>
+                <div class="photo-thumb"><img src="https://images.unsplash.com/photo-1500651230702-0e2d8a49d4ad?w=100&q=60"></div>
+                <div class="photo-thumb"><img src="https://images.unsplash.com/photo-1592150621744-aca64f48394a?w=100&q=60"></div>
+              </div>
+              <div id="uploadBtn" style="display:none;margin-top:10px"><button class="save-btn" onclick="fakeUploadDone()">⬆️ Upload 5 Photos</button></div>
+              <div id="uploadDone" class="alert-success" style="display:none;margin-top:10px">✅ 5 photos uploaded to album!</div>
+            </div>
+          </div>
+
+          <!-- Announcements Admin -->
+          <div class="admin-panel" id="ap-ann-admin">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+              <div style="font-size:13px;font-weight:500">Volunteer Announcements</div>
+              <div style="background:#2D6A2D;color:#fff;padding:6px 14px;border-radius:20px;font-size:11.5px;cursor:pointer" onclick="toggleAnn()">+ New Announcement</div>
+            </div>
+            <div id="annForm" style="display:none" class="admin-card">
+              <div class="form-group-a"><div class="form-lbl">Title</div><input class="form-inp" type="text" placeholder="e.g. 🌱 Recap: Farm Visit at Hesaraghatta!"></div>
+              <div class="form-group-a"><div class="form-lbl">Message</div><textarea class="form-inp" rows="3" placeholder="Write your update here..."></textarea></div>
+              <div class="form-row-grid">
+                <div class="form-group-a"><div class="form-lbl">Type</div><select class="form-inp"><option>📢 General Update</option><option>📅 Event Info</option><option>📸 Photos Uploaded</option><option>🚨 Urgent Notice</option></select></div>
+                <div class="form-group-a"><div class="form-lbl">Date</div><input class="form-inp" type="date"></div>
+              </div>
+              <div style="margin-top:10px"><button class="save-btn">💾 Save Announcement</button></div>
+            </div>
+            <div class="table-wrap">
+              <table class="data-table">
+                <thead><tr><th>Title</th><th>Type</th><th>Date</th><th>Action</th></tr></thead>
+                <tbody>
+                  <tr><td><strong>Welcome to the Volunteer Hub!</strong></td><td>📢 Update</td><td>17 Jun 2026</td><td><span class="btn-edit">Edit</span></td></tr>
+                  <tr><td><strong>Farm Visit recap — Hesaraghatta</strong></td><td>📅 Event</td><td>28 May 2026</td><td><span class="btn-edit">Edit</span></td></tr>
+                  <tr><td><strong>Photos uploaded — May Workshop</strong></td><td>📸 Photos</td><td>15 May 2026</td><td><span class="btn-edit">Edit</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<script>
+function showPage(id,tab,path){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  tab.classList.add('active');
+  document.getElementById('urlBar').textContent='https://bhumitattva.org'+path;
+  if(id==='admin') document.getElementById('urlBar').textContent='https://bhumitattva.org/admin/';
+}
+function switchTo(id){
+  const tabs=document.querySelectorAll('.nav-tab');
+  const map={home:0,events:1,gallery:2,volunteer:3,donate:4,admin:5};
+  const idx=map[id];
+  if(idx!==undefined) tabs[idx].click();
+}
+function switchAdmin(panel,navEl){
+  document.querySelectorAll('.admin-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.admin-nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('ap-'+panel).classList.add('active');
+  if(navEl) navEl.classList.add('active');
+  const titles={dashboard:'Dashboard','events-admin':'Events','gallery-admin':'Gallery','ann-admin':'Announcements'};
+  document.getElementById('adminTitle').textContent=titles[panel]||'Admin';
+}
+function toggleAddEvent(){
+  const f=document.getElementById('addEvtForm');
+  f.style.display=f.style.display==='none'?'block':'none';
+}
+function saveEvent(){
+  const title=document.getElementById('evtTitle').value||'New Event';
+  const date=document.getElementById('evtDate').value||'TBD';
+  document.getElementById('savedAlert').style.display='block';
+  setTimeout(()=>{document.getElementById('savedAlert').style.display='none';},2500);
+  const body=document.getElementById('eventsBody');
+  const tr=document.createElement('tr');
+  tr.innerHTML=`<td><strong>${title}</strong></td><td>${date}</td><td>Bengaluru</td><td><span class="badge badge-open">Open</span></td><td><span class="btn-edit">Edit</span></td>`;
+  body.prepend(tr);
+  document.getElementById('evtTitle').value='';
+}
+function toggleAnn(){
+  const f=document.getElementById('annForm');
+  f.style.display=f.style.display==='none'?'block':'none';
+}
+function simulateUpload(){
+  document.getElementById('uploadPreview').style.display='grid';
+  document.getElementById('uploadBtn').style.display='block';
+  document.getElementById('uploadDone').style.display='none';
+}
+function fakeUploadDone(){
+  document.getElementById('uploadBtn').style.display='none';
+  document.getElementById('uploadDone').style.display='block';
+}
+</script>
