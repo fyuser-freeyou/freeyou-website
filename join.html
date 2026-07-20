@@ -194,6 +194,14 @@
       .main { padding:20px 16px 60px; }
     }
   </style>
+  <!-- Microsoft Clarity -->
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "xm63r3zqui");
+  </script>
 </head>
 <body>
 
@@ -918,6 +926,28 @@ async function submitToZoho() {
     fd.append('SingleLine1', SESSION.authMethod); // auth method
 
     await fetch(ZOHO_SUBMIT, { method:'POST', body:fd, mode:'no-cors' });
+
+    // Also submit to Google Sheets
+    const sheetsPayload = {
+      firstName: SESSION.fname,
+      lastName: SESSION.lname,
+      email: SESSION.email,
+      phone: SESSION.phone,
+      city: SESSION.city,
+      experience: SESSION.experience,
+      skill: SESSION.skills.join(', '),
+      source: SESSION.source
+    };
+    try {
+      await fetch('https://script.google.com/macros/s/AKfycbwGVLlNIk3VLsO62tba_zDs40Sp8RxZ3ucKZVDZM22lkhnwj8kpXQtlaQ9Qa764PFhaPA/exec', {
+        method: 'POST',
+        body: JSON.stringify(sheetsPayload),
+        headers: { 'Content-Type': 'application/json' }
+      }).catch(err => console.log('Sheets submission skipped:', err));
+    } catch (e) {
+      // Silently fail if Google Sheets endpoint is unavailable
+      console.log('Google Sheets optional submission failed:', e);
+    }
 
     if (window.posthog) posthog.capture('profile_submitted', {
       auth_method: SESSION.authMethod, city:SESSION.city,
